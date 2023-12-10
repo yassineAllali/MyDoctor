@@ -1,14 +1,14 @@
 package com.mydoctor.domaine.appointment.exception;
 
-public class TimeSlotNotBookedException extends CalendarException {
+public class BookingException extends CalendarException {
 
     private static final String CANT_BOOK_MESSAGE = "Can't book this time slot : ";
 
-    public TimeSlotNotBookedException(String message) {
+    public BookingException(String message) {
         super(CANT_BOOK_MESSAGE + message);
     }
 
-    public TimeSlotNotBookedException(String message, Throwable cause) {
+    public BookingException(String message, Throwable cause) {
         super(CANT_BOOK_MESSAGE + message, cause);
     }
 }

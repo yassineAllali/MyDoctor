@@ -1,12 +1,12 @@
 package com.mydoctor.domaine.appointment;
 
-import com.mydoctor.domaine.appointment.exception.TimeSlotNotBookedException;
+import com.mydoctor.domaine.appointment.exception.BookingException;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class WorkingTimeSlot extends TimeSlot {
+public final class WorkingTimeSlot extends TimeSlot implements Bookable{
 
     private final List<TimeSlot> booked;
 
@@ -23,14 +23,25 @@ public final class WorkingTimeSlot extends TimeSlot {
         return new ArrayList<>(booked);
     }
 
+    @Override
+    public int getBookedSize() {
+        return booked.size();
+    }
+
+    @Override
     public void book(TimeSlot timeSlot) {
-        if(timeSlot.isOutside(this)) {
-            throw new TimeSlotNotBookedException("Outside working slot !");
+        if(!isInside(timeSlot)) {
+            throw new BookingException("Outside working slot!");
+        }
+        if(isConflictWithBooked(timeSlot)) {
+            throw new BookingException("Conflict with existing booked Time Slots!");
         }
         booked.add(timeSlot);
     }
 
-    public int getBookedSize() {
-        return booked.size();
+    @Override
+    public boolean isConflictWithBooked(TimeSlot timeSlot) {
+        return booked.stream().anyMatch(b -> b.isConflict(timeSlot));
     }
+
 }
