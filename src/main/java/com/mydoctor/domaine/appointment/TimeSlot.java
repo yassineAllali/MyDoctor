@@ -2,31 +2,23 @@ package com.mydoctor.domaine.appointment;
 
 import com.mydoctor.domaine.appointment.exception.IllegalArgumentException;
 
-import java.time.DayOfWeek;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalTime;
 
 
 // Immutable
-public abstract class TimeSlot {
+public class TimeSlot{
     // All attributes types are immutable
     // That why returned in getters
-    private final LocalDate date;
     private final LocalTime start;
     private final LocalTime end;
 
-    public TimeSlot(LocalDate date, LocalTime start, LocalTime end) {
+    public TimeSlot(LocalTime start, LocalTime end) {
         if(end.isBefore(start)) {
             throw new IllegalArgumentException("Start time must be before end time !");
         }
-        this.date = date;
         this.start = start;
         this.end = end;
-    }
-
-    public LocalDate getDate() {
-        return date;
     }
 
     public LocalTime getStart() {
@@ -41,22 +33,6 @@ public abstract class TimeSlot {
         return Duration.between(start, end);
     }
 
-    public DayOfWeek getDayOfWeek() {
-        return DayOfWeek.from(date);
-    }
-
-    // No conflict only if other End is before my start
-    // or other start is after my end
-    public boolean isConflict(TimeSlot other) {
-        if(!date.isEqual(other.date)) {
-            return false;
-        }
-        if(isBefore(other) || isAfter(other)) {
-            return false;
-        }
-        return true;
-    }
-
     public boolean isBefore(TimeSlot other) {
         return other.end.isBefore(start) || other.end.equals(start);
     }
@@ -64,4 +40,68 @@ public abstract class TimeSlot {
     public boolean isAfter(TimeSlot other) {
         return other.start.isAfter(end) || other.start.equals(end);
     }
+
+    public boolean isStartEqually(TimeSlot other) {
+        return other.start.equals(start);
+    }
+
+    public boolean isEndEqually(TimeSlot other) {
+        return other.end.equals(end);
+    }
+
+    public boolean isStartBefore(TimeSlot other) {
+        return other.start.isBefore(start);
+    }
+
+    public boolean isStartAfter(TimeSlot other) {
+        return other.start.isAfter(start);
+    }
+
+    public boolean isEndBefore(TimeSlot other) {
+        return other.end.isBefore(end);
+    }
+
+    public boolean isEndAfter(TimeSlot other) {
+        return other.end.isAfter(end);
+    }
+
+    public boolean isStartBeforeOrEqually(TimeSlot other) {
+        return isStartBefore(other) || isStartEqually(other);
+    }
+
+    public boolean isStartAfterOrEqually(TimeSlot other) {
+        return isStartAfter(other) || isStartEqually(other);
+    }
+
+    public boolean isEndBeforeOrEqually(TimeSlot other) {
+        return isEndBefore(other) || isEndEqually(other);
+    }
+
+    public boolean isEndAfterOrEqually(TimeSlot other) {
+        return isEndAfter(other) || isEndEqually(other);
+    }
+
+    public boolean isEndBeforeMyStart(TimeSlot other) {
+        return isStartBefore(other) && (other.end.isBefore(start) || other.end.equals(start));
+    }
+
+    public boolean isStartAfterMyEnd(TimeSlot other) {
+        return other.start.isAfter(end) || other.start.equals(end);
+    }
+
+    public boolean isInside(TimeSlot other) {
+        return isStartAfterOrEqually(other) && isEndBeforeOrEqually(other);
+    }
+
+    public boolean isOutside(TimeSlot other) {
+        return isEndBeforeMyStart(other) || isStartAfterMyEnd(other);
+    }
+
+    // No conflict only if other End is before my start
+    // or other start is after my end
+    public boolean isConflict(TimeSlot other) {
+        return !isOutside(other);
+    }
+
+
 }
