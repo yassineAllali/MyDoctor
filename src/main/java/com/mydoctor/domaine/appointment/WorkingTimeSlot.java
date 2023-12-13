@@ -20,7 +20,7 @@ public final class WorkingTimeSlot extends TimeSlot implements Bookable{
     }
 
     public List<TimeSlot> getBooked() {
-        return new ArrayList<>(booked);
+        return List.copyOf(booked);
     }
 
     @Override
