@@ -6,6 +6,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public final class WorkingDay implements BookableTimeInterval {
 
@@ -47,15 +48,15 @@ public final class WorkingDay implements BookableTimeInterval {
             throw new BookingException("Conflict with existing booked Time Slots!");
         }
 
-        WorkingTimeInterval workingTimeSlot = getWhereInside(timeSlot);
+        WorkingTimeInterval workingTimeSlot = getWhereInside(timeSlot)
+                .orElseThrow(() -> new BookingException("Not Inside Working Slots!"));
         workingTimeSlot.book(timeSlot);
     }
 
-    private WorkingTimeInterval getWhereInside(TimeSlot timeSlot) {
+    private Optional<WorkingTimeInterval> getWhereInside(TimeSlot timeSlot) {
         return workingTimeSlots.stream()
                 .filter(w -> w.isInside(timeSlot))
-                .findFirst()
-                .orElseThrow(() -> new BookingException("Time Slot is not Inside Working Slots!"));
+                .findFirst();
     }
 
     @Override

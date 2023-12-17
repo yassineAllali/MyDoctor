@@ -1,8 +1,11 @@
 package com.mydoctor.domaine.appointment.booking;
 
+import com.mydoctor.domaine.appointment.booking.exception.BookingException;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 // Not Finished
@@ -41,7 +44,21 @@ public final class WorkingPeriod implements BookablePeriod {
 
     @Override
     public void book(LocalDate date, TimeSlot timeSlot) {
-        // TODO
+        if(!isInside(date, timeSlot)) {
+            throw new BookingException("Not Inside Working Slots!");
+        }
+        if(isConflictWithBooked(date, timeSlot)) {
+            throw new BookingException("Conflict with existing booked Time Slots!");
+        }
+        WorkingDay workingDay = getWhereInside(date)
+                .orElseThrow(() -> new BookingException("Not Inside Working Slots!"));
+        workingDay.book(timeSlot);
+    }
+
+    private Optional<WorkingDay> getWhereInside(LocalDate date) {
+        return workingDays.stream()
+                .filter(d -> d.getDate().equals(date))
+                .findFirst();
     }
 
     @Override
