@@ -1,10 +1,12 @@
-package com.mydoctor.domaine.appointment;
+package com.mydoctor.domaine.appointment.booking;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorkingPeriod implements Bookable {
+
+// Not Finished
+public final class WorkingPeriod implements BookablePeriod {
 
     private final LocalDate start;
     private final LocalDate end;
@@ -38,17 +40,19 @@ public class WorkingPeriod implements Bookable {
     }
 
     @Override
-    public void book(TimeSlot timeSlot) {
-
+    public void book(LocalDate date, TimeSlot timeSlot) {
+        // TODO
     }
 
     @Override
-    public boolean isConflictWithBooked(TimeSlot timeSlot) {
+    public boolean isConflictWithBooked(LocalDate date, TimeSlot timeSlot) {
+        // TODO
         return false;
     }
 
     @Override
-    public boolean isInside(TimeSlot timeSlot) {
+    public boolean isInside(LocalDate date, TimeSlot timeSlot) {
+        // TODO
         return false;
     }
 }

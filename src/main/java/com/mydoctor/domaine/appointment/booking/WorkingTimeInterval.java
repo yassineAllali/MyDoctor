@@ -1,21 +1,21 @@
-package com.mydoctor.domaine.appointment;
+package com.mydoctor.domaine.appointment.booking;
 
-import com.mydoctor.domaine.appointment.exception.BookingException;
+import com.mydoctor.domaine.appointment.booking.exception.BookingException;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class WorkingTimeSlot extends TimeSlot implements Bookable{
+public final class WorkingTimeInterval extends TimeSlot implements BookableTimeInterval {
 
     private final List<TimeSlot> booked;
 
-    public WorkingTimeSlot(LocalTime start, LocalTime end, List<TimeSlot> booked) {
+    public WorkingTimeInterval(LocalTime start, LocalTime end, List<TimeSlot> booked) {
         super(start, end);
         this.booked = new ArrayList<>(booked);
     }
 
-    public WorkingTimeSlot(LocalTime start, LocalTime end) {
+    public WorkingTimeInterval(LocalTime start, LocalTime end) {
         this(start, end, new ArrayList<>());
     }
 

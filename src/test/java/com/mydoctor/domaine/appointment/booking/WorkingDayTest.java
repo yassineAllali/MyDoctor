@@ -1,6 +1,6 @@
-package com.mydoctor.domaine.appointment;
+package com.mydoctor.domaine.appointment.booking;
 
-import com.mydoctor.domaine.appointment.exception.BookingException;
+import com.mydoctor.domaine.appointment.booking.exception.*;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -24,7 +24,7 @@ class WorkingDayTest {
         TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
         TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
         List<TimeSlot> existingBooked1 = Arrays.asList(existingSlot1, existingSlot2);
-        WorkingTimeSlot workingTimeSlot1 = new WorkingTimeSlot(workingStart1, workingEnd1, existingBooked1);
+        WorkingTimeInterval workingTimeSlot1 = new WorkingTimeInterval(workingStart1, workingEnd1, existingBooked1);
 
         // Working TimeSlot 2
         LocalTime workingStart2 = LocalTime.of(8, 0);
@@ -33,11 +33,11 @@ class WorkingDayTest {
         TimeSlot existingSlot3 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
         TimeSlot existingSlot4 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
         List<TimeSlot> existingBooked2 = Arrays.asList(existingSlot3, existingSlot4);
-        WorkingTimeSlot workingTimeSlot2 = new WorkingTimeSlot(workingStart2, workingEnd2, existingBooked2);
+        WorkingTimeInterval workingTimeSlot2 = new WorkingTimeInterval(workingStart2, workingEnd2, existingBooked2);
 
         // Working Day
         LocalDate date = LocalDate.of(2023, 12,10);
-        Bookable workingDay = new WorkingDay(date, Arrays.asList(workingTimeSlot1, workingTimeSlot2));
+        BookableTimeInterval workingDay = new WorkingDay(date, Arrays.asList(workingTimeSlot1, workingTimeSlot2));
 
         // When
         int actualBookedSize = workingDay.getBookedSize();
@@ -59,7 +59,7 @@ class WorkingDayTest {
         TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
         TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
         List<TimeSlot> existingBooked1 = Arrays.asList(existingSlot1, existingSlot2);
-        WorkingTimeSlot workingTimeSlot1 = new WorkingTimeSlot(workingStart1, workingEnd1, existingBooked1);
+        WorkingTimeInterval workingTimeSlot1 = new WorkingTimeInterval(workingStart1, workingEnd1, existingBooked1);
 
         // Working TimeSlot 2
         LocalTime workingStart2 = LocalTime.of(14, 0);
@@ -68,11 +68,11 @@ class WorkingDayTest {
         TimeSlot existingSlot3 = new TimeSlot(LocalTime.of(14,0), LocalTime.of(15,30));
         TimeSlot existingSlot4 = new TimeSlot(LocalTime.of(15,30), LocalTime.of(16,30));
         List<TimeSlot> existingBooked2 = Arrays.asList(existingSlot3, existingSlot4);
-        WorkingTimeSlot workingTimeSlot2 = new WorkingTimeSlot(workingStart2, workingEnd2, existingBooked2);
+        WorkingTimeInterval workingTimeSlot2 = new WorkingTimeInterval(workingStart2, workingEnd2, existingBooked2);
 
         // Working Day
         LocalDate date = LocalDate.of(2023, 12,10);
-        Bookable workingDay = new WorkingDay(date, Arrays.asList(workingTimeSlot1, workingTimeSlot2));
+        BookableTimeInterval workingDay = new WorkingDay(date, Arrays.asList(workingTimeSlot1, workingTimeSlot2));
 
         // TimeSlot
         LocalTime slotStart = LocalTime.of(14, 30);
@@ -97,7 +97,7 @@ class WorkingDayTest {
         TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
         TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
         List<TimeSlot> existingBooked1 = Arrays.asList(existingSlot1, existingSlot2);
-        WorkingTimeSlot workingTimeSlot1 = new WorkingTimeSlot(workingStart1, workingEnd1, existingBooked1);
+        WorkingTimeInterval workingTimeSlot1 = new WorkingTimeInterval(workingStart1, workingEnd1, existingBooked1);
 
         // Working TimeSlot 2
         LocalTime workingStart2 = LocalTime.of(14, 0);
@@ -106,11 +106,11 @@ class WorkingDayTest {
         TimeSlot existingSlot3 = new TimeSlot(LocalTime.of(14,0), LocalTime.of(15,30));
         TimeSlot existingSlot4 = new TimeSlot(LocalTime.of(15,30), LocalTime.of(16,30));
         List<TimeSlot> existingBooked2 = Arrays.asList(existingSlot3, existingSlot4);
-        WorkingTimeSlot workingTimeSlot2 = new WorkingTimeSlot(workingStart2, workingEnd2, existingBooked2);
+        WorkingTimeInterval workingTimeSlot2 = new WorkingTimeInterval(workingStart2, workingEnd2, existingBooked2);
 
         // Working Day
         LocalDate date = LocalDate.of(2023, 12,10);
-        Bookable workingDay = new WorkingDay(date, Arrays.asList(workingTimeSlot1, workingTimeSlot2));
+        BookableTimeInterval workingDay = new WorkingDay(date, Arrays.asList(workingTimeSlot1, workingTimeSlot2));
 
         // TimeSlot
         LocalTime slotStart = LocalTime.of(16, 30);
@@ -137,7 +137,7 @@ class WorkingDayTest {
         TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
         TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
         List<TimeSlot> existingBooked1 = Arrays.asList(existingSlot1, existingSlot2);
-        WorkingTimeSlot workingTimeSlot1 = new WorkingTimeSlot(workingStart1, workingEnd1, existingBooked1);
+        WorkingTimeInterval workingTimeSlot1 = new WorkingTimeInterval(workingStart1, workingEnd1, existingBooked1);
 
         // Working TimeSlot 2
         LocalTime workingStart2 = LocalTime.of(14, 0);
@@ -146,11 +146,11 @@ class WorkingDayTest {
         TimeSlot existingSlot3 = new TimeSlot(LocalTime.of(14,0), LocalTime.of(15,30));
         TimeSlot existingSlot4 = new TimeSlot(LocalTime.of(15,30), LocalTime.of(16,30));
         List<TimeSlot> existingBooked2 = Arrays.asList(existingSlot3, existingSlot4);
-        WorkingTimeSlot workingTimeSlot2 = new WorkingTimeSlot(workingStart2, workingEnd2, existingBooked2);
+        WorkingTimeInterval workingTimeSlot2 = new WorkingTimeInterval(workingStart2, workingEnd2, existingBooked2);
 
         // Working Day
         LocalDate date = LocalDate.of(2023, 12,10);
-        Bookable workingDay = new WorkingDay(date, Arrays.asList(workingTimeSlot1, workingTimeSlot2));
+        BookableTimeInterval workingDay = new WorkingDay(date, Arrays.asList(workingTimeSlot1, workingTimeSlot2));
 
         // TimeSlot
         LocalTime slotStart = LocalTime.of(8, 20);
@@ -175,7 +175,7 @@ class WorkingDayTest {
         TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
         TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
         List<TimeSlot> existingBooked1 = Arrays.asList(existingSlot1, existingSlot2);
-        WorkingTimeSlot workingTimeSlot1 = new WorkingTimeSlot(workingStart1, workingEnd1, existingBooked1);
+        WorkingTimeInterval workingTimeSlot1 = new WorkingTimeInterval(workingStart1, workingEnd1, existingBooked1);
 
         // Working TimeSlot 2
         LocalTime workingStart2 = LocalTime.of(14, 0);
@@ -184,11 +184,11 @@ class WorkingDayTest {
         TimeSlot existingSlot3 = new TimeSlot(LocalTime.of(14,0), LocalTime.of(15,30));
         TimeSlot existingSlot4 = new TimeSlot(LocalTime.of(15,30), LocalTime.of(16,30));
         List<TimeSlot> existingBooked2 = Arrays.asList(existingSlot3, existingSlot4);
-        WorkingTimeSlot workingTimeSlot2 = new WorkingTimeSlot(workingStart2, workingEnd2, existingBooked2);
+        WorkingTimeInterval workingTimeSlot2 = new WorkingTimeInterval(workingStart2, workingEnd2, existingBooked2);
 
         // Working Day
         LocalDate date = LocalDate.of(2023, 12,10);
-        Bookable workingDay = new WorkingDay(date, Arrays.asList(workingTimeSlot1, workingTimeSlot2));
+        BookableTimeInterval workingDay = new WorkingDay(date, Arrays.asList(workingTimeSlot1, workingTimeSlot2));
 
         // TimeSlot
         LocalTime slotStart = LocalTime.of(9, 10);
@@ -216,7 +216,7 @@ class WorkingDayTest {
         TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
         TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
         List<TimeSlot> existingBooked1 = Arrays.asList(existingSlot1, existingSlot2);
-        WorkingTimeSlot workingTimeSlot1 = new WorkingTimeSlot(workingStart1, workingEnd1, existingBooked1);
+        WorkingTimeInterval workingTimeSlot1 = new WorkingTimeInterval(workingStart1, workingEnd1, existingBooked1);
 
         // Working TimeSlot 2
         LocalTime workingStart2 = LocalTime.of(14, 0);
@@ -225,11 +225,11 @@ class WorkingDayTest {
         TimeSlot existingSlot3 = new TimeSlot(LocalTime.of(14,0), LocalTime.of(14,30));
         TimeSlot existingSlot4 = new TimeSlot(LocalTime.of(15,30), LocalTime.of(16,30));
         List<TimeSlot> existingBooked2 = Arrays.asList(existingSlot3, existingSlot4);
-        WorkingTimeSlot workingTimeSlot2 = new WorkingTimeSlot(workingStart2, workingEnd2, existingBooked2);
+        WorkingTimeInterval workingTimeSlot2 = new WorkingTimeInterval(workingStart2, workingEnd2, existingBooked2);
 
         // Working Day
         LocalDate date = LocalDate.of(2023, 12,10);
-        Bookable workingDay = new WorkingDay(date, Arrays.asList(workingTimeSlot1, workingTimeSlot2));
+        BookableTimeInterval workingDay = new WorkingDay(date, Arrays.asList(workingTimeSlot1, workingTimeSlot2));
 
         // TimeSlot
         LocalTime slotStart = LocalTime.of(14, 30);
@@ -255,7 +255,7 @@ class WorkingDayTest {
         TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
         TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
         List<TimeSlot> existingBooked1 = Arrays.asList(existingSlot1, existingSlot2);
-        WorkingTimeSlot workingTimeSlot1 = new WorkingTimeSlot(workingStart1, workingEnd1, existingBooked1);
+        WorkingTimeInterval workingTimeSlot1 = new WorkingTimeInterval(workingStart1, workingEnd1, existingBooked1);
 
         // Working TimeSlot 2
         LocalTime workingStart2 = LocalTime.of(14, 0);
@@ -264,11 +264,11 @@ class WorkingDayTest {
         TimeSlot existingSlot3 = new TimeSlot(LocalTime.of(14,0), LocalTime.of(15,30));
         TimeSlot existingSlot4 = new TimeSlot(LocalTime.of(15,30), LocalTime.of(16,30));
         List<TimeSlot> existingBooked2 = Arrays.asList(existingSlot3, existingSlot4);
-        WorkingTimeSlot workingTimeSlot2 = new WorkingTimeSlot(workingStart2, workingEnd2, existingBooked2);
+        WorkingTimeInterval workingTimeSlot2 = new WorkingTimeInterval(workingStart2, workingEnd2, existingBooked2);
 
         // Working Day
         LocalDate date = LocalDate.of(2023, 12,10);
-        Bookable workingDay = new WorkingDay(date, Arrays.asList(workingTimeSlot1, workingTimeSlot2));
+        BookableTimeInterval workingDay = new WorkingDay(date, Arrays.asList(workingTimeSlot1, workingTimeSlot2));
 
         // TimeSlot
         LocalTime slotStart = LocalTime.of(12, 30);
@@ -290,7 +290,7 @@ class WorkingDayTest {
         TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
         TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
         List<TimeSlot> existingBooked1 = Arrays.asList(existingSlot1, existingSlot2);
-        WorkingTimeSlot workingTimeSlot1 = new WorkingTimeSlot(workingStart1, workingEnd1, existingBooked1);
+        WorkingTimeInterval workingTimeSlot1 = new WorkingTimeInterval(workingStart1, workingEnd1, existingBooked1);
 
         // Working TimeSlot 2
         LocalTime workingStart2 = LocalTime.of(14, 0);
@@ -299,11 +299,11 @@ class WorkingDayTest {
         TimeSlot existingSlot3 = new TimeSlot(LocalTime.of(14,0), LocalTime.of(15,30));
         TimeSlot existingSlot4 = new TimeSlot(LocalTime.of(15,30), LocalTime.of(16,30));
         List<TimeSlot> existingBooked2 = Arrays.asList(existingSlot3, existingSlot4);
-        WorkingTimeSlot workingTimeSlot2 = new WorkingTimeSlot(workingStart2, workingEnd2, existingBooked2);
+        WorkingTimeInterval workingTimeSlot2 = new WorkingTimeInterval(workingStart2, workingEnd2, existingBooked2);
 
         // Working Day
         LocalDate date = LocalDate.of(2023, 12,10);
-        Bookable workingDay = new WorkingDay(date, Arrays.asList(workingTimeSlot1, workingTimeSlot2));
+        BookableTimeInterval workingDay = new WorkingDay(date, Arrays.asList(workingTimeSlot1, workingTimeSlot2));
 
         // TimeSlot
         LocalTime slotStart = LocalTime.of(8, 20);

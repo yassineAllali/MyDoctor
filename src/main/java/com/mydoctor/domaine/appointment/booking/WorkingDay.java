@@ -1,18 +1,18 @@
-package com.mydoctor.domaine.appointment;
+package com.mydoctor.domaine.appointment.booking;
 
-import com.mydoctor.domaine.appointment.exception.BookingException;
+import com.mydoctor.domaine.appointment.booking.exception.BookingException;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class WorkingDay implements Bookable{
+public final class WorkingDay implements BookableTimeInterval {
 
     private final LocalDate date;
-    private final List<WorkingTimeSlot> workingTimeSlots;
+    private final List<WorkingTimeInterval> workingTimeSlots;
 
-    public WorkingDay(LocalDate date, List<WorkingTimeSlot> workingTimeSlots) {
+    public WorkingDay(LocalDate date, List<WorkingTimeInterval> workingTimeSlots) {
         this.date = date;
         this.workingTimeSlots = new ArrayList<>(workingTimeSlots);
     }
@@ -29,7 +29,7 @@ public final class WorkingDay implements Bookable{
         return DayOfWeek.from(date);
     }
 
-    public List<WorkingTimeSlot> getWorkingTimeSlots() {
+    public List<WorkingTimeInterval> getWorkingTimeSlots() {
         return new ArrayList<>(workingTimeSlots);
     }
 
@@ -47,11 +47,11 @@ public final class WorkingDay implements Bookable{
             throw new BookingException("Conflict with existing booked Time Slots!");
         }
 
-        WorkingTimeSlot workingTimeSlot = getWhereInside(timeSlot);
+        WorkingTimeInterval workingTimeSlot = getWhereInside(timeSlot);
         workingTimeSlot.book(timeSlot);
     }
 
-    private WorkingTimeSlot getWhereInside(TimeSlot timeSlot) {
+    private WorkingTimeInterval getWhereInside(TimeSlot timeSlot) {
         return workingTimeSlots.stream()
                 .filter(w -> w.isInside(timeSlot))
                 .findFirst()

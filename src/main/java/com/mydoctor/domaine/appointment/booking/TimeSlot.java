@@ -1,6 +1,6 @@
-package com.mydoctor.domaine.appointment;
+package com.mydoctor.domaine.appointment.booking;
 
-import com.mydoctor.domaine.appointment.exception.IllegalArgumentException;
+import com.mydoctor.domaine.appointment.booking.exception.IllegalArgumentException;
 
 import java.time.Duration;
 import java.time.LocalTime;

@@ -1,6 +1,6 @@
-package com.mydoctor.domaine.appointment.exception;
+package com.mydoctor.domaine.appointment.booking.exception;
 
-public class IllegalArgumentException extends CalendarException{
+public class IllegalArgumentException extends TimeSlotException {
 
     private static final String ILLEGAL_MESSAGE = "Illegal Argument : ";
     public IllegalArgumentException(String message) {

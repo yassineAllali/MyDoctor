@@ -1,6 +1,6 @@
-package com.mydoctor.domaine.appointment;
+package com.mydoctor.domaine.appointment.booking;
 
-import com.mydoctor.domaine.appointment.exception.BookingException;
+import com.mydoctor.domaine.appointment.booking.exception.BookingException;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;
@@ -19,7 +19,7 @@ class WorkingTimeSlotTest {
         // Given
         LocalTime start = LocalTime.of(8, 0);
         LocalTime end = LocalTime.of(12, 30);
-        Bookable workingTimeSlot = new WorkingTimeSlot(start, end);
+        BookableTimeInterval workingTimeSlot = new WorkingTimeInterval(start, end);
 
         LocalTime slotStart = LocalTime.of(8, 30);
         LocalTime slotEnd = LocalTime.of(9, 0);
@@ -41,7 +41,7 @@ class WorkingTimeSlotTest {
         TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
         TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
         List<TimeSlot> existingBooked = Arrays.asList(existingSlot1, existingSlot2);
-        Bookable workingTimeSlot = new WorkingTimeSlot(start, end, existingBooked);
+        BookableTimeInterval workingTimeSlot = new WorkingTimeInterval(start, end, existingBooked);
 
         LocalTime slotStart = LocalTime.of(8, 30);
         LocalTime slotEnd = LocalTime.of(9, 0);
@@ -63,7 +63,7 @@ class WorkingTimeSlotTest {
         TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
         TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
         List<TimeSlot> existingBooked = Arrays.asList(existingSlot1, existingSlot2);
-        Bookable workingTimeSlot = new WorkingTimeSlot(start, end, existingBooked);
+        BookableTimeInterval workingTimeSlot = new WorkingTimeInterval(start, end, existingBooked);
 
         LocalTime slotStart = LocalTime.of(9, 30);
         LocalTime slotEnd = LocalTime.of(12, 30);
@@ -87,7 +87,7 @@ class WorkingTimeSlotTest {
         TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
         TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
         List<TimeSlot> existingBooked = Arrays.asList(existingSlot1, existingSlot2);
-        Bookable workingTimeSlot = new WorkingTimeSlot(start, end, existingBooked);
+        BookableTimeInterval workingTimeSlot = new WorkingTimeInterval(start, end, existingBooked);
 
         LocalTime slotStart = LocalTime.of(14, 30);
         LocalTime slotEnd = LocalTime.of(15, 0);
@@ -106,7 +106,7 @@ class WorkingTimeSlotTest {
         TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
         TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
         List<TimeSlot> existingBooked = Arrays.asList(existingSlot1, existingSlot2);
-        Bookable workingTimeSlot = new WorkingTimeSlot(start, end, existingBooked);
+        BookableTimeInterval workingTimeSlot = new WorkingTimeInterval(start, end, existingBooked);
 
         LocalTime slotStart = LocalTime.of(6, 30);
         LocalTime slotEnd = LocalTime.of(   8, 0);
@@ -125,7 +125,7 @@ class WorkingTimeSlotTest {
         TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
         TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
         List<TimeSlot> existingBooked = Arrays.asList(existingSlot1, existingSlot2);
-        Bookable workingTimeSlot = new WorkingTimeSlot(start, end, existingBooked);
+        BookableTimeInterval workingTimeSlot = new WorkingTimeInterval(start, end, existingBooked);
 
         LocalTime slotStart = LocalTime.of(11, 30);
         LocalTime slotEnd = LocalTime.of(   13, 0);
@@ -144,7 +144,7 @@ class WorkingTimeSlotTest {
         TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
         TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
         List<TimeSlot> existingBooked = Arrays.asList(existingSlot1, existingSlot2);
-        Bookable workingTimeSlot = new WorkingTimeSlot(start, end, existingBooked);
+        BookableTimeInterval workingTimeSlot = new WorkingTimeInterval(start, end, existingBooked);
 
         LocalTime slotStart = LocalTime.of(8, 0);
         LocalTime slotEnd = LocalTime.of(   8, 20);
@@ -168,7 +168,7 @@ class WorkingTimeSlotTest {
         TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
         TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
         List<TimeSlot> existingBooked = Arrays.asList(existingSlot1, existingSlot2);
-        Bookable workingTimeSlot = new WorkingTimeSlot(start, end, existingBooked);
+        BookableTimeInterval workingTimeSlot = new WorkingTimeInterval(start, end, existingBooked);
 
         LocalTime slotStart = LocalTime.of(8, 20);
         LocalTime slotEnd = LocalTime.of(   8, 40);
@@ -190,7 +190,7 @@ class WorkingTimeSlotTest {
         TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
         TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
         List<TimeSlot> existingBooked = Arrays.asList(existingSlot1, existingSlot2);
-        Bookable workingTimeSlot = new WorkingTimeSlot(start, end, existingBooked);
+        BookableTimeInterval workingTimeSlot = new WorkingTimeInterval(start, end, existingBooked);
 
         LocalTime slotStart = LocalTime.of(8, 30);
         LocalTime slotEnd = LocalTime.of(   9, 0);
