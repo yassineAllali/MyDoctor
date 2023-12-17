@@ -74,6 +74,433 @@ class WorkingPeriodTest {
         assertEquals(9, actualBookedSize);
     }
 
+    // IsInside
+
+    // Succeed
+    @Test
+    public void testIsInsideShouldSucceed() {
+        // Given
+
+        // Working TimeSlot 1
+        LocalTime workingStart1 = LocalTime.of(8, 0);
+        LocalTime workingEnd1 = LocalTime.of(12, 30);
+
+        TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
+        TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
+        List<TimeSlot> existingBooked1 = Arrays.asList(existingSlot1, existingSlot2);
+        WorkingTimeInterval workingTimeSlot1 = new WorkingTimeInterval(workingStart1, workingEnd1, existingBooked1);
+
+        // Working TimeSlot 2
+        LocalTime workingStart2 = LocalTime.of(14, 0);
+        LocalTime workingEnd2 = LocalTime.of(18, 30);
+
+        TimeSlot existingSlot3 = new TimeSlot(LocalTime.of(14,0), LocalTime.of(14,30));
+        TimeSlot existingSlot4 = new TimeSlot(LocalTime.of(15,0), LocalTime.of(15,30));
+        List<TimeSlot> existingBooked2 = Arrays.asList(existingSlot3, existingSlot4);
+        WorkingTimeInterval workingTimeSlot2 = new WorkingTimeInterval(workingStart2, workingEnd2, existingBooked2);
+
+        // Working TimeSlot 3
+        LocalTime workingStart3 = LocalTime.of(8, 0);
+        LocalTime workingEnd3 = LocalTime.of(12, 30);
+
+        TimeSlot existingSlot5 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
+        TimeSlot existingSlot6 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
+        List<TimeSlot> existingBooked3 = Arrays.asList(existingSlot5, existingSlot6);
+        WorkingTimeInterval workingTimeSlot3 = new WorkingTimeInterval(workingStart3, workingEnd3, existingBooked3);
+
+        // Working TimeSlot 4
+        LocalTime workingStart4 = LocalTime.of(14, 0);
+        LocalTime workingEnd4 = LocalTime.of(17, 30);
+
+        TimeSlot existingSlot7 = new TimeSlot(LocalTime.of(15,0), LocalTime.of(15,30));
+        TimeSlot existingSlot8 = new TimeSlot(LocalTime.of(16,0), LocalTime.of(16,30));
+        TimeSlot existingSlot9 = new TimeSlot(LocalTime.of(17,30), LocalTime.of(17,30));
+        List<TimeSlot> existingBooked4 = Arrays.asList(existingSlot7, existingSlot8, existingSlot9);
+        WorkingTimeInterval workingTimeSlot4 = new WorkingTimeInterval(workingStart4, workingEnd4, existingBooked4);
+
+        // Working Day 1
+        LocalDate date1 = LocalDate.of(2023, 12,17);
+        WorkingDay workingDay1 = new WorkingDay(date1, Arrays.asList(workingTimeSlot1, workingTimeSlot2));
+
+        // Working Day 2
+        LocalDate date2 = LocalDate.of(2023, 12,18);
+        WorkingDay workingDay2 = new WorkingDay(date2, Arrays.asList(workingTimeSlot3, workingTimeSlot4));
+
+        // Working Period
+        LocalDate workingStart = LocalDate.of(2023, 12, 17);
+        LocalDate workingEnd = LocalDate.of(2023, 12, 18);
+        BookablePeriod workingPeriod = new WorkingPeriod(workingStart, workingEnd, Arrays.asList(workingDay1, workingDay2));
+
+        // Given TimeSlot
+        LocalTime slotStart = LocalTime.of(14, 30);
+        LocalTime slotEnd = LocalTime.of(15, 40);
+        TimeSlot givenTimeSlot = new TimeSlot(slotStart, slotEnd);
+
+        // Given Date
+        LocalDate bookingDate = LocalDate.of(2023, 12, 18);
+
+        // When
+        boolean actualIsInside = workingPeriod.isInside(bookingDate, givenTimeSlot);
+
+        // Then
+        assertTrue(actualIsInside);
+    }
+
+    // Fail
+
+    @Test
+    public void testIsInsideShouldFailIfDifferentDate() {
+        // Given
+
+        // Working TimeSlot 1
+        LocalTime workingStart1 = LocalTime.of(8, 0);
+        LocalTime workingEnd1 = LocalTime.of(12, 30);
+
+        TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
+        TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
+        List<TimeSlot> existingBooked1 = Arrays.asList(existingSlot1, existingSlot2);
+        WorkingTimeInterval workingTimeSlot1 = new WorkingTimeInterval(workingStart1, workingEnd1, existingBooked1);
+
+        // Working TimeSlot 2
+        LocalTime workingStart2 = LocalTime.of(14, 0);
+        LocalTime workingEnd2 = LocalTime.of(18, 30);
+
+        TimeSlot existingSlot3 = new TimeSlot(LocalTime.of(14,0), LocalTime.of(14,30));
+        TimeSlot existingSlot4 = new TimeSlot(LocalTime.of(15,0), LocalTime.of(15,30));
+        List<TimeSlot> existingBooked2 = Arrays.asList(existingSlot3, existingSlot4);
+        WorkingTimeInterval workingTimeSlot2 = new WorkingTimeInterval(workingStart2, workingEnd2, existingBooked2);
+
+        // Working TimeSlot 3
+        LocalTime workingStart3 = LocalTime.of(8, 0);
+        LocalTime workingEnd3 = LocalTime.of(12, 30);
+
+        TimeSlot existingSlot5 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
+        TimeSlot existingSlot6 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
+        List<TimeSlot> existingBooked3 = Arrays.asList(existingSlot5, existingSlot6);
+        WorkingTimeInterval workingTimeSlot3 = new WorkingTimeInterval(workingStart3, workingEnd3, existingBooked3);
+
+        // Working TimeSlot 4
+        LocalTime workingStart4 = LocalTime.of(14, 0);
+        LocalTime workingEnd4 = LocalTime.of(17, 30);
+
+        TimeSlot existingSlot7 = new TimeSlot(LocalTime.of(15,0), LocalTime.of(15,30));
+        TimeSlot existingSlot8 = new TimeSlot(LocalTime.of(16,0), LocalTime.of(16,30));
+        TimeSlot existingSlot9 = new TimeSlot(LocalTime.of(17,30), LocalTime.of(17,30));
+        List<TimeSlot> existingBooked4 = Arrays.asList(existingSlot7, existingSlot8, existingSlot9);
+        WorkingTimeInterval workingTimeSlot4 = new WorkingTimeInterval(workingStart4, workingEnd4, existingBooked4);
+
+        // Working Day 1
+        LocalDate date1 = LocalDate.of(2023, 12,17);
+        WorkingDay workingDay1 = new WorkingDay(date1, Arrays.asList(workingTimeSlot1, workingTimeSlot2));
+
+        // Working Day 2
+        LocalDate date2 = LocalDate.of(2023, 12,18);
+        WorkingDay workingDay2 = new WorkingDay(date2, Arrays.asList(workingTimeSlot3, workingTimeSlot4));
+
+        // Working Period
+        LocalDate workingStart = LocalDate.of(2023, 12, 17);
+        LocalDate workingEnd = LocalDate.of(2023, 12, 18);
+        BookablePeriod workingPeriod = new WorkingPeriod(workingStart, workingEnd, Arrays.asList(workingDay1, workingDay2));
+
+        // Given TimeSlot
+        LocalTime slotStart = LocalTime.of(14, 30);
+        LocalTime slotEnd = LocalTime.of(15, 40);
+        TimeSlot givenTimeSlot = new TimeSlot(slotStart, slotEnd);
+
+        // Given Date
+        LocalDate bookingDate = LocalDate.of(2023, 12, 20);
+
+        // When
+        boolean actualIsInside = workingPeriod.isInside(bookingDate, givenTimeSlot);
+
+        // Then
+        assertFalse(actualIsInside);
+    }
+
+    @Test
+    public void testIsInsideShouldFailIfDateExistsButNotInsideDays() {
+        // Given
+
+        // Working TimeSlot 1
+        LocalTime workingStart1 = LocalTime.of(8, 0);
+        LocalTime workingEnd1 = LocalTime.of(12, 30);
+
+        TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
+        TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
+        List<TimeSlot> existingBooked1 = Arrays.asList(existingSlot1, existingSlot2);
+        WorkingTimeInterval workingTimeSlot1 = new WorkingTimeInterval(workingStart1, workingEnd1, existingBooked1);
+
+        // Working TimeSlot 2
+        LocalTime workingStart2 = LocalTime.of(14, 0);
+        LocalTime workingEnd2 = LocalTime.of(18, 30);
+
+        TimeSlot existingSlot3 = new TimeSlot(LocalTime.of(14,0), LocalTime.of(14,30));
+        TimeSlot existingSlot4 = new TimeSlot(LocalTime.of(15,0), LocalTime.of(15,30));
+        List<TimeSlot> existingBooked2 = Arrays.asList(existingSlot3, existingSlot4);
+        WorkingTimeInterval workingTimeSlot2 = new WorkingTimeInterval(workingStart2, workingEnd2, existingBooked2);
+
+        // Working TimeSlot 3
+        LocalTime workingStart3 = LocalTime.of(8, 0);
+        LocalTime workingEnd3 = LocalTime.of(12, 30);
+
+        TimeSlot existingSlot5 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
+        TimeSlot existingSlot6 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
+        List<TimeSlot> existingBooked3 = Arrays.asList(existingSlot5, existingSlot6);
+        WorkingTimeInterval workingTimeSlot3 = new WorkingTimeInterval(workingStart3, workingEnd3, existingBooked3);
+
+        // Working TimeSlot 4
+        LocalTime workingStart4 = LocalTime.of(14, 0);
+        LocalTime workingEnd4 = LocalTime.of(17, 30);
+
+        TimeSlot existingSlot7 = new TimeSlot(LocalTime.of(15,0), LocalTime.of(15,30));
+        TimeSlot existingSlot8 = new TimeSlot(LocalTime.of(16,0), LocalTime.of(16,30));
+        TimeSlot existingSlot9 = new TimeSlot(LocalTime.of(17,30), LocalTime.of(17,30));
+        List<TimeSlot> existingBooked4 = Arrays.asList(existingSlot7, existingSlot8, existingSlot9);
+        WorkingTimeInterval workingTimeSlot4 = new WorkingTimeInterval(workingStart4, workingEnd4, existingBooked4);
+
+        // Working Day 1
+        LocalDate date1 = LocalDate.of(2023, 12,17);
+        WorkingDay workingDay1 = new WorkingDay(date1, Arrays.asList(workingTimeSlot1, workingTimeSlot2));
+
+        // Working Day 2
+        LocalDate date2 = LocalDate.of(2023, 12,18);
+        WorkingDay workingDay2 = new WorkingDay(date2, Arrays.asList(workingTimeSlot3, workingTimeSlot4));
+
+        // Working Period
+        LocalDate workingStart = LocalDate.of(2023, 12, 17);
+        LocalDate workingEnd = LocalDate.of(2023, 12, 18);
+        BookablePeriod workingPeriod = new WorkingPeriod(workingStart, workingEnd, Arrays.asList(workingDay1, workingDay2));
+
+        // Given TimeSlot
+        LocalTime slotStart = LocalTime.of(13, 30);
+        LocalTime slotEnd = LocalTime.of(15, 40);
+        TimeSlot givenTimeSlot = new TimeSlot(slotStart, slotEnd);
+
+        // Given Date
+        LocalDate bookingDate = LocalDate.of(2023, 12, 18);
+
+        // When
+        boolean actualIsInside = workingPeriod.isInside(bookingDate, givenTimeSlot);
+
+        // Then
+        assertFalse(actualIsInside);
+    }
+
+    // IsConflictWithBooked
+
+    // Success
+
+    @Test
+    public void testIsConflictWithBookedShouldSucceed() {
+        // Given
+
+        // Working TimeSlot 1
+        LocalTime workingStart1 = LocalTime.of(8, 0);
+        LocalTime workingEnd1 = LocalTime.of(12, 30);
+
+        TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
+        TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
+        List<TimeSlot> existingBooked1 = Arrays.asList(existingSlot1, existingSlot2);
+        WorkingTimeInterval workingTimeSlot1 = new WorkingTimeInterval(workingStart1, workingEnd1, existingBooked1);
+
+        // Working TimeSlot 2
+        LocalTime workingStart2 = LocalTime.of(14, 0);
+        LocalTime workingEnd2 = LocalTime.of(18, 30);
+
+        TimeSlot existingSlot3 = new TimeSlot(LocalTime.of(14,0), LocalTime.of(14,30));
+        TimeSlot existingSlot4 = new TimeSlot(LocalTime.of(15,0), LocalTime.of(15,30));
+        List<TimeSlot> existingBooked2 = Arrays.asList(existingSlot3, existingSlot4);
+        WorkingTimeInterval workingTimeSlot2 = new WorkingTimeInterval(workingStart2, workingEnd2, existingBooked2);
+
+        // Working TimeSlot 3
+        LocalTime workingStart3 = LocalTime.of(8, 0);
+        LocalTime workingEnd3 = LocalTime.of(12, 30);
+
+        TimeSlot existingSlot5 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
+        TimeSlot existingSlot6 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
+        List<TimeSlot> existingBooked3 = Arrays.asList(existingSlot5, existingSlot6);
+        WorkingTimeInterval workingTimeSlot3 = new WorkingTimeInterval(workingStart3, workingEnd3, existingBooked3);
+
+        // Working TimeSlot 4
+        LocalTime workingStart4 = LocalTime.of(14, 0);
+        LocalTime workingEnd4 = LocalTime.of(17, 30);
+
+        TimeSlot existingSlot7 = new TimeSlot(LocalTime.of(15,0), LocalTime.of(15,30));
+        TimeSlot existingSlot8 = new TimeSlot(LocalTime.of(16,0), LocalTime.of(16,30));
+        TimeSlot existingSlot9 = new TimeSlot(LocalTime.of(17,30), LocalTime.of(17,30));
+        List<TimeSlot> existingBooked4 = Arrays.asList(existingSlot7, existingSlot8, existingSlot9);
+        WorkingTimeInterval workingTimeSlot4 = new WorkingTimeInterval(workingStart4, workingEnd4, existingBooked4);
+
+        // Working Day 1
+        LocalDate date1 = LocalDate.of(2023, 12,17);
+        WorkingDay workingDay1 = new WorkingDay(date1, Arrays.asList(workingTimeSlot1, workingTimeSlot2));
+
+        // Working Day 2
+        LocalDate date2 = LocalDate.of(2023, 12,18);
+        WorkingDay workingDay2 = new WorkingDay(date2, Arrays.asList(workingTimeSlot3, workingTimeSlot4));
+
+        // Working Period
+        LocalDate workingStart = LocalDate.of(2023, 12, 17);
+        LocalDate workingEnd = LocalDate.of(2023, 12, 18);
+        BookablePeriod workingPeriod = new WorkingPeriod(workingStart, workingEnd, Arrays.asList(workingDay1, workingDay2));
+
+        // Given TimeSlot
+        LocalTime slotStart = LocalTime.of(16, 20);
+        LocalTime slotEnd = LocalTime.of(16, 40);
+        TimeSlot givenTimeSlot = new TimeSlot(slotStart, slotEnd);
+
+        // Given Date
+        LocalDate bookingDate = LocalDate.of(2023, 12, 18);
+
+        // When
+        boolean actualIsConflict = workingPeriod.isConflictWithBooked(bookingDate, givenTimeSlot);
+
+        // Then
+        assertTrue(actualIsConflict);
+    }
+
+    // Fail
+
+    @Test
+    public void testIsConflictWithBookedShouldFailIfDifferentDate() {
+        // Given
+
+        // Working TimeSlot 1
+        LocalTime workingStart1 = LocalTime.of(8, 0);
+        LocalTime workingEnd1 = LocalTime.of(12, 30);
+
+        TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
+        TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
+        List<TimeSlot> existingBooked1 = Arrays.asList(existingSlot1, existingSlot2);
+        WorkingTimeInterval workingTimeSlot1 = new WorkingTimeInterval(workingStart1, workingEnd1, existingBooked1);
+
+        // Working TimeSlot 2
+        LocalTime workingStart2 = LocalTime.of(14, 0);
+        LocalTime workingEnd2 = LocalTime.of(18, 30);
+
+        TimeSlot existingSlot3 = new TimeSlot(LocalTime.of(14,0), LocalTime.of(14,30));
+        TimeSlot existingSlot4 = new TimeSlot(LocalTime.of(15,0), LocalTime.of(15,30));
+        List<TimeSlot> existingBooked2 = Arrays.asList(existingSlot3, existingSlot4);
+        WorkingTimeInterval workingTimeSlot2 = new WorkingTimeInterval(workingStart2, workingEnd2, existingBooked2);
+
+        // Working TimeSlot 3
+        LocalTime workingStart3 = LocalTime.of(8, 0);
+        LocalTime workingEnd3 = LocalTime.of(12, 30);
+
+        TimeSlot existingSlot5 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
+        TimeSlot existingSlot6 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
+        List<TimeSlot> existingBooked3 = Arrays.asList(existingSlot5, existingSlot6);
+        WorkingTimeInterval workingTimeSlot3 = new WorkingTimeInterval(workingStart3, workingEnd3, existingBooked3);
+
+        // Working TimeSlot 4
+        LocalTime workingStart4 = LocalTime.of(14, 0);
+        LocalTime workingEnd4 = LocalTime.of(17, 30);
+
+        TimeSlot existingSlot7 = new TimeSlot(LocalTime.of(15,0), LocalTime.of(15,30));
+        TimeSlot existingSlot8 = new TimeSlot(LocalTime.of(16,0), LocalTime.of(16,30));
+        TimeSlot existingSlot9 = new TimeSlot(LocalTime.of(17,30), LocalTime.of(17,30));
+        List<TimeSlot> existingBooked4 = Arrays.asList(existingSlot7, existingSlot8, existingSlot9);
+        WorkingTimeInterval workingTimeSlot4 = new WorkingTimeInterval(workingStart4, workingEnd4, existingBooked4);
+
+        // Working Day 1
+        LocalDate date1 = LocalDate.of(2023, 12,17);
+        WorkingDay workingDay1 = new WorkingDay(date1, Arrays.asList(workingTimeSlot1, workingTimeSlot2));
+
+        // Working Day 2
+        LocalDate date2 = LocalDate.of(2023, 12,18);
+        WorkingDay workingDay2 = new WorkingDay(date2, Arrays.asList(workingTimeSlot3, workingTimeSlot4));
+
+        // Working Period
+        LocalDate workingStart = LocalDate.of(2023, 12, 17);
+        LocalDate workingEnd = LocalDate.of(2023, 12, 18);
+        BookablePeriod workingPeriod = new WorkingPeriod(workingStart, workingEnd, Arrays.asList(workingDay1, workingDay2));
+
+        // Given TimeSlot
+        LocalTime slotStart = LocalTime.of(16, 20);
+        LocalTime slotEnd = LocalTime.of(16, 40);
+        TimeSlot givenTimeSlot = new TimeSlot(slotStart, slotEnd);
+
+        // Given Date
+        LocalDate bookingDate = LocalDate.of(2023, 12, 20);
+
+        // When
+        boolean actualIsConflict = workingPeriod.isConflictWithBooked(bookingDate, givenTimeSlot);
+
+        // Then
+        assertFalse(actualIsConflict);
+    }
+
+    @Test
+    public void testIsConflictWithBookedShouldFailIfDateExistButNoConflict() {
+        // Given
+
+        // Working TimeSlot 1
+        LocalTime workingStart1 = LocalTime.of(8, 0);
+        LocalTime workingEnd1 = LocalTime.of(12, 30);
+
+        TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
+        TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
+        List<TimeSlot> existingBooked1 = Arrays.asList(existingSlot1, existingSlot2);
+        WorkingTimeInterval workingTimeSlot1 = new WorkingTimeInterval(workingStart1, workingEnd1, existingBooked1);
+
+        // Working TimeSlot 2
+        LocalTime workingStart2 = LocalTime.of(14, 0);
+        LocalTime workingEnd2 = LocalTime.of(18, 30);
+
+        TimeSlot existingSlot3 = new TimeSlot(LocalTime.of(14,0), LocalTime.of(14,30));
+        TimeSlot existingSlot4 = new TimeSlot(LocalTime.of(15,0), LocalTime.of(15,30));
+        List<TimeSlot> existingBooked2 = Arrays.asList(existingSlot3, existingSlot4);
+        WorkingTimeInterval workingTimeSlot2 = new WorkingTimeInterval(workingStart2, workingEnd2, existingBooked2);
+
+        // Working TimeSlot 3
+        LocalTime workingStart3 = LocalTime.of(8, 0);
+        LocalTime workingEnd3 = LocalTime.of(12, 30);
+
+        TimeSlot existingSlot5 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
+        TimeSlot existingSlot6 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
+        List<TimeSlot> existingBooked3 = Arrays.asList(existingSlot5, existingSlot6);
+        WorkingTimeInterval workingTimeSlot3 = new WorkingTimeInterval(workingStart3, workingEnd3, existingBooked3);
+
+        // Working TimeSlot 4
+        LocalTime workingStart4 = LocalTime.of(14, 0);
+        LocalTime workingEnd4 = LocalTime.of(17, 30);
+
+        TimeSlot existingSlot7 = new TimeSlot(LocalTime.of(15,0), LocalTime.of(15,30));
+        TimeSlot existingSlot8 = new TimeSlot(LocalTime.of(16,0), LocalTime.of(16,30));
+        TimeSlot existingSlot9 = new TimeSlot(LocalTime.of(17,30), LocalTime.of(17,30));
+        List<TimeSlot> existingBooked4 = Arrays.asList(existingSlot7, existingSlot8, existingSlot9);
+        WorkingTimeInterval workingTimeSlot4 = new WorkingTimeInterval(workingStart4, workingEnd4, existingBooked4);
+
+        // Working Day 1
+        LocalDate date1 = LocalDate.of(2023, 12,17);
+        WorkingDay workingDay1 = new WorkingDay(date1, Arrays.asList(workingTimeSlot1, workingTimeSlot2));
+
+        // Working Day 2
+        LocalDate date2 = LocalDate.of(2023, 12,18);
+        WorkingDay workingDay2 = new WorkingDay(date2, Arrays.asList(workingTimeSlot3, workingTimeSlot4));
+
+        // Working Period
+        LocalDate workingStart = LocalDate.of(2023, 12, 17);
+        LocalDate workingEnd = LocalDate.of(2023, 12, 18);
+        BookablePeriod workingPeriod = new WorkingPeriod(workingStart, workingEnd, Arrays.asList(workingDay1, workingDay2));
+
+        // Given TimeSlot
+        LocalTime slotStart = LocalTime.of(14, 30);
+        LocalTime slotEnd = LocalTime.of(15, 0);
+        TimeSlot givenTimeSlot = new TimeSlot(slotStart, slotEnd);
+
+        // Given Date
+        LocalDate bookingDate = LocalDate.of(2023, 12, 17);
+
+        // When
+        boolean actualIsConflict = workingPeriod.isConflictWithBooked(bookingDate, givenTimeSlot);
+
+        // Then
+        assertFalse(actualIsConflict);
+    }
+
+
+
     // testBook : TODO
 
     @Test

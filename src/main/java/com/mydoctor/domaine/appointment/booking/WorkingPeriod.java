@@ -46,13 +46,13 @@ public final class WorkingPeriod implements BookablePeriod {
 
     @Override
     public boolean isConflictWithBooked(LocalDate date, TimeSlot timeSlot) {
-        // TODO
-        return false;
+        return workingDays.stream()
+                .anyMatch(w -> w.getDate().equals(date) && w.isConflictWithBooked(timeSlot));
     }
 
     @Override
     public boolean isInside(LocalDate date, TimeSlot timeSlot) {
-        // TODO
-        return false;
+        return workingDays.stream()
+                .anyMatch(w -> w.getDate().equals(date) && w.isInside(timeSlot));
     }
 }
