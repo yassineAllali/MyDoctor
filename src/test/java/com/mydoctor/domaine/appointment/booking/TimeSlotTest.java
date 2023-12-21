@@ -531,4 +531,54 @@ class TimeSlotTest {
         assertTrue(timeSlot.isConflict(otherTimeSlot));
     }
 
+    // testSubSlotsSize
+
+    // test 1
+    @Test
+    public void testSubSlotsSize1() {
+        // Given
+        LocalTime start = LocalTime.of(14, 20);
+        LocalTime end = LocalTime.of(15, 10);
+
+        TimeSlot timeSlot = new TimeSlot(start, end);
+
+        // When
+        int actualSubSlotsSize = timeSlot.getSubSlotsSize(Duration.ofMinutes(10));
+
+        // Then
+        assertEquals(5, actualSubSlotsSize);
+    }
+
+    // test 2
+    @Test
+    public void testSubSlotsSize2() {
+        // Given
+        LocalTime start = LocalTime.of(14, 20);
+        LocalTime end = LocalTime.of(15, 10);
+
+        TimeSlot timeSlot = new TimeSlot(start, end);
+
+        // When
+        int actualSubSlotsSize = timeSlot.getSubSlotsSize(Duration.ofMinutes(15));
+
+        // Then
+        assertEquals(3, actualSubSlotsSize);
+    }
+
+    // test 3
+    @Test
+    public void testSubSlotsSize3() {
+        // Given
+        LocalTime start = LocalTime.of(14, 20);
+        LocalTime end = LocalTime.of(15, 10);
+
+        TimeSlot timeSlot = new TimeSlot(start, end);
+
+        // When
+        int actualSubSlotsSize = timeSlot.getSubSlotsSize(Duration.ofMinutes(70));
+
+        // Then
+        assertEquals(0, actualSubSlotsSize);
+    }
+
 }

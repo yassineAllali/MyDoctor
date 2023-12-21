@@ -314,4 +314,42 @@ class WorkingDayTest {
         assertThrows(BookingException.class,() -> workingDay.book(timeSlot));
     }
 
+    // TestGetAvailableSlots
+
+    // Test 1 :
+    @Test
+    public void testGetAvailableSlots() {
+        // Given
+
+        // Working TimeSlot 1
+        LocalTime workingStart1 = LocalTime.of(8, 0);
+        LocalTime workingEnd1 = LocalTime.of(12, 30);
+
+        TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
+        TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
+        List<TimeSlot> existingBooked1 = Arrays.asList(existingSlot1, existingSlot2);
+        WorkingTimeInterval workingTimeSlot1 = new WorkingTimeInterval(workingStart1, workingEnd1, existingBooked1);
+
+        // Working TimeSlot 2
+        LocalTime workingStart2 = LocalTime.of(14, 0);
+        LocalTime workingEnd2 = LocalTime.of(18, 30);
+
+        TimeSlot existingSlot3 = new TimeSlot(LocalTime.of(14,0), LocalTime.of(15,30));
+        TimeSlot existingSlot4 = new TimeSlot(LocalTime.of(15,30), LocalTime.of(16,30));
+        List<TimeSlot> existingBooked2 = Arrays.asList(existingSlot3, existingSlot4);
+        WorkingTimeInterval workingTimeSlot2 = new WorkingTimeInterval(workingStart2, workingEnd2, existingBooked2);
+
+        // Working Day
+        LocalDate date = LocalDate.of(2023, 12,10);
+        BookableTimeInterval workingDay = new WorkingDay(date, Arrays.asList(workingTimeSlot1, workingTimeSlot2));
+
+        // TimeSlot
+        LocalTime slotStart = LocalTime.of(8, 20);
+        LocalTime slotEnd = LocalTime.of(9, 40);
+        TimeSlot timeSlot = new TimeSlot(slotStart, slotEnd);
+
+        // When, Then
+        assertThrows(BookingException.class,() -> workingDay.book(timeSlot));
+    }
+
 }

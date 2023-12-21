@@ -2,6 +2,7 @@ package com.mydoctor.domaine.appointment.booking;
 
 import com.mydoctor.domaine.appointment.booking.exception.BookingException;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,11 @@ public final class WorkingPeriod implements BookablePeriod {
     @Override
     public int getBookedSize() {
         return workingDays.stream().mapToInt(w -> w.getBookedSize()).sum();
+    }
+
+    @Override
+    public int getAvailableSlotsSize(Duration duration) {
+        return 0;
     }
 
     @Override

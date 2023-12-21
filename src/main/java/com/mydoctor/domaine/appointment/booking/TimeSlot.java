@@ -103,5 +103,12 @@ public class TimeSlot{
         return !isOutside(other);
     }
 
+    public int getSubSlotsSize(Duration duration) {
+        return getAvailableSlotsSize(start, end, duration);
+    }
+
+    public static int getAvailableSlotsSize(LocalTime start, LocalTime end, Duration duration) {
+        return (int)(Duration.between(start, end).getSeconds()/duration.getSeconds());
+    }
 
 }
