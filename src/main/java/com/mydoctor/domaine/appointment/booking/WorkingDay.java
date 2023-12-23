@@ -47,7 +47,9 @@ public final class WorkingDay implements BookableTimeInterval {
 
     @Override
     public List<TimeSlot> getAvailableSlots(Duration duration) {
-        return null;
+        return workingTimeSlots.stream()
+                .map(w -> w.getAvailableSlots(duration))
+                .flatMap(list -> list.stream()).toList();
     }
 
     @Override

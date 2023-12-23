@@ -51,7 +51,9 @@ public final class WorkingPeriod implements BookablePeriod {
 
     @Override
     public List<TimeSlot> getAvailableSlots(Duration duration) {
-        return null;
+        return workingDays.stream()
+                .map(w -> w.getAvailableSlots(duration))
+                .flatMap(list -> list.stream()).toList();
     }
 
     @Override

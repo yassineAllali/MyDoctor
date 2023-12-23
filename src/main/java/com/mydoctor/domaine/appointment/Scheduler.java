@@ -22,13 +22,12 @@ public final class Scheduler {
         return workingPeriod.getBookedSize();
     }
 
+    public List<TimeSlot> getAvailableSlots(Duration duration) {
+        return workingPeriod.getAvailableSlots(duration);
+    }
+
     public int getAvailableSlotsSize(Duration duration) {
         return workingPeriod.getAvailableSlotsSize(duration);
     }
-
-    public List<TimeSlot> getAvailableSlots(Duration duration) {
-        return null;
-    }
-
 
 }

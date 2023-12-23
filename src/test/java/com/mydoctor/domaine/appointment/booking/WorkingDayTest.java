@@ -315,10 +315,10 @@ class WorkingDayTest {
         assertThrows(BookingException.class,() -> workingDay.book(timeSlot));
     }
 
-    // TestGetAvailableSlots
+    // TestGetAvailableSlotsSize
 
     @Test
-    public void testGetAvailableSlots() {
+    public void testGetAvailableSlotsSize() {
         // Given
 
         // Working TimeSlot 1
@@ -348,6 +348,43 @@ class WorkingDayTest {
 
         // Then
         assertEquals(16, actualAvailableSlotsSize);
+    }
+
+    // TestGetAvailableSlots
+    //
+    @Test
+    public void testGetAvailableSlots() {
+        // Given
+
+        // Working TimeSlot 1
+        LocalTime workingStart1 = LocalTime.of(8, 0);
+        LocalTime workingEnd1 = LocalTime.of(12, 30);
+
+        TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
+        TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
+        List<TimeSlot> existingBooked1 = Arrays.asList(existingSlot1, existingSlot2);
+        WorkingTimeInterval workingTimeSlot1 = new WorkingTimeInterval(workingStart1, workingEnd1, existingBooked1);
+
+        // Working TimeSlot 2
+        LocalTime workingStart2 = LocalTime.of(14, 0);
+        LocalTime workingEnd2 = LocalTime.of(18, 30);
+
+        TimeSlot existingSlot3 = new TimeSlot(LocalTime.of(14,0), LocalTime.of(15,30));
+        TimeSlot existingSlot4 = new TimeSlot(LocalTime.of(15,30), LocalTime.of(16,30));
+        List<TimeSlot> existingBooked2 = Arrays.asList(existingSlot3, existingSlot4);
+        WorkingTimeInterval workingTimeSlot2 = new WorkingTimeInterval(workingStart2, workingEnd2, existingBooked2);
+
+        // Working Day
+        LocalDate date = LocalDate.of(2023, 12,23);
+        BookableTimeInterval workingDay = new WorkingDay(date, Arrays.asList(workingTimeSlot1, workingTimeSlot2));
+
+        // When
+        List<TimeSlot> actualAvailableSlots = workingDay.getAvailableSlots(Duration.ofMinutes(20));
+
+        // Then
+        assertEquals(LocalTime.of(8, 50), actualAvailableSlots.get(0).getEnd());
+        assertEquals(LocalTime.of(17, 10), actualAvailableSlots.get(12).getStart());
+        assertEquals(16, actualAvailableSlots.size());
     }
 
 }
