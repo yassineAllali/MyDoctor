@@ -32,10 +32,13 @@ public final class WorkingTimeInterval extends TimeSlot implements BookableTimeI
 
     @Override
     public int getAvailableSlotsSize(Duration duration) {
-        int availableSlotsSize = 0;
+        if( getBookedSize() == 0 ) {
+            return getSubSlotsSize(duration);
+        }
 
+        int availableSlotsSize = 0;
         LocalTime localStart = getStart();
-        LocalTime localEnd = (getBookedSize() > 0) ? getBooked().get(0).getStart() : getEnd();
+        LocalTime localEnd = getBooked().get(0).getStart();
 
         availableSlotsSize += TimeSlot.getAvailableSlotsSize(localStart, localEnd, duration);
 

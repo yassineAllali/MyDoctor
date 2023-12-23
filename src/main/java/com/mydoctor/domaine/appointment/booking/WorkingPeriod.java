@@ -45,7 +45,8 @@ public final class WorkingPeriod implements BookablePeriod {
 
     @Override
     public int getAvailableSlotsSize(Duration duration) {
-        return 0;
+        return workingDays.stream()
+                .mapToInt(w -> w.getAvailableSlotsSize(duration)).sum();
     }
 
     @Override

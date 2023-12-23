@@ -3,6 +3,7 @@ package com.mydoctor.domaine.appointment.booking;
 import com.mydoctor.domaine.appointment.booking.exception.*;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
@@ -316,7 +317,6 @@ class WorkingDayTest {
 
     // TestGetAvailableSlots
 
-    // Test 1 :
     @Test
     public void testGetAvailableSlots() {
         // Given
@@ -340,16 +340,14 @@ class WorkingDayTest {
         WorkingTimeInterval workingTimeSlot2 = new WorkingTimeInterval(workingStart2, workingEnd2, existingBooked2);
 
         // Working Day
-        LocalDate date = LocalDate.of(2023, 12,10);
+        LocalDate date = LocalDate.of(2023, 12,23);
         BookableTimeInterval workingDay = new WorkingDay(date, Arrays.asList(workingTimeSlot1, workingTimeSlot2));
 
-        // TimeSlot
-        LocalTime slotStart = LocalTime.of(8, 20);
-        LocalTime slotEnd = LocalTime.of(9, 40);
-        TimeSlot timeSlot = new TimeSlot(slotStart, slotEnd);
+        // When
+        int actualAvailableSlotsSize = workingDay.getAvailableSlotsSize(Duration.ofMinutes(20));
 
-        // When, Then
-        assertThrows(BookingException.class,() -> workingDay.book(timeSlot));
+        // Then
+        assertEquals(16, actualAvailableSlotsSize);
     }
 
 }
