@@ -50,6 +50,11 @@ public final class WorkingPeriod implements BookablePeriod {
     }
 
     @Override
+    public List<TimeSlot> getAvailableSlots(Duration duration) {
+        return null;
+    }
+
+    @Override
     public void book(LocalDate date, TimeSlot timeSlot) {
         if(!isInside(date, timeSlot)) {
             throw new BookingException("Not Inside Working Slots!");

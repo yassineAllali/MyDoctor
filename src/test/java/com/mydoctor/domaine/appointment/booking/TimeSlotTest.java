@@ -581,4 +581,42 @@ class TimeSlotTest {
         assertEquals(0, actualSubSlotsSize);
     }
 
+
+    // testSubSlots
+
+    // test 1
+    @Test
+    public void testSubSlots1() {
+        // Given
+        LocalTime start = LocalTime.of(12, 20);
+        LocalTime end = LocalTime.of(14, 10);
+
+        TimeSlot timeSlot = new TimeSlot(start, end);
+
+        // When
+        TimeSlot[] actualSubSlots = timeSlot.getSubSlots(Duration.ofMinutes(7));
+
+        // Then
+        assertEquals(15, actualSubSlots.length);
+        assertEquals(LocalTime.of(12, 34), actualSubSlots[1].getEnd());
+        assertEquals(LocalTime.of(13, 58), actualSubSlots[14].getStart());
+    }
+
+
+    // test 2
+    @Test
+    public void testSubSlots2() {
+        // Given
+        LocalTime start = LocalTime.of(15, 20);
+        LocalTime end = LocalTime.of(16, 10);
+
+        TimeSlot timeSlot = new TimeSlot(start, end);
+
+        // When
+        TimeSlot[] actualSubSlots = timeSlot.getSubSlots(Duration.ofHours(1));
+
+        // Then
+        assertEquals(0, actualSubSlots.length);
+    }
+
 }

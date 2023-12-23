@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class WorkingTimeSlotTest {
+class WorkingTimeIntervalTest {
 
     /////// Booking //////
 
@@ -20,17 +20,17 @@ class WorkingTimeSlotTest {
         // Given
         LocalTime start = LocalTime.of(8, 0);
         LocalTime end = LocalTime.of(12, 30);
-        BookableTimeInterval workingTimeSlot = new WorkingTimeInterval(start, end);
+        BookableTimeInterval workingTimeInterval = new WorkingTimeInterval(start, end);
 
         LocalTime slotStart = LocalTime.of(8, 30);
         LocalTime slotEnd = LocalTime.of(9, 0);
         TimeSlot timeSlot = new TimeSlot(slotStart, slotEnd);
 
         // When
-        workingTimeSlot.book(timeSlot);
+        workingTimeInterval.book(timeSlot);
 
         // Then
-        assertEquals(1, workingTimeSlot.getBookedSize());
+        assertEquals(1, workingTimeInterval.getBookedSize());
     }
 
     @Test
@@ -42,17 +42,17 @@ class WorkingTimeSlotTest {
         TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
         TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
         List<TimeSlot> existingBooked = Arrays.asList(existingSlot1, existingSlot2);
-        BookableTimeInterval workingTimeSlot = new WorkingTimeInterval(start, end, existingBooked);
+        BookableTimeInterval workingTimeInterval = new WorkingTimeInterval(start, end, existingBooked);
 
         LocalTime slotStart = LocalTime.of(8, 30);
         LocalTime slotEnd = LocalTime.of(9, 0);
         TimeSlot timeSlot = new TimeSlot(slotStart, slotEnd);
 
         // When
-        workingTimeSlot.book(timeSlot);
+        workingTimeInterval.book(timeSlot);
 
         // Then
-        assertEquals(3, workingTimeSlot.getBookedSize());
+        assertEquals(3, workingTimeInterval.getBookedSize());
     }
 
     @Test
@@ -64,17 +64,17 @@ class WorkingTimeSlotTest {
         TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
         TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
         List<TimeSlot> existingBooked = Arrays.asList(existingSlot1, existingSlot2);
-        BookableTimeInterval workingTimeSlot = new WorkingTimeInterval(start, end, existingBooked);
+        BookableTimeInterval workingTimeInterval = new WorkingTimeInterval(start, end, existingBooked);
 
         LocalTime slotStart = LocalTime.of(9, 30);
         LocalTime slotEnd = LocalTime.of(12, 30);
         TimeSlot timeSlot = new TimeSlot(slotStart, slotEnd);
 
         // When
-        workingTimeSlot.book(timeSlot);
+        workingTimeInterval.book(timeSlot);
 
         // Then
-        assertEquals(3, workingTimeSlot.getBookedSize());
+        assertEquals(3, workingTimeInterval.getBookedSize());
     }
 
     // Failed Booking
@@ -88,14 +88,14 @@ class WorkingTimeSlotTest {
         TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
         TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
         List<TimeSlot> existingBooked = Arrays.asList(existingSlot1, existingSlot2);
-        BookableTimeInterval workingTimeSlot = new WorkingTimeInterval(start, end, existingBooked);
+        BookableTimeInterval workingTimeInterval = new WorkingTimeInterval(start, end, existingBooked);
 
         LocalTime slotStart = LocalTime.of(14, 30);
         LocalTime slotEnd = LocalTime.of(15, 0);
         TimeSlot timeSlot = new TimeSlot(slotStart, slotEnd);
 
         // When, Then
-        assertThrows(BookingException.class, () -> workingTimeSlot.book(timeSlot));
+        assertThrows(BookingException.class, () -> workingTimeInterval.book(timeSlot));
     }
 
     @Test
@@ -107,14 +107,14 @@ class WorkingTimeSlotTest {
         TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
         TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
         List<TimeSlot> existingBooked = Arrays.asList(existingSlot1, existingSlot2);
-        BookableTimeInterval workingTimeSlot = new WorkingTimeInterval(start, end, existingBooked);
+        BookableTimeInterval workingTimeInterval = new WorkingTimeInterval(start, end, existingBooked);
 
         LocalTime slotStart = LocalTime.of(6, 30);
         LocalTime slotEnd = LocalTime.of(   8, 0);
         TimeSlot timeSlot = new TimeSlot(slotStart, slotEnd);
 
         // When, Then
-        assertThrows(BookingException.class, () -> workingTimeSlot.book(timeSlot));
+        assertThrows(BookingException.class, () -> workingTimeInterval.book(timeSlot));
     }
 
     @Test
@@ -126,14 +126,14 @@ class WorkingTimeSlotTest {
         TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
         TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
         List<TimeSlot> existingBooked = Arrays.asList(existingSlot1, existingSlot2);
-        BookableTimeInterval workingTimeSlot = new WorkingTimeInterval(start, end, existingBooked);
+        BookableTimeInterval workingTimeInterval = new WorkingTimeInterval(start, end, existingBooked);
 
         LocalTime slotStart = LocalTime.of(11, 30);
         LocalTime slotEnd = LocalTime.of(   13, 0);
         TimeSlot timeSlot = new TimeSlot(slotStart, slotEnd);
 
         // When, Then
-        assertThrows(BookingException.class, () -> workingTimeSlot.book(timeSlot));
+        assertThrows(BookingException.class, () -> workingTimeInterval.book(timeSlot));
     }
 
     @Test
@@ -145,14 +145,14 @@ class WorkingTimeSlotTest {
         TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
         TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
         List<TimeSlot> existingBooked = Arrays.asList(existingSlot1, existingSlot2);
-        BookableTimeInterval workingTimeSlot = new WorkingTimeInterval(start, end, existingBooked);
+        BookableTimeInterval workingTimeInterval = new WorkingTimeInterval(start, end, existingBooked);
 
         LocalTime slotStart = LocalTime.of(8, 0);
         LocalTime slotEnd = LocalTime.of(   8, 20);
         TimeSlot timeSlot = new TimeSlot(slotStart, slotEnd);
 
         // When, Then
-        assertThrows(BookingException.class, () -> workingTimeSlot.book(timeSlot));
+        assertThrows(BookingException.class, () -> workingTimeInterval.book(timeSlot));
     }
 
 
@@ -169,14 +169,14 @@ class WorkingTimeSlotTest {
         TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
         TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
         List<TimeSlot> existingBooked = Arrays.asList(existingSlot1, existingSlot2);
-        BookableTimeInterval workingTimeSlot = new WorkingTimeInterval(start, end, existingBooked);
+        BookableTimeInterval workingTimeInterval = new WorkingTimeInterval(start, end, existingBooked);
 
         LocalTime slotStart = LocalTime.of(8, 20);
         LocalTime slotEnd = LocalTime.of(   8, 40);
         TimeSlot timeSlot = new TimeSlot(slotStart, slotEnd);
 
         // When
-        boolean actualIsConflict = workingTimeSlot.isConflictWithBooked(timeSlot);
+        boolean actualIsConflict = workingTimeInterval.isConflictWithBooked(timeSlot);
 
         // Then
         assertTrue(actualIsConflict);
@@ -191,14 +191,14 @@ class WorkingTimeSlotTest {
         TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
         TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
         List<TimeSlot> existingBooked = Arrays.asList(existingSlot1, existingSlot2);
-        BookableTimeInterval workingTimeSlot = new WorkingTimeInterval(start, end, existingBooked);
+        BookableTimeInterval workingTimeInterval = new WorkingTimeInterval(start, end, existingBooked);
 
         LocalTime slotStart = LocalTime.of(8, 30);
         LocalTime slotEnd = LocalTime.of(   9, 0);
         TimeSlot timeSlot = new TimeSlot(slotStart, slotEnd);
 
         // When
-        boolean actualIsConflict = workingTimeSlot.isConflictWithBooked(timeSlot);
+        boolean actualIsConflict = workingTimeInterval.isConflictWithBooked(timeSlot);
 
         // Then
         assertFalse(actualIsConflict);
@@ -214,10 +214,10 @@ class WorkingTimeSlotTest {
         LocalTime start = LocalTime.of(8, 0);
         LocalTime end = LocalTime.of(12, 30);
 
-        BookableTimeInterval workingTimeSlot = new WorkingTimeInterval(start, end);
+        BookableTimeInterval workingTimeInterval = new WorkingTimeInterval(start, end);
 
         // When
-        int actualAvailableSlotsSize = workingTimeSlot.getAvailableSlotsSize(Duration.ofMinutes(20));
+        int actualAvailableSlotsSize = workingTimeInterval.getAvailableSlotsSize(Duration.ofMinutes(20));
 
         // Then
         assertEquals(13, actualAvailableSlotsSize);
@@ -230,32 +230,32 @@ class WorkingTimeSlotTest {
         LocalTime start = LocalTime.of(8, 0);
         LocalTime end = LocalTime.of(12, 25);
         TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,10), LocalTime.of(8,35));
-        BookableTimeInterval workingTimeSlot = new WorkingTimeInterval(start, end, List.of(existingSlot1));
+        BookableTimeInterval workingTimeInterval = new WorkingTimeInterval(start, end, List.of(existingSlot1));
 
         // When
-        int actualAvailableSlotsSize = workingTimeSlot.getAvailableSlotsSize(Duration.ofMinutes(20));
+        int actualAvailableSlotsSize = workingTimeInterval.getAvailableSlotsSize(Duration.ofMinutes(20));
 
         // Then
         assertEquals(11, actualAvailableSlotsSize);
     }
 
-    // Test 2
+    // Test 3
     @Test
     void testGetAvailableSlotsSizeWhenOneBooking2() {
         // Given
         LocalTime start = LocalTime.of(8, 0);
         LocalTime end = LocalTime.of(9, 25);
         TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,10), LocalTime.of(9,5));
-        BookableTimeInterval workingTimeSlot = new WorkingTimeInterval(start, end, List.of(existingSlot1));
+        BookableTimeInterval workingTimeInterval = new WorkingTimeInterval(start, end, List.of(existingSlot1));
 
         // When
-        int actualAvailableSlotsSize = workingTimeSlot.getAvailableSlotsSize(Duration.ofMinutes(25));
+        int actualAvailableSlotsSize = workingTimeInterval.getAvailableSlotsSize(Duration.ofMinutes(25));
 
         // Then
         assertEquals(0, actualAvailableSlotsSize);
     }
 
-    // Test3
+    // Test4
     @Test
     void testGetAvailableSlotsSizeWhenMoreThanOneBooking() {
         // Given
@@ -264,13 +264,88 @@ class WorkingTimeSlotTest {
         TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,10), LocalTime.of(8,27));
         TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(8,45), LocalTime.of(9,5));
         TimeSlot existingSlot3 = new TimeSlot(LocalTime.of(9,19), LocalTime.of(9,37));
-        BookableTimeInterval workingTimeSlot = new WorkingTimeInterval(start, end, List.of(existingSlot1, existingSlot2, existingSlot3));
+        BookableTimeInterval workingTimeInterval = new WorkingTimeInterval(start, end, List.of(existingSlot1, existingSlot2, existingSlot3));
 
         // When
-        int actualAvailableSlotsSize = workingTimeSlot.getAvailableSlotsSize(Duration.ofMinutes(13));
+        int actualAvailableSlotsSize = workingTimeInterval.getAvailableSlotsSize(Duration.ofMinutes(13));
 
         // Then
         assertEquals(10, actualAvailableSlotsSize);
+    }
+
+
+    ///// getAvailableSlots
+
+    // Test 1
+    @Test
+    void testGetAvailableSlotsWhenNoBooking() {
+        // Given
+        LocalTime start = LocalTime.of(8, 0);
+        LocalTime end = LocalTime.of(12, 30);
+
+        BookableTimeInterval workingTimeInterval = new WorkingTimeInterval(start, end);
+
+        // When
+        List<TimeSlot> actualAvailableSlots = workingTimeInterval.getAvailableSlots(Duration.ofMinutes(25));
+
+        // Then
+        assertEquals(LocalTime.of(8, 25), actualAvailableSlots.get(0).getEnd());
+        assertEquals(LocalTime.of(10, 5), actualAvailableSlots.get(5).getStart());
+        assertEquals(10, actualAvailableSlots.size());
+    }
+
+    // Test 2
+    @Test
+    void testGetAvailableSlotsWhenOneBooking1() {
+        // Given
+        LocalTime start = LocalTime.of(8, 0);
+        LocalTime end = LocalTime.of(12, 30);
+
+        TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(9,15), LocalTime.of(9,45));
+        BookableTimeInterval workingTimeInterval = new WorkingTimeInterval(start, end, List.of(existingSlot1));
+
+        // When
+        List<TimeSlot> actualAvailableSlots = workingTimeInterval.getAvailableSlots(Duration.ofMinutes(30));
+
+        // Then
+        assertEquals(LocalTime.of(9, 45), actualAvailableSlots.get(2).getStart());
+        assertEquals(7, actualAvailableSlots.size());
+    }
+
+    // Test 3
+    @Test
+    void testGetAvailableSlotsWhenOneBooking2() {
+        // Given
+        LocalTime start = LocalTime.of(8, 0);
+        LocalTime end = LocalTime.of(9, 25);
+        TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,10), LocalTime.of(9,5));
+        BookableTimeInterval workingTimeInterval = new WorkingTimeInterval(start, end, List.of(existingSlot1));
+
+        // When
+        List<TimeSlot> actualAvailableSlots = workingTimeInterval.getAvailableSlots(Duration.ofMinutes(25));
+
+        // Then
+        assertEquals(0, actualAvailableSlots.size());
+    }
+
+    // Test4
+    @Test
+    void testGetAvailableSlotsWhenMoreThanOneBooking() {
+        // Given
+        LocalTime start = LocalTime.of(8, 0);
+        LocalTime end = LocalTime.of(11, 25);
+        TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,10), LocalTime.of(8,27));
+        TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(8,45), LocalTime.of(9,5));
+        TimeSlot existingSlot3 = new TimeSlot(LocalTime.of(9,19), LocalTime.of(9,37));
+        BookableTimeInterval workingTimeInterval = new WorkingTimeInterval(start, end, List.of(existingSlot1, existingSlot2, existingSlot3));
+
+        // When
+        List<TimeSlot> actualAvailableSlots = workingTimeInterval.getAvailableSlots(Duration.ofMinutes(13));
+
+        // Then
+        assertEquals(LocalTime.of(9, 18), actualAvailableSlots.get(1).getEnd());
+        assertEquals(LocalTime.of(10, 16), actualAvailableSlots.get(5).getStart());
+        assertEquals(10, actualAvailableSlots.size());
     }
 
 }

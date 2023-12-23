@@ -4,6 +4,8 @@ import com.mydoctor.domaine.appointment.booking.exception.IllegalArgumentExcepti
 
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 // Immutable
@@ -19,6 +21,11 @@ public class TimeSlot{
         }
         this.start = start;
         this.end = end;
+    }
+
+    public TimeSlot(LocalTime start, Duration duration) {
+        this.start = start;
+        this.end = start.plus(duration);
     }
 
     public LocalTime getStart() {
@@ -107,8 +114,23 @@ public class TimeSlot{
         return getAvailableSlotsSize(start, end, duration);
     }
 
+    public TimeSlot[] getSubSlots(Duration duration) {
+        return getAvailableSlots(start, end, duration);
+    }
+
     public static int getAvailableSlotsSize(LocalTime start, LocalTime end, Duration duration) {
         return (int)(Duration.between(start, end).getSeconds()/duration.getSeconds());
+    }
+
+    public static TimeSlot[] getAvailableSlots(LocalTime start, LocalTime end, Duration duration) {
+        int subSlotsSize = getAvailableSlotsSize(start, end, duration);
+        TimeSlot[] subSlots = new TimeSlot[subSlotsSize];
+        for(int i = 0; i < subSlotsSize; i++) {
+            Duration marginDuration = Duration.ofMillis(duration.toMillis() * i);
+            LocalTime subSlotStart = start.plus(marginDuration);
+            subSlots[i] = new TimeSlot(subSlotStart, duration);
+        }
+        return subSlots;
     }
 
 }

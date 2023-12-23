@@ -46,6 +46,11 @@ public final class WorkingDay implements BookableTimeInterval {
     }
 
     @Override
+    public List<TimeSlot> getAvailableSlots(Duration duration) {
+        return null;
+    }
+
+    @Override
     public void book(TimeSlot timeSlot) {
         if(!isInside(timeSlot)) {
             throw new BookingException("Not Inside Working Slots!");

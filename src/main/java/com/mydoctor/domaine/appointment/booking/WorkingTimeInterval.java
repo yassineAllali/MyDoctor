@@ -5,6 +5,7 @@ import com.mydoctor.domaine.appointment.booking.exception.BookingException;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public final class WorkingTimeInterval extends TimeSlot implements BookableTimeInterval {
@@ -48,15 +49,46 @@ public final class WorkingTimeInterval extends TimeSlot implements BookableTimeI
                 localStart = booked.get(i).getEnd();
                 localEnd = booked.get(i + 1).getStart();
 
-                availableSlotsSize += TimeSlot.getAvailableSlotsSize(localStart, localEnd, duration);
+                availableSlotsSize += getAvailableSlotsSize(localStart, localEnd, duration);
             }
         }
 
         // Add last Gap
         TimeSlot lastBooked = booked.get(booked.size() - 1);
-        availableSlotsSize += TimeSlot.getAvailableSlotsSize(lastBooked.getEnd(), getEnd(), duration);
+        availableSlotsSize += getAvailableSlotsSize(lastBooked.getEnd(), getEnd(), duration);
 
         return availableSlotsSize;
+    }
+
+    @Override
+    public List<TimeSlot> getAvailableSlots(Duration duration) {
+        if( getBookedSize() == 0 ) {
+            return Arrays.asList(getSubSlots(duration));
+        }
+
+        final int maxSubSlotsSize = getSubSlotsSize(duration);
+        List<TimeSlot> availableSlots = new ArrayList<>(maxSubSlotsSize);
+
+        LocalTime localStart = getStart();
+        LocalTime localEnd = getBooked().get(0).getStart();
+
+        availableSlots.addAll(Arrays.asList(getAvailableSlots(localStart, localEnd, duration)));
+
+        // get available slots between booked gaps
+        if(booked.size() > 1) {
+            for(int i = 0; i < booked.size() - 1; i++) {
+                localStart = booked.get(i).getEnd();
+                localEnd = booked.get(i + 1).getStart();
+
+                availableSlots.addAll(Arrays.asList(getAvailableSlots(localStart, localEnd, duration)));
+            }
+        }
+
+        // Add last Gap
+        TimeSlot lastBooked = booked.get(booked.size() - 1);
+        availableSlots.addAll(Arrays.asList(getAvailableSlots(lastBooked.getEnd(), getEnd(), duration)));
+
+        return availableSlots;
     }
 
     @Override
