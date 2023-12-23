@@ -5,6 +5,7 @@ import com.mydoctor.domaine.appointment.booking.TimeSlot;
 import com.mydoctor.domaine.appointment.booking.exception.BookingException;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.List;
 
 public final class Scheduler {
@@ -24,6 +25,10 @@ public final class Scheduler {
 
     public List<TimeSlot> getAvailableSlots(Duration duration) {
         return workingPeriod.getAvailableSlots(duration);
+    }
+
+    public List<TimeSlot> getAvailableSlots(LocalDate date, Duration duration) {
+        return workingPeriod.getAvailableSlots(date, duration);
     }
 
     public int getAvailableSlotsSize(Duration duration) {

@@ -4,8 +4,10 @@ import com.mydoctor.domaine.appointment.booking.exception.BookingException;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 
@@ -34,6 +36,10 @@ public final class WorkingPeriod implements BookablePeriod {
         return end;
     }
 
+    public Period getPeriod() {
+        return Period.between(start, end);
+    }
+
     public List<WorkingDay> getWorkingDays() {
         return List.copyOf(workingDays);
     }
@@ -56,6 +62,8 @@ public final class WorkingPeriod implements BookablePeriod {
                 .flatMap(list -> list.stream()).toList();
     }
 
+
+
     @Override
     public void book(LocalDate date, TimeSlot timeSlot) {
         if(!isInside(date, timeSlot)) {
@@ -68,6 +76,37 @@ public final class WorkingPeriod implements BookablePeriod {
                 .orElseThrow(() -> new BookingException("Not Inside Working Slots!"));
         workingDay.book(timeSlot);
     }
+
+    @Override
+    public List<TimeSlot> getAvailableSlots(LocalDate date, Duration duration) {
+        if(!isWorkingDay(date))
+            return List.of();
+
+        Optional<WorkingDay> workingDay = getWorkingDay(date);
+        if(workingDay.isEmpty())
+            return List.of();
+        return workingDay.get().getAvailableSlots(duration);
+    }
+
+    public Optional<WorkingDay> getWorkingDay(LocalDate date) {
+        return workingDays.stream().filter(d -> d.getDate().equals(date)).findFirst();
+    }
+
+    @Override
+    public boolean isWorkingDay(LocalDate date) {
+        if(isOutsideWorkingPeriod(date) || !isInsideWorkingDaysList(date))
+            return false;
+        return true;
+    }
+
+    public boolean isOutsideWorkingPeriod(LocalDate date) {
+        return date.isBefore(start) || date.isAfter(end);
+    }
+
+    private boolean isInsideWorkingDaysList(LocalDate date) {
+        return workingDays.stream().anyMatch(w -> w.getDate().equals(date));
+    }
+
 
     private Optional<WorkingDay> getWhereInside(LocalDate date) {
         return workingDays.stream()
