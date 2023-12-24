@@ -1,6 +1,6 @@
 package com.mydoctor.domaine.appointment.booking;
 
-import com.mydoctor.domaine.appointment.booking.exception.BookingException;
+import com.mydoctor.domaine.exception.IllegalArgumentException;
 
 import java.time.DayOfWeek;
 import java.time.Duration;
@@ -15,12 +15,32 @@ public final class WorkingDay implements BookableTimeInterval {
     private final List<WorkingTimeInterval> workingTimeSlots;
 
     public WorkingDay(LocalDate date, List<WorkingTimeInterval> workingTimeSlots) {
+        validateInputs(date, workingTimeSlots);
         this.date = date;
         this.workingTimeSlots = new ArrayList<>(workingTimeSlots);
     }
 
     public WorkingDay(LocalDate date) {
         this(date, new ArrayList<>());
+    }
+
+    private void validateInputs(LocalDate date, List<WorkingTimeInterval> workingTimeSlots) {
+        if(date == null)
+            throw new IllegalArgumentException("Date is null !");
+        if(workingTimeSlots == null)
+            throw new IllegalArgumentException("Working Time Slots is null !");
+        if(!isWorkingTimeSlotsOrdered(workingTimeSlots))
+            throw new IllegalArgumentException("Working Time Slots should be ordered !");
+    }
+
+    private boolean isWorkingTimeSlotsOrdered(List<WorkingTimeInterval> workingTimeSlots) {
+        if(workingTimeSlots.size() <= 1)
+            return true;
+        for(int i = 0; i < workingTimeSlots.size() - 1; i++) {
+            if(!workingTimeSlots.get(i).isStartAfterMyEnd(workingTimeSlots.get(i + 1)))
+                return false;
+        }
+        return true;
     }
 
     public LocalDate getDate() {

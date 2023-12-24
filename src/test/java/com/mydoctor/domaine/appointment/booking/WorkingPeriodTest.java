@@ -1,6 +1,5 @@
 package com.mydoctor.domaine.appointment.booking;
 
-import com.mydoctor.domaine.appointment.booking.exception.BookingException;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;

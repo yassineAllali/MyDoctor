@@ -1,13 +1,10 @@
 package com.mydoctor.domaine.appointment.booking;
 
-import com.mydoctor.domaine.appointment.booking.exception.BookingException;
-
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 

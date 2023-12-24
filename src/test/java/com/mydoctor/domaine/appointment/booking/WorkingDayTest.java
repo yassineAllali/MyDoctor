@@ -1,6 +1,6 @@
 package com.mydoctor.domaine.appointment.booking;
 
-import com.mydoctor.domaine.appointment.booking.exception.*;
+import com.mydoctor.domaine.exception.IllegalArgumentException;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -12,6 +12,41 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class WorkingDayTest {
+
+    // Constructor
+    @Test
+    public void testConstructorShouldFailIfWorkingTimeIntervalsIsNotOrdered() {
+        // Given
+
+        // Working TimeSlot 1
+        LocalTime workingStart1 = LocalTime.of(8, 0);
+        LocalTime workingEnd1 = LocalTime.of(12, 30);
+
+        TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
+        TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
+        List<TimeSlot> existingBooked1 = Arrays.asList(existingSlot1, existingSlot2);
+        WorkingTimeInterval workingTimeSlot1 = new WorkingTimeInterval(workingStart1, workingEnd1, existingBooked1);
+
+        // Working TimeSlot 2
+        LocalTime workingStart2 = LocalTime.of(15, 0);
+        LocalTime workingEnd2 = LocalTime.of(18, 30);
+
+        TimeSlot existingSlot3 = new TimeSlot(LocalTime.of(15,0), LocalTime.of(15,30));
+        TimeSlot existingSlot4 = new TimeSlot(LocalTime.of(16,0), LocalTime.of(16,30));
+        List<TimeSlot> existingBooked2 = Arrays.asList(existingSlot3, existingSlot4);
+        WorkingTimeInterval workingTimeSlot2 = new WorkingTimeInterval(workingStart2, workingEnd2, existingBooked2);
+
+        // Working TimeSlot 3
+        LocalTime workingStart3 = LocalTime.of(10 , 15);
+        LocalTime workingEnd3 = LocalTime.of(12, 30);
+        WorkingTimeInterval workingTimeSlot3 = new WorkingTimeInterval(workingStart3, workingEnd3);
+
+        // Working Day
+        LocalDate date = LocalDate.of(2023, 12,24);
+
+        // When, Then
+        assertThrows(IllegalArgumentException.class, () -> new WorkingDay(date, Arrays.asList(workingTimeSlot1, workingTimeSlot2, workingTimeSlot3)));
+    }
 
     // BookedSize
     @Test

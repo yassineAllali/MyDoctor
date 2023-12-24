@@ -3,8 +3,7 @@ package com.mydoctor.domaine;
 import com.mydoctor.domaine.appointment.Appointment;
 import com.mydoctor.domaine.appointment.Scheduler;
 import com.mydoctor.domaine.appointment.booking.*;
-import com.mydoctor.domaine.appointment.booking.exception.BookingException;
-import com.mydoctor.domaine.medical.MedicalOffice;
+import com.mydoctor.domaine.appointment.booking.BookingException;
 import com.mydoctor.domaine.medical.Patient;
 import org.junit.jupiter.api.Test;
 

@@ -1,11 +1,9 @@
 package com.mydoctor.domaine.appointment.booking;
 
-import com.mydoctor.domaine.appointment.booking.exception.IllegalArgumentException;
+import com.mydoctor.domaine.exception.IllegalArgumentException;
 
 import java.time.Duration;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 
 // Immutable
@@ -16,9 +14,7 @@ public class TimeSlot{
     private final LocalTime end;
 
     public TimeSlot(LocalTime start, LocalTime end) {
-        if(end.isBefore(start)) {
-            throw new IllegalArgumentException("Start time must be before end time !");
-        }
+        validateInputs(start, end);
         this.start = start;
         this.end = end;
     }
@@ -26,6 +22,16 @@ public class TimeSlot{
     public TimeSlot(LocalTime start, Duration duration) {
         this.start = start;
         this.end = start.plus(duration);
+    }
+
+    private static void validateInputs(LocalTime start, LocalTime end) {
+        if(start == null)
+            throw new IllegalArgumentException("Start time is null !");
+        if(end == null)
+            throw new IllegalArgumentException("End time is null !");
+        if(end.isBefore(start)) {
+            throw new IllegalArgumentException("Start time must be before end time !");
+        }
     }
 
     public LocalTime getStart() {
@@ -119,10 +125,13 @@ public class TimeSlot{
     }
 
     public static int getAvailableSlotsSize(LocalTime start, LocalTime end, Duration duration) {
+        validateInputs(start, end);
         return (int)(Duration.between(start, end).getSeconds()/duration.getSeconds());
     }
 
     public static TimeSlot[] getAvailableSlots(LocalTime start, LocalTime end, Duration duration) {
+        validateInputs(start, end);
+
         int subSlotsSize = getAvailableSlotsSize(start, end, duration);
         TimeSlot[] subSlots = new TimeSlot[subSlotsSize];
         for(int i = 0; i < subSlotsSize; i++) {

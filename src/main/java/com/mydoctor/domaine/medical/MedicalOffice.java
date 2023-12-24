@@ -3,7 +3,7 @@ package com.mydoctor.domaine.medical;
 import com.mydoctor.domaine.appointment.Appointment;
 import com.mydoctor.domaine.appointment.Scheduler;
 import com.mydoctor.domaine.appointment.booking.TimeSlot;
-import com.mydoctor.domaine.appointment.booking.exception.BookingException;
+import com.mydoctor.domaine.appointment.booking.BookingException;
 import com.mydoctor.domaine.medical.contact.Contact;
 import com.mydoctor.domaine.medical.location.Address;
 

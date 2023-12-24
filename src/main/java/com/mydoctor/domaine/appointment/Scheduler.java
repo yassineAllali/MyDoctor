@@ -2,7 +2,7 @@ package com.mydoctor.domaine.appointment;
 
 import com.mydoctor.domaine.appointment.booking.BookablePeriod;
 import com.mydoctor.domaine.appointment.booking.TimeSlot;
-import com.mydoctor.domaine.appointment.booking.exception.BookingException;
+import com.mydoctor.domaine.appointment.booking.BookingException;
 
 import java.time.Duration;
 import java.time.LocalDate;

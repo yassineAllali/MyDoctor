@@ -1,6 +1,6 @@
 package com.mydoctor.domaine.appointment.booking;
 
-import com.mydoctor.domaine.appointment.booking.exception.BookingException;
+import com.mydoctor.domaine.exception.IllegalArgumentException;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -11,6 +11,54 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class WorkingTimeIntervalTest {
+
+    // Constructor
+    @Test
+    void testConstructorShouldFailIfBookedIsNotInside() {
+        // Given
+        LocalTime start = LocalTime.of(8, 0);
+        LocalTime end = LocalTime.of(12, 30);
+
+        TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(7,30), LocalTime.of(8,30));
+        TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
+        List<TimeSlot> existingBooked = Arrays.asList(existingSlot1, existingSlot2);
+
+        // When, Then
+        assertThrows(IllegalArgumentException.class,
+                () -> new WorkingTimeInterval(start, end, existingBooked));
+    }
+
+    @Test
+    void testConstructorShouldFailIfBookedIsNotOrdered1() {
+        // Given
+        LocalTime start = LocalTime.of(8, 0);
+        LocalTime end = LocalTime.of(12, 30);
+
+        TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
+        TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
+        TimeSlot existingSlot3 = new TimeSlot(LocalTime.of(9,20), LocalTime.of(9,40));
+        List<TimeSlot> existingBooked = Arrays.asList(existingSlot1, existingSlot2, existingSlot3);
+
+        // When, Then
+        assertThrows(IllegalArgumentException.class,
+                () -> new WorkingTimeInterval(start, end, existingBooked));
+    }
+
+    @Test
+    void testConstructorShouldFailIfBookedIsNotOrdered2() {
+        // Given
+        LocalTime start = LocalTime.of(8, 0);
+        LocalTime end = LocalTime.of(12, 30);
+
+        TimeSlot existingSlot1 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
+        TimeSlot existingSlot2 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
+        TimeSlot existingSlot3 = new TimeSlot(LocalTime.of(8,30), LocalTime.of(9,0));
+        List<TimeSlot> existingBooked = Arrays.asList(existingSlot1, existingSlot2, existingSlot3);
+
+        // When, Then
+        assertThrows(IllegalArgumentException.class,
+                () -> new WorkingTimeInterval(start, end, existingBooked));
+    }
 
     /////// Booking //////
 

@@ -1,6 +1,6 @@
 package com.mydoctor.domaine.appointment.booking;
 
-import com.mydoctor.domaine.appointment.booking.exception.BookingException;
+import com.mydoctor.domaine.exception.IllegalArgumentException;
 
 import java.time.Duration;
 import java.time.LocalTime;
@@ -15,7 +15,27 @@ public final class WorkingTimeInterval extends TimeSlot implements BookableTimeI
 
     public WorkingTimeInterval(LocalTime start, LocalTime end, List<TimeSlot> booked) {
         super(start, end);
+        validateBooked(booked);
         this.booked = new ArrayList<>(booked);
+    }
+
+    private void validateBooked(List<TimeSlot> booked) {
+        if(booked == null)
+            throw new IllegalArgumentException("Booked is null !");
+        if(booked.stream().anyMatch(b -> !this.isInside(b)))
+            throw new IllegalArgumentException("Booked should be inside working time slot !");
+        if(!isBookedOrdered(booked))
+            throw new IllegalArgumentException("Booked should be ordered !");
+    }
+
+    private boolean isBookedOrdered(List<TimeSlot> booked) {
+        if(booked.size() <= 1)
+            return true;
+        for(int i = 0; i < booked.size() - 1; i++) {
+            if(!booked.get(i).isStartAfterMyEnd(booked.get(i + 1)))
+                return false;
+        }
+        return true;
     }
 
     public WorkingTimeInterval(LocalTime start, LocalTime end) {

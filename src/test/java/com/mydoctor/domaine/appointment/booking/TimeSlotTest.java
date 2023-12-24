@@ -1,7 +1,6 @@
 package com.mydoctor.domaine.appointment.booking;
 
-import com.mydoctor.domaine.appointment.booking.exception.IllegalArgumentException;
-import com.mydoctor.domaine.appointment.booking.TimeSlot;
+import com.mydoctor.domaine.exception.IllegalArgumentException;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;

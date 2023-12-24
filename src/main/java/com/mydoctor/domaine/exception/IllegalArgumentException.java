@@ -1,6 +1,8 @@
-package com.mydoctor.domaine.appointment.booking.exception;
+package com.mydoctor.domaine.exception;
 
-public class IllegalArgumentException extends TimeSlotException {
+import com.mydoctor.domaine.exception.DomainException;
+
+public class IllegalArgumentException extends DomainException {
 
     private static final String ILLEGAL_MESSAGE = "Illegal Argument : ";
     public IllegalArgumentException(String message) {
