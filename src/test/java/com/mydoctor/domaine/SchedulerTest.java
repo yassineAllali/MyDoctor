@@ -4,6 +4,8 @@ import com.mydoctor.domaine.appointment.Appointment;
 import com.mydoctor.domaine.appointment.Scheduler;
 import com.mydoctor.domaine.appointment.booking.*;
 import com.mydoctor.domaine.appointment.booking.exception.BookingException;
+import com.mydoctor.domaine.medical.MedicalOffice;
+import com.mydoctor.domaine.medical.Patient;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -179,7 +181,7 @@ class SchedulerTest {
         TimeSlot givenTimeSlot = new TimeSlot(appointmentStart, appointmentEnd);
         LocalDate appointmentDate = LocalDate.of(2023, 12, 23);
 
-        Appointment givenAppointment = new Appointment(appointmentDate, givenTimeSlot, new Patient("Yassine"), new MedicalOffice());
+        Appointment givenAppointment = new Appointment(appointmentDate, givenTimeSlot, new Patient("Yassine"));
 
         // When
         scheduler.schedule(givenAppointment);
@@ -284,7 +286,7 @@ class SchedulerTest {
         TimeSlot givenTimeSlot = new TimeSlot(appointmentStart, appointmentEnd);
         LocalDate appointmentDate = LocalDate.of(2023, 12, 26);
 
-        Appointment givenAppointment = new Appointment(appointmentDate, givenTimeSlot, new Patient("Yassine"), new MedicalOffice());
+        Appointment givenAppointment = new Appointment(appointmentDate, givenTimeSlot, new Patient("Yassine"));
 
         // When, Then
         assertThrows(BookingException.class, () -> scheduler.schedule(givenAppointment));
