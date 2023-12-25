@@ -43,11 +43,11 @@ class WorkingPeriodTest {
         WorkingTimeInterval workingTimeSlot1 = new WorkingTimeInterval(workingStart1, workingEnd1, existingBooked1);
 
         // Working TimeSlot 2
-        LocalTime workingStart2 = LocalTime.of(8, 0);
-        LocalTime workingEnd2 = LocalTime.of(12, 30);
+        LocalTime workingStart2 = LocalTime.of(13, 0);
+        LocalTime workingEnd2 = LocalTime.of(17, 30);
 
-        TimeSlot existingSlot3 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
-        TimeSlot existingSlot4 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
+        TimeSlot existingSlot3 = new TimeSlot(LocalTime.of(13,0), LocalTime.of(13,30));
+        TimeSlot existingSlot4 = new TimeSlot(LocalTime.of(14,0), LocalTime.of(14,30));
         List<TimeSlot> existingBooked2 = Arrays.asList(existingSlot3, existingSlot4);
         WorkingTimeInterval workingTimeSlot2 = new WorkingTimeInterval(workingStart2, workingEnd2, existingBooked2);
 
@@ -61,12 +61,12 @@ class WorkingPeriodTest {
         WorkingTimeInterval workingTimeSlot3 = new WorkingTimeInterval(workingStart3, workingEnd3, existingBooked3);
 
         // Working TimeSlot 4
-        LocalTime workingStart4 = LocalTime.of(8, 0);
-        LocalTime workingEnd4 = LocalTime.of(12, 30);
+        LocalTime workingStart4 = LocalTime.of(14, 0);
+        LocalTime workingEnd4 = LocalTime.of(17, 30);
 
-        TimeSlot existingSlot7 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
-        TimeSlot existingSlot8 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
-        TimeSlot existingSlot9 = new TimeSlot(LocalTime.of(9,30), LocalTime.of(10,30));
+        TimeSlot existingSlot7 = new TimeSlot(LocalTime.of(14,0), LocalTime.of(14,30));
+        TimeSlot existingSlot8 = new TimeSlot(LocalTime.of(15,0), LocalTime.of(15,30));
+        TimeSlot existingSlot9 = new TimeSlot(LocalTime.of(15,30), LocalTime.of(16,30));
         List<TimeSlot> existingBooked4 = Arrays.asList(existingSlot7, existingSlot8, existingSlot9);
         WorkingTimeInterval workingTimeSlot4 = new WorkingTimeInterval(workingStart4, workingEnd4, existingBooked4);
 

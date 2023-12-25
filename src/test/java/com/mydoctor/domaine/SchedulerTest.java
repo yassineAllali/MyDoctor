@@ -67,7 +67,7 @@ class SchedulerTest {
 
         // Working Day 2
         LocalDate date2 = LocalDate.of(2023, 12,22);
-        WorkingDay workingDay2 = new WorkingDay(date2, Arrays.asList(workingTimeSlot3, workingTimeSlot4));
+        WorkingDay workingDay2 = new WorkingDay(date2, Arrays.asList(workingTimeSlot4, workingTimeSlot3));
 
         // Working Period
         LocalDate workingStart = LocalDate.of(2023, 12, 21);

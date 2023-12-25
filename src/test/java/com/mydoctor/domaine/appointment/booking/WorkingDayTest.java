@@ -63,11 +63,11 @@ class WorkingDayTest {
         WorkingTimeInterval workingTimeSlot1 = new WorkingTimeInterval(workingStart1, workingEnd1, existingBooked1);
 
         // Working TimeSlot 2
-        LocalTime workingStart2 = LocalTime.of(8, 0);
-        LocalTime workingEnd2 = LocalTime.of(12, 30);
+        LocalTime workingStart2 = LocalTime.of(14, 0);
+        LocalTime workingEnd2 = LocalTime.of(17, 30);
 
-        TimeSlot existingSlot3 = new TimeSlot(LocalTime.of(8,0), LocalTime.of(8,30));
-        TimeSlot existingSlot4 = new TimeSlot(LocalTime.of(9,0), LocalTime.of(9,30));
+        TimeSlot existingSlot3 = new TimeSlot(LocalTime.of(14,0), LocalTime.of(14,30));
+        TimeSlot existingSlot4 = new TimeSlot(LocalTime.of(15,0), LocalTime.of(15,30));
         List<TimeSlot> existingBooked2 = Arrays.asList(existingSlot3, existingSlot4);
         WorkingTimeInterval workingTimeSlot2 = new WorkingTimeInterval(workingStart2, workingEnd2, existingBooked2);
 
