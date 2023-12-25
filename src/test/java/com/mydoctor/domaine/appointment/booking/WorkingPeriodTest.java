@@ -1,5 +1,6 @@
 package com.mydoctor.domaine.appointment.booking;
 
+import com.mydoctor.domaine.exception.IllegalArgumentException;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -13,6 +14,90 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class WorkingPeriodTest {
 
+    // Constructor
+    @Test
+    void testConstructorShouldFailIfEndDateBeforeStart() {
+        // Given, When, Then
+        assertThrows(IllegalArgumentException.class,
+                () -> new WorkingPeriod(LocalDate.of(2023, 12, 26), LocalDate.of(2023, 12, 22)));
+    }
+
+    @Test
+    void testConstructorShouldFailIfWorkingDayNotInsidePeriod() {
+        // Given
+
+        // Working Day 1
+        LocalDate date1 = LocalDate.of(2023, 12,25);
+        WorkingDay workingDay1 = new WorkingDay(date1);
+
+        // Working Day 2
+        LocalDate date2 = LocalDate.of(2024, 1,15);
+        WorkingDay workingDay2 = new WorkingDay(date2);
+
+        // Working Period
+        LocalDate workingStart = LocalDate.of(2023, 12, 24);
+        LocalDate workingEnd = LocalDate.of(2024, 1, 12);
+
+        // When, Then
+        assertThrows(IllegalArgumentException.class, () -> new WorkingPeriod(workingStart, workingEnd, Arrays.asList(workingDay1, workingDay2)));
+    }
+
+    @Test
+    void testConstructorShouldFailIfWorkingDayNotOrdered() {
+        // Given
+        // Working Day 1
+        LocalDate date1 = LocalDate.of(2023, 12,25);
+        WorkingDay workingDay1 = new WorkingDay(date1);
+
+        // Working Day 2
+        LocalDate date2 = LocalDate.of(2024, 1,27);
+        WorkingDay workingDay2 = new WorkingDay(date2);
+
+        // Working Day 3
+        LocalDate date3 = LocalDate.of(2023, 12, 26);
+        WorkingDay workingDay3 = new WorkingDay(date3);
+
+        // Working Day 4
+        LocalDate date4 = LocalDate.of(2024, 1,30);
+        WorkingDay workingDay4 = new WorkingDay(date4);
+
+        // Working Period
+        LocalDate workingStart = LocalDate.of(2023, 12, 24);
+        LocalDate workingEnd = LocalDate.of(2024, 2, 27);
+
+        // When, Then
+        assertThrows(IllegalArgumentException.class,
+                () -> new WorkingPeriod(workingStart, workingEnd, Arrays.asList(workingDay1, workingDay2, workingDay3, workingDay4)));
+    }
+
+    @Test
+    void testConstructorShouldFailIfWorkingDayDuplicated() {
+        // Given
+        // Working Day 1
+        LocalDate date1 = LocalDate.of(2023, 12,25);
+        WorkingDay workingDay1 = new WorkingDay(date1);
+
+        // Working Day 2
+        LocalDate date2 = LocalDate.of(2024, 1,5);
+        WorkingDay workingDay2 = new WorkingDay(date2);
+
+        // Working Day 3
+        LocalDate date3 = LocalDate.of(2024, 1, 7);
+        WorkingDay workingDay3 = new WorkingDay(date3);
+
+        // Working Day 4
+        LocalDate date4 = LocalDate.of(2024, 1,7);
+        WorkingDay workingDay4 = new WorkingDay(date4);
+
+        // Working Period
+        LocalDate workingStart = LocalDate.of(2023, 12, 24);
+        LocalDate workingEnd = LocalDate.of(2024, 2, 27);
+
+        // When, Then
+        assertThrows(IllegalArgumentException.class,
+                () -> new WorkingPeriod(workingStart, workingEnd, Arrays.asList(workingDay1, workingDay2, workingDay3, workingDay4)));
+    }
+
     // TestGetPeriod
     @Test
     void testGetPeriod() {
@@ -23,7 +108,7 @@ class WorkingPeriodTest {
         Period actualPeriod = workingPeriod.getPeriod();
 
         // Then
-        assertEquals(Period.ofDays(5), actualPeriod);
+        assertEquals(Period.ofDays(6), actualPeriod);
     }
 
 
@@ -71,11 +156,11 @@ class WorkingPeriodTest {
         WorkingTimeInterval workingTimeSlot4 = new WorkingTimeInterval(workingStart4, workingEnd4, existingBooked4);
 
         // Working Day 1
-        LocalDate date1 = LocalDate.of(2023, 12,10);
+        LocalDate date1 = LocalDate.of(2023, 12,13);
         WorkingDay workingDay1 = new WorkingDay(date1, Arrays.asList(workingTimeSlot1, workingTimeSlot2));
 
         // Working Day 2
-        LocalDate date2 = LocalDate.of(2023, 12,10);
+        LocalDate date2 = LocalDate.of(2023, 12,16);
         WorkingDay workingDay2 = new WorkingDay(date2, Arrays.asList(workingTimeSlot3, workingTimeSlot4));
 
         // Working Period

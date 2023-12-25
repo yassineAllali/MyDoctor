@@ -167,8 +167,8 @@ class SchedulerTest {
         WorkingDay workingDay3 = new WorkingDay(dateForThirdWorkingDay, Arrays.asList(workingTimeSlot5, workingTimeSlot6));
 
         // Working Period
-        LocalDate workingStart = LocalDate.of(2023, 12, 21);
-        LocalDate workingEnd = LocalDate.of(2023, 12, 22);
+        LocalDate workingStart = LocalDate.of(2023, 12, 20);
+        LocalDate workingEnd = LocalDate.of(2023, 12, 25);
         BookablePeriod workingPeriod = new WorkingPeriod(workingStart, workingEnd, Arrays.asList(workingDay1, workingDay2, workingDay3));
 
         // Scheduler
@@ -273,7 +273,7 @@ class SchedulerTest {
 
         // Working Period
         LocalDate workingStart = LocalDate.of(2023, 12, 21);
-        LocalDate workingEnd = LocalDate.of(2023, 12, 22);
+        LocalDate workingEnd = LocalDate.of(2023, 12, 24);
         BookablePeriod workingPeriod = new WorkingPeriod(workingStart, workingEnd, Arrays.asList(workingDay1, workingDay2, workingDay3));
 
         // Scheduler

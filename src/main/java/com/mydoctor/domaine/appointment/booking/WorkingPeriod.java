@@ -1,5 +1,7 @@
 package com.mydoctor.domaine.appointment.booking;
 
+import com.mydoctor.domaine.exception.IllegalArgumentException;
+
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Period;
@@ -11,30 +13,82 @@ import java.util.Optional;
 // Not Finished
 public final class WorkingPeriod implements BookablePeriod {
 
-    private final LocalDate start;
-    private final LocalDate end;
+    private final LocalDate startInclusive;
+    private final LocalDate endInclusive;
     private final List<WorkingDay> workingDays;
 
-    public WorkingPeriod(LocalDate start, LocalDate end, List<WorkingDay> workingDays) {
-        this.start = start;
-        this.end = end;
+    public WorkingPeriod(LocalDate startInclusive, LocalDate endInclusive, List<WorkingDay> workingDays) {
+        validateInputs(startInclusive, endInclusive, workingDays);
+        this.startInclusive = startInclusive;
+        this.endInclusive = endInclusive;
         this.workingDays = new ArrayList<>(workingDays);
     }
 
-    public WorkingPeriod(LocalDate start, LocalDate end) {
-        this(start, end, new ArrayList<>());
+    private void validateInputs(LocalDate start, LocalDate end, List<WorkingDay> workingDays) {
+        validateNotNull(start, end, workingDays);
+        validateStartAndEndOrder(start, end);
+        validateIsWorkingDaysInside(start, end, workingDays);
+        validateIsWorkingDaysOrderedAndNotDuplicated(workingDays);
     }
 
-    public LocalDate getStart() {
-        return start;
+    private void validateNotNull(LocalDate start, LocalDate end, List<WorkingDay> workingDays) {
+        if(start == null)
+            throw new IllegalArgumentException("Start date is null !");
+        if(end == null)
+            throw new IllegalArgumentException("End date is null !");
+        if(workingDays == null)
+            throw new IllegalArgumentException("End date is null !");
     }
 
-    public LocalDate getEnd() {
-        return end;
+    private void validateStartAndEndOrder(LocalDate start, LocalDate end) {
+        if(end.isBefore(start))
+            throw new IllegalArgumentException("End date should be after start !");
+    }
+
+    private void validateIsWorkingDaysInside(LocalDate start, LocalDate end, List<WorkingDay> workingDays) {
+        if(!isWorkingDaysInside(start, end, workingDays))
+            throw new IllegalArgumentException("Working days should be inside period !");
+    }
+
+    private boolean isWorkingDaysInside(LocalDate start, LocalDate end, List<WorkingDay> workingDays) {
+        return workingDays.stream().allMatch(w -> isInsidePeriod(start, end, w.getDate()));
+    }
+
+    private boolean isInsidePeriod(LocalDate start, LocalDate end, LocalDate date) {
+        if(date.isBefore(start) || date.isAfter(end))
+            return false;
+        return true;
+    }
+
+    private void validateIsWorkingDaysOrderedAndNotDuplicated(List<WorkingDay> workingDays) {
+        if(!isWorkingDaysOrderedAndNotDuplicated(workingDays))
+            throw new IllegalArgumentException("Working days should be ordered !");
+    }
+
+    private boolean isWorkingDaysOrderedAndNotDuplicated(List<WorkingDay> workingDays) {
+        for(int i = 0; i < workingDays.size() - 1; i++) {
+            LocalDate currentDate = workingDays.get(i).getDate();
+            LocalDate nextDate = workingDays.get(i + 1).getDate();
+            if(nextDate.isEqual(currentDate) || nextDate.isBefore(currentDate))
+                return false;
+        }
+        return true;
+    }
+
+    public WorkingPeriod(LocalDate startInclusive, LocalDate endInclusive) {
+        this(startInclusive, endInclusive, new ArrayList<>());
+    }
+
+    public LocalDate getStartInclusive() {
+        return startInclusive;
+    }
+
+    public LocalDate getEndInclusive() {
+        return endInclusive;
     }
 
     public Period getPeriod() {
-        return Period.between(start, end);
+        return Period.between(startInclusive, endInclusive).plusDays(1);
     }
 
     public List<WorkingDay> getWorkingDays() {
@@ -97,7 +151,7 @@ public final class WorkingPeriod implements BookablePeriod {
     }
 
     public boolean isOutsideWorkingPeriod(LocalDate date) {
-        return date.isBefore(start) || date.isAfter(end);
+        return date.isBefore(startInclusive) || date.isAfter(endInclusive);
     }
 
     private boolean isInsideWorkingDaysList(LocalDate date) {
