@@ -7,6 +7,8 @@ import com.mydoctor.infrastructure.repository.entity.MedicalOfficeEntity;
 import com.mydoctor.infrastructure.repository.mapper.ApplicationMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class JpaMedicalOfficeRepositoryAdapter implements MedicalOfficeRepositoryAdapter {
 
@@ -22,5 +24,10 @@ public class JpaMedicalOfficeRepositoryAdapter implements MedicalOfficeRepositor
     public MedicalOfficeResource save(MedicalOfficeResource medicalOfficeResource) {
         MedicalOfficeEntity entity = mapper.map(medicalOfficeResource);
         return mapper.map(repository.save(entity));
+    }
+
+    @Override
+    public Optional<MedicalOfficeResource> get(Long medicalOfficeId) {
+        return Optional.empty();
     }
 }

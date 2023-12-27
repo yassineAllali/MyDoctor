@@ -108,7 +108,7 @@ class WorkingPeriodTest {
         Period actualPeriod = workingPeriod.getPeriod();
 
         // Then
-        assertEquals(Period.ofDays(6), actualPeriod);
+        assertEquals(Period.ofDays(5), actualPeriod);
     }
 
 

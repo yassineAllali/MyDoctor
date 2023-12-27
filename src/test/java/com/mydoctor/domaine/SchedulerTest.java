@@ -180,7 +180,7 @@ class SchedulerTest {
         TimeSlot givenTimeSlot = new TimeSlot(appointmentStart, appointmentEnd);
         LocalDate appointmentDate = LocalDate.of(2023, 12, 23);
 
-        Appointment givenAppointment = new Appointment(appointmentDate, givenTimeSlot, new Patient("Yassine"));
+        Appointment givenAppointment = new Appointment(appointmentDate, givenTimeSlot);
 
         // When
         scheduler.schedule(givenAppointment);
@@ -285,7 +285,7 @@ class SchedulerTest {
         TimeSlot givenTimeSlot = new TimeSlot(appointmentStart, appointmentEnd);
         LocalDate appointmentDate = LocalDate.of(2023, 12, 26);
 
-        Appointment givenAppointment = new Appointment(appointmentDate, givenTimeSlot, new Patient("Yassine"));
+        Appointment givenAppointment = new Appointment(appointmentDate, givenTimeSlot);
 
         // When, Then
         assertThrows(BookingException.class, () -> scheduler.schedule(givenAppointment));

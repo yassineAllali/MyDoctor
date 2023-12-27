@@ -14,13 +14,13 @@ import java.util.Optional;
 public final class WorkingPeriod implements BookablePeriod {
 
     private final LocalDate startInclusive;
-    private final LocalDate endInclusive;
+    private final LocalDate endExclusive;
     private final List<WorkingDay> workingDays;
 
-    public WorkingPeriod(LocalDate startInclusive, LocalDate endInclusive, List<WorkingDay> workingDays) {
-        validateInputs(startInclusive, endInclusive, workingDays);
+    public WorkingPeriod(LocalDate startInclusive, LocalDate endExclusive, List<WorkingDay> workingDays) {
+        validateInputs(startInclusive, endExclusive, workingDays);
         this.startInclusive = startInclusive;
-        this.endInclusive = endInclusive;
+        this.endExclusive = endExclusive;
         this.workingDays = new ArrayList<>(workingDays);
     }
 
@@ -75,20 +75,20 @@ public final class WorkingPeriod implements BookablePeriod {
         return true;
     }
 
-    public WorkingPeriod(LocalDate startInclusive, LocalDate endInclusive) {
-        this(startInclusive, endInclusive, new ArrayList<>());
+    public WorkingPeriod(LocalDate startInclusive, LocalDate endExclusive) {
+        this(startInclusive, endExclusive, new ArrayList<>());
     }
 
     public LocalDate getStartInclusive() {
         return startInclusive;
     }
 
-    public LocalDate getEndInclusive() {
-        return endInclusive;
+    public LocalDate getEndExclusive() {
+        return endExclusive;
     }
 
     public Period getPeriod() {
-        return Period.between(startInclusive, endInclusive).plusDays(1);
+        return Period.between(startInclusive, endExclusive);
     }
 
     public List<WorkingDay> getWorkingDays() {
@@ -151,7 +151,7 @@ public final class WorkingPeriod implements BookablePeriod {
     }
 
     public boolean isOutsideWorkingPeriod(LocalDate date) {
-        return date.isBefore(startInclusive) || date.isAfter(endInclusive);
+        return date.isBefore(startInclusive) || date.isAfter(endExclusive);
     }
 
     private boolean isInsideWorkingDaysList(LocalDate date) {

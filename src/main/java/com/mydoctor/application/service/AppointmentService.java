@@ -1,6 +1,7 @@
 package com.mydoctor.application.service;
 
 import com.mydoctor.application.adapter.AppointmentRepositoryAdapter;
+import com.mydoctor.application.adapter.MedicalOfficeRepositoryAdapter;
 import com.mydoctor.application.command.CreateAppointmentCommand;
 import com.mydoctor.application.command.CreatePatientCommand;
 import com.mydoctor.application.resource.AppointmentResource;
@@ -15,11 +16,5 @@ public class AppointmentService {
         this.appointmentRepository = appointmentRepository;
     }
 
-    public AppointmentResource scheduleAppointment(CreateAppointmentCommand appointmentCommand,
-                                                   CreatePatientCommand patientCommand, String medicalOfficeId) {
 
-
-
-        return null;
-    }
 }

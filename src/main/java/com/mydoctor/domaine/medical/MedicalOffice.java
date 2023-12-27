@@ -16,15 +16,13 @@ public final class MedicalOffice {
     private final Address address;
     private final Contact contact;
     private final List<Doctor> doctors;
-    private final Scheduler scheduler;
 
-    public MedicalOffice(String name, String description, Address address, Contact contact, List<Doctor> doctors, Scheduler scheduler) {
+    public MedicalOffice(String name, String description, Address address, Contact contact, List<Doctor> doctors) {
         this.name = name;
         this.description = description;
         this.address = address;
         this.contact = contact;
         this.doctors = doctors;
-        this.scheduler = scheduler;
     }
 
     public String getName() {
@@ -49,13 +47,5 @@ public final class MedicalOffice {
 
     List<Speciality> getSpecialities() {
         return doctors.stream().map(d -> d.speciality()).toList();
-    }
-
-    public void schedule(Appointment appointment) throws BookingException {
-        scheduler.schedule(appointment);
-    }
-
-    public List<TimeSlot> getAvailableSlots(Duration duration) {
-        return scheduler.getAvailableSlots(duration);
     }
 }
