@@ -1,11 +1,14 @@
-package com.mydoctor.infrastructure.repository.adapter;
+package com.mydoctor.infrastructure.adapter;
 
 import com.mydoctor.application.adapter.AppointmentRepositoryAdapter;
 import com.mydoctor.application.resource.AppointmentResource;
+import com.mydoctor.domaine.appointment.booking.BookablePeriod;
+import com.mydoctor.infrastructure.entity.AppointmentEntity;
+import com.mydoctor.infrastructure.mapper.ApplicationMapper;
 import com.mydoctor.infrastructure.repository.AppointmentRepository;
-import com.mydoctor.infrastructure.repository.entity.AppointmentEntity;
-import com.mydoctor.infrastructure.repository.mapper.ApplicationMapper;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 @Service
 public class JpaAppointmentRepositoryAdapter implements AppointmentRepositoryAdapter {

@@ -1,10 +1,10 @@
-package com.mydoctor.infrastructure.repository.adapter;
+package com.mydoctor.infrastructure.adapter;
 
 import com.mydoctor.application.adapter.PatientRepositoryAdapter;
 import com.mydoctor.application.resource.PatientResource;
 import com.mydoctor.infrastructure.repository.PatientRepository;
-import com.mydoctor.infrastructure.repository.entity.PatientEntity;
-import com.mydoctor.infrastructure.repository.mapper.ApplicationMapper;
+import com.mydoctor.infrastructure.mapper.ApplicationMapper;
+import com.mydoctor.infrastructure.entity.PatientEntity;
 import org.springframework.stereotype.Service;
 
 @Service

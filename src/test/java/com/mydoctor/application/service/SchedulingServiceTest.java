@@ -3,6 +3,7 @@ package com.mydoctor.application.service;
 import com.mydoctor.application.adapter.AppointmentRepositoryAdapter;
 import com.mydoctor.application.adapter.MedicalOfficeRepositoryAdapter;
 import com.mydoctor.application.adapter.PatientRepositoryAdapter;
+import com.mydoctor.application.adapter.WorkingIntervalRepositoryAdapter;
 import com.mydoctor.application.command.CreateAppointmentCommand;
 import com.mydoctor.application.command.CreatePatientCommand;
 import com.mydoctor.application.resource.AppointmentResource;
@@ -25,6 +26,8 @@ class SchedulingServiceTest {
     @Mock
     private AppointmentRepositoryAdapter appointmentRepository;
     @Mock
+    private WorkingIntervalRepositoryAdapter workingIntervalRepository;
+    @Mock
     private PatientRepositoryAdapter patientRepository;
     @Mock
     private MedicalOfficeRepositoryAdapter medicalOfficeRepository;
@@ -34,7 +37,7 @@ class SchedulingServiceTest {
     @BeforeEach
     void init() {
         openMocks = MockitoAnnotations.openMocks(this);
-        schedulingService = new SchedulingService(appointmentRepository, patientRepository, medicalOfficeRepository);
+        schedulingService = new SchedulingService(appointmentRepository, workingIntervalRepository, patientRepository, medicalOfficeRepository);
     }
 
     @Test

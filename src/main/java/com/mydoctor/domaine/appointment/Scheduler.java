@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public final class Scheduler {
+    /*
     private final BookablePeriod workingPeriod;
 
     public Scheduler(BookablePeriod workingPeriod) {
@@ -43,5 +44,5 @@ public final class Scheduler {
     public int getAvailableSlotsSize(Duration duration) {
         return workingPeriod.getAvailableSlotsSize(duration);
     }
-
+    */
 }

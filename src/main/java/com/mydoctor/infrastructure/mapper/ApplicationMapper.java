@@ -1,11 +1,17 @@
-package com.mydoctor.infrastructure.repository.mapper;
+package com.mydoctor.infrastructure.mapper;
 
 import com.mydoctor.application.resource.AppointmentResource;
 import com.mydoctor.application.resource.MedicalOfficeResource;
 import com.mydoctor.application.resource.PatientResource;
-import com.mydoctor.infrastructure.repository.entity.AppointmentEntity;
-import com.mydoctor.infrastructure.repository.entity.MedicalOfficeEntity;
-import com.mydoctor.infrastructure.repository.entity.PatientEntity;
+import com.mydoctor.application.resource.WorkingIntervalResource;
+import com.mydoctor.domaine.appointment.booking.WorkingDay;
+import com.mydoctor.domaine.appointment.booking.WorkingTimeInterval;
+import com.mydoctor.infrastructure.entity.AppointmentEntity;
+import com.mydoctor.infrastructure.entity.MedicalOfficeEntity;
+import com.mydoctor.infrastructure.entity.PatientEntity;
+import com.mydoctor.infrastructure.entity.WorkingIntervalEntity;
+
+import java.util.List;
 
 public class ApplicationMapper {
 
@@ -49,6 +55,10 @@ public class ApplicationMapper {
 
     public MedicalOfficeResource map(MedicalOfficeEntity entity) {
         return new MedicalOfficeResource(entity.getId(), entity.getName());
+    }
+
+    public WorkingIntervalResource map(WorkingIntervalEntity entity) {
+        return new WorkingIntervalResource(entity.getDate(), entity.getStart(), entity.getEnd());
     }
 
 }

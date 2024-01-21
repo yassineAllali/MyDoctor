@@ -1,4 +1,4 @@
-package com.mydoctor.infrastructure.repository.entity;
+package com.mydoctor.infrastructure.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

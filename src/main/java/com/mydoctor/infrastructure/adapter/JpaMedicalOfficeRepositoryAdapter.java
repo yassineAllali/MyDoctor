@@ -1,10 +1,10 @@
-package com.mydoctor.infrastructure.repository.adapter;
+package com.mydoctor.infrastructure.adapter;
 
 import com.mydoctor.application.adapter.MedicalOfficeRepositoryAdapter;
 import com.mydoctor.application.resource.MedicalOfficeResource;
 import com.mydoctor.infrastructure.repository.MedicalOfficeRepository;
-import com.mydoctor.infrastructure.repository.entity.MedicalOfficeEntity;
-import com.mydoctor.infrastructure.repository.mapper.ApplicationMapper;
+import com.mydoctor.infrastructure.entity.MedicalOfficeEntity;
+import com.mydoctor.infrastructure.mapper.ApplicationMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

@@ -1,6 +1,6 @@
 package com.mydoctor.infrastructure.repository;
 
-import com.mydoctor.infrastructure.repository.entity.AppointmentEntity;
+import com.mydoctor.infrastructure.entity.AppointmentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
