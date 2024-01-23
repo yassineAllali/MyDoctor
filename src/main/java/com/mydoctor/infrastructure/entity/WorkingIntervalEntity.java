@@ -1,16 +1,16 @@
 package com.mydoctor.infrastructure.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class WorkingIntervalEntity {
@@ -25,4 +25,7 @@ public class WorkingIntervalEntity {
     private LocalDate date;
     private LocalTime start;
     private LocalTime end;
+
+    @OneToMany(mappedBy = "workingInterval", fetch = FetchType.LAZY)
+    private List<AppointmentEntity> appointments;
 }

@@ -5,11 +5,13 @@ import com.mydoctor.application.resource.WorkingIntervalResource;
 import com.mydoctor.infrastructure.entity.WorkingIntervalEntity;
 import com.mydoctor.infrastructure.mapper.ApplicationMapper;
 import com.mydoctor.infrastructure.repository.WorkingIntervalRepository;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+@Service
 public class JpaWorkingIntervalRepositoryAdapter implements WorkingIntervalRepositoryAdapter {
 
     private final WorkingIntervalRepository repository;

@@ -31,14 +31,14 @@ public class ApplicationMapper {
     public PatientEntity map(PatientResource patientResource) {
         PatientEntity entity = new PatientEntity();
         entity.setId(patientResource.id());
-
+        entity.setName(patientResource.name());
         return entity;
     }
 
     public MedicalOfficeEntity map(MedicalOfficeResource medicalOfficeResource) {
         MedicalOfficeEntity entity = new MedicalOfficeEntity();
         entity.setId(medicalOfficeResource.id());
-
+        entity.setName(medicalOfficeResource.name());
         return entity;
     }
 
@@ -58,7 +58,8 @@ public class ApplicationMapper {
     }
 
     public WorkingIntervalResource map(WorkingIntervalEntity entity) {
-        return new WorkingIntervalResource(entity.getDate(), entity.getStart(), entity.getEnd());
+        return new WorkingIntervalResource(entity.getDate(), entity.getStart(), entity.getEnd(),
+                entity.getAppointments().stream().map(this::map).toList());
     }
 
 }
