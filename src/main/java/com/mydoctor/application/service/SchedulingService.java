@@ -52,19 +52,15 @@ public class SchedulingService {
 
     public AppointmentResource schedule(CreateAppointmentCommand appointmentCommand,
                                         CreatePatientCommand patientCommand, Long medicalOfficeId) {
-        List<WorkingIntervalResource> workingIntervalResources = workingIntervalRepository
-                .get(medicalOfficeId, appointmentCommand.date());
 
-        WorkingDay workingDay = generateWorkingDay(workingIntervalResources)
-                .orElseThrow(() -> new BookingException(
-                        String.format("Can't book appointment, %s is not a working day !", appointmentCommand.date())));
-
+        WorkingDay workingDay = getWorkingDay(medicalOfficeId, appointmentCommand.date());
         Appointment appointment = commandMapper.map(appointmentCommand);
-        try {
-            workingDay.book(appointment.getTimeSlot());
-        } catch (BookingException e) {
-            throw new BookingException("Can't book appointment : " + e.getMessage());
-        }
+        book(workingDay, appointment);
+
+        return saveAppointment(appointment, patientCommand, medicalOfficeId);
+    }
+
+    private AppointmentResource saveAppointment(Appointment appointment, CreatePatientCommand patientCommand, Long medicalOfficeId) {
         PatientResource patientResource = patientRepository.save(commandMapper.map(patientCommand));
         MedicalOfficeResource medicalOfficeResource = medicalOfficeRepository
                 .get(medicalOfficeId)
@@ -73,6 +69,23 @@ public class SchedulingService {
                 .save(new AppointmentResource(null, patientResource,
                         medicalOfficeResource, appointment.getDate(),
                         appointment.getStart(), appointment.getEnd()));
+    }
+
+
+    private WorkingDay getWorkingDay(Long medicalOfficeId, LocalDate date) {
+        List<WorkingIntervalResource> workingIntervalResources = workingIntervalRepository.get(medicalOfficeId, date);
+
+        return generateWorkingDay(workingIntervalResources)
+                .orElseThrow(() -> new BookingException(
+                        String.format("Can't book appointment, %s is not a working day !", date)));
+    }
+
+    private void book(WorkingDay workingDay, Appointment appointment) {
+        try {
+            workingDay.book(appointment.getTimeSlot());
+        } catch (BookingException e) {
+            throw new BookingException("Can't book appointment : " + e.getMessage());
+        }
     }
 
     private Optional<WorkingDay> generateWorkingDay(List<WorkingIntervalResource> workingIntervals) {
