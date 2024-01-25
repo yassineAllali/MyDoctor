@@ -1,13 +1,12 @@
 package com.mydoctor.application.adapter;
 
-import com.mydoctor.application.resource.MedicalOfficeResource;
-import com.mydoctor.domaine.medical.MedicalOffice;
+import com.mydoctor.infrastructure.entity.MedicalOfficeEntity;
 
 import java.util.Optional;
 
 public interface MedicalOfficeRepositoryAdapter {
 
-    MedicalOfficeResource save(MedicalOfficeResource medicalOfficeResource);
+    MedicalOfficeEntity save(MedicalOfficeEntity medicalOfficeEntity);
 
-    Optional<MedicalOfficeResource> get(Long medicalOfficeId);
+    Optional<MedicalOfficeEntity> get(Long medicalOfficeId);
 }

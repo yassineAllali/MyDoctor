@@ -1,8 +1,8 @@
 package com.mydoctor.application.adapter;
 
-import com.mydoctor.application.resource.AppointmentResource;
+import com.mydoctor.infrastructure.entity.AppointmentEntity;
 
 public interface AppointmentRepositoryAdapter {
 
-    AppointmentResource save(AppointmentResource appointmentResource);
+    AppointmentEntity save(AppointmentEntity appointmentEntity);
 }
