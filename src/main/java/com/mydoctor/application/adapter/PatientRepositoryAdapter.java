@@ -1,8 +1,8 @@
 package com.mydoctor.application.adapter;
 
-import com.mydoctor.application.resource.PatientResource;
+import com.mydoctor.infrastructure.entity.PatientEntity;
 
 public interface PatientRepositoryAdapter {
 
-    PatientResource save(PatientResource patientResource);
+    PatientEntity save(PatientEntity patientEntity);
 }
