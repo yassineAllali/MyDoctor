@@ -1,17 +1,16 @@
-package com.mydoctor.infrastructure.adapter;
+package com.mydoctor.infrastructure.adapter.dummy;
 
 import com.mydoctor.application.adapter.PatientRepositoryAdapter;
-import com.mydoctor.infrastructure.repository.PatientRepository;
 import com.mydoctor.infrastructure.entity.PatientEntity;
+import com.mydoctor.infrastructure.repository.PatientRepository;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 @Repository
-public class JpaPatientRepositoryAdapter implements PatientRepositoryAdapter {
+public class DummyPatientRepositoryAdapter implements PatientRepositoryAdapter {
 
     private final PatientRepository repository;
 
-    public JpaPatientRepositoryAdapter(PatientRepository repository) {
+    public DummyPatientRepositoryAdapter(PatientRepository repository) {
         this.repository = repository;
     }
 

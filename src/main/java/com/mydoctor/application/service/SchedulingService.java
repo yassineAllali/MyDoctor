@@ -46,7 +46,7 @@ public class SchedulingService {
     }
 
     public AppointmentResource schedule(CreateAppointmentCommand appointmentCommand,
-                                        CreatePatientCommand patientCommand, Long medicalOfficeId) {
+                                        CreatePatientCommand patientCommand, long medicalOfficeId) {
         WorkingIntervalEntity workingIntervalEntity = getWhereAppointmentInside(medicalOfficeId, appointmentCommand)
                 .orElseThrow(() -> new BookingException("Appointment is not inside any working interval !"));
 
