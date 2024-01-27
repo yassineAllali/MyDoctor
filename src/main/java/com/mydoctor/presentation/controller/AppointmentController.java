@@ -8,6 +8,7 @@ import com.mydoctor.presentation.mapper.CommandMapper;
 import com.mydoctor.presentation.mapper.ResponseMapper;
 import com.mydoctor.presentation.request.CreateAppointmentRequest;
 import com.mydoctor.presentation.request.CreatePatientRequest;
+import com.mydoctor.presentation.request.ScheduleRequest;
 import com.mydoctor.presentation.response.AppointmentResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,13 +28,12 @@ public class AppointmentController {
         this.responseMapper = new ResponseMapper();
     }
 
-    @PostMapping("/med-office/{id}")
+    @PostMapping("/med-office/{medicalOfficeId}")
     public AppointmentResponse schedule(@PathVariable long medicalOfficeId,
-                                        @RequestBody CreateAppointmentRequest appointment,
-                                        @RequestBody CreatePatientRequest patient) {
+                                        @RequestBody ScheduleRequest scheduleRequest) {
 
-        CreateAppointmentCommand appointmentCommand = commandMapper.map(appointment);
-        CreatePatientCommand patientCommand = commandMapper.map(patient);
+        CreateAppointmentCommand appointmentCommand = commandMapper.map(scheduleRequest.appointment());
+        CreatePatientCommand patientCommand = commandMapper.map(scheduleRequest.patient());
 
         return responseMapper.map(schedulingService.schedule(appointmentCommand, patientCommand, medicalOfficeId));
     }

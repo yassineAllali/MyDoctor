@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public class DummyMedicalOfficeRepositoryAdapter implements MedicalOfficeRepositoryAdapter {
 
-    List<MedicalOfficeEntity> medicalOfficeEntities;
+    private final List<MedicalOfficeEntity> medicalOfficeEntities;
 
     private List<MedicalOfficeEntity> generateDummyMedicalOffices() {
         List<String> names = Arrays.asList(
@@ -29,15 +29,15 @@ public class DummyMedicalOfficeRepositoryAdapter implements MedicalOfficeReposit
                 "Unity Medical Center"
         );
         List<MedicalOfficeEntity> entities = new ArrayList<>(10);
-        for(int i = 1; i < names.size(); i++) {
-            entities.add(new MedicalOfficeEntity((long) i, names.get(i - 1)));
+        for(int i = 0; i < names.size(); i++) {
+            entities.add(new MedicalOfficeEntity((long) i + 1, names.get(i)));
         }
         return entities;
     }
 
 
     public DummyMedicalOfficeRepositoryAdapter() {
-
+        medicalOfficeEntities = generateDummyMedicalOffices();
     }
 
     @Override

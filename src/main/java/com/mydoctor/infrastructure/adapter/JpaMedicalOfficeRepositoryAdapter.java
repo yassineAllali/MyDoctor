@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Repository
+//@Repository
 public class JpaMedicalOfficeRepositoryAdapter implements MedicalOfficeRepositoryAdapter {
 
     private final MedicalOfficeRepository repository;

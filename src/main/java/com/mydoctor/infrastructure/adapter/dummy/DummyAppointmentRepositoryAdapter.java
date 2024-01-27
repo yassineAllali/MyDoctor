@@ -22,7 +22,7 @@ public class DummyAppointmentRepositoryAdapter implements AppointmentRepositoryA
         Random random = new Random();
 
         // Start generating appointments from today
-        LocalDate startDate = LocalDate.now();
+        LocalDate startDate = LocalDate.of(2024, 1, 27);
         LocalDate endDate = startDate.plusDays(6); // One week from today
 
         for (LocalDate date = startDate; date.isBefore(endDate.plusDays(1)); date = date.plusDays(1)) {

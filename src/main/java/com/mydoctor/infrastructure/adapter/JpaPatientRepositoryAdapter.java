@@ -6,7 +6,7 @@ import com.mydoctor.infrastructure.entity.PatientEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
-@Repository
+//@Repository
 public class JpaPatientRepositoryAdapter implements PatientRepositoryAdapter {
 
     private final PatientRepository repository;

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
-@Repository
+//@Repository
 public class JpaAppointmentRepositoryAdapter implements AppointmentRepositoryAdapter {
 
     private final AppointmentRepository repository;
