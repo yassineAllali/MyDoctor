@@ -6,6 +6,7 @@ import com.mydoctor.application.adapter.PatientRepositoryAdapter;
 import com.mydoctor.application.adapter.WorkingIntervalRepositoryAdapter;
 import com.mydoctor.application.command.CreateAppointmentCommand;
 import com.mydoctor.application.command.CreatePatientCommand;
+import com.mydoctor.application.exception.NotFoundException;
 import com.mydoctor.application.mapper.DomainMapper;
 import com.mydoctor.application.mapper.EntityMapper;
 import com.mydoctor.application.mapper.ResourceMapper;
@@ -46,7 +47,19 @@ public class SchedulingService {
     }
 
     public AppointmentResource schedule(CreateAppointmentCommand appointmentCommand,
-                                        CreatePatientCommand patientCommand, Long medicalOfficeId) {
+                                        CreatePatientCommand patientCommand, long medicalOfficeId) {
+        PatientEntity patientEntity = patientRepository.save(entityMapper.map(patientCommand));
+        return schedule(appointmentCommand, medicalOfficeId, patientEntity);
+    }
+
+    public AppointmentResource schedule(CreateAppointmentCommand appointmentCommand, long medicalOfficeId, long patientId) {
+        PatientEntity patientEntity = patientRepository.get(patientId)
+                .orElseThrow(() -> new NotFoundException(String.format("Patient not found for id : %s !", patientId)));
+
+        return schedule(appointmentCommand, medicalOfficeId, patientEntity);
+    }
+
+    private AppointmentResource schedule(CreateAppointmentCommand appointmentCommand, long medicalOfficeId, PatientEntity patientEntity) {
         WorkingIntervalEntity workingIntervalEntity = getWhereAppointmentInside(medicalOfficeId, appointmentCommand)
                 .orElseThrow(() -> new BookingException("Appointment is not inside any working interval !"));
 
@@ -57,8 +70,6 @@ public class SchedulingService {
         } catch (BookingException e) {
             throw new BookingException("Can't book appointment : " + e.getMessage());
         }
-
-        PatientEntity patientEntity = patientRepository.save(entityMapper.map(patientCommand));
         return resourceMapper.map(appointmentRepository.save(new AppointmentEntity(null, patientEntity,
                 workingIntervalEntity.getMedicalOffice(), workingIntervalEntity, appointment.getDate(),
                 appointment.getStart(), appointment.getEnd())));

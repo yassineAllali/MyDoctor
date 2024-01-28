@@ -3,9 +3,12 @@ package com.mydoctor.infrastructure.adapter;
 import com.mydoctor.application.adapter.PatientRepositoryAdapter;
 import com.mydoctor.infrastructure.repository.PatientRepository;
 import com.mydoctor.infrastructure.entity.PatientEntity;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
-@Service
+import java.util.Optional;
+
+//@Repository
 public class JpaPatientRepositoryAdapter implements PatientRepositoryAdapter {
 
     private final PatientRepository repository;
@@ -17,5 +20,10 @@ public class JpaPatientRepositoryAdapter implements PatientRepositoryAdapter {
     @Override
     public PatientEntity save(PatientEntity patientEntity) {
         return repository.save(patientEntity);
+    }
+
+    @Override
+    public Optional<PatientEntity> get(long id) {
+        return repository.findById(id);
     }
 }
