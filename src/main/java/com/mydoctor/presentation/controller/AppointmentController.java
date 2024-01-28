@@ -12,6 +12,8 @@ import com.mydoctor.presentation.request.ScheduleRequest;
 import com.mydoctor.presentation.response.AppointmentResponse;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/appointments")
 public class AppointmentController {
@@ -36,6 +38,21 @@ public class AppointmentController {
         CreatePatientCommand patientCommand = commandMapper.map(scheduleRequest.patient());
 
         return responseMapper.map(schedulingService.schedule(appointmentCommand, patientCommand, medicalOfficeId));
+    }
+
+    @PostMapping("/med-office/{medicalOfficeId}/patient/{patientId}")
+    public AppointmentResponse schedule(@PathVariable long medicalOfficeId, @PathVariable long patientId,
+                                        @RequestBody CreateAppointmentRequest appointmentRequest) {
+        CreateAppointmentCommand appointmentCommand = commandMapper.map(appointmentRequest);
+        return responseMapper.map(schedulingService.schedule(appointmentCommand, medicalOfficeId, patientId));
+    }
+
+    @GetMapping("/patient/{patientId}")
+    public List<AppointmentResponse> getPatientAppointments(@PathVariable long patientId) {
+        return appointmentService.getPatientAppointments(patientId)
+                .stream()
+                .map(responseMapper::map)
+                .toList();
     }
 
 

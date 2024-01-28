@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 //@Repository
 public class JpaAppointmentRepositoryAdapter implements AppointmentRepositoryAdapter {
@@ -20,5 +21,10 @@ public class JpaAppointmentRepositoryAdapter implements AppointmentRepositoryAda
     @Override
     public AppointmentEntity save(AppointmentEntity appointmentEntity) {
         return repository.save(appointmentEntity);
+    }
+
+    @Override
+    public List<AppointmentEntity> getPatientAppointments(long patientId) {
+        return repository.findByPatient_Id(patientId);
     }
 }

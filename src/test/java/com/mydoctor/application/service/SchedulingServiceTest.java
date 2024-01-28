@@ -90,6 +90,40 @@ class SchedulingServiceTest {
     }
 
     @Test
+    void testScheduleAppointmentWithExistingPatient() {
+        // Given
+        LocalDate appointmentDate = LocalDate.of(2024, 1, 23);
+        LocalTime start = LocalTime.of(9, 0);
+        LocalTime end = LocalTime.of(10, 0);
+        CreateAppointmentCommand givenAppointment = new CreateAppointmentCommand(appointmentDate, start, end);
+        PatientEntity givenPatient = new PatientEntity(123l, "Yassine");
+        MedicalOfficeEntity givenMedicalOffice = new MedicalOfficeEntity(1l, "med_1");
+
+        // When
+        when(workingIntervalRepository.get(1l, LocalDate.of(2024, 1, 23), LocalTime.of(9, 0), LocalTime.of(10, 0)))
+                .thenReturn(Arrays.asList(new WorkingIntervalEntity(123l, givenMedicalOffice, LocalDate.of(2024, 1, 23), LocalTime.of(8, 0), LocalTime.of(12, 0), null)));
+
+        when(patientRepository.get(123l)).thenReturn(Optional.of(givenPatient));
+
+        when(appointmentRepository.save(any(AppointmentEntity.class))).then(args -> {
+            AppointmentEntity entity = args.getArgument(0, AppointmentEntity.class);
+            return new AppointmentEntity(123l, entity.getPatient(), entity.getMedicalOffice(), entity.getWorkingInterval(), entity.getDate(), entity.getStart(), entity.getEnd());
+        });
+
+        AppointmentResource actualAppointment = schedulingService.schedule(givenAppointment, 1l, 123l);
+
+        // Then
+        assertNotNull(actualAppointment);
+        assertNotNull(actualAppointment.id());
+        assertEquals(appointmentDate, actualAppointment.date());
+        assertEquals(start, actualAppointment.start());
+        assertEquals(end, actualAppointment.end());
+        assertEquals("Yassine", actualAppointment.patient().name());
+        assertEquals(1l, actualAppointment.medicalOffice().id());
+        assertEquals("med_1", actualAppointment.medicalOffice().name());
+    }
+
+    @Test
     void testScheduleAppointmentShouldFailIfNotInSameDate() {
         // Given
         LocalDate appointmentDate = LocalDate.of(2024, 1, 26);

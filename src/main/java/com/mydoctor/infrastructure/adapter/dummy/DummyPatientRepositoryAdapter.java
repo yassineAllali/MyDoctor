@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class DummyPatientRepositoryAdapter implements PatientRepositoryAdapter {
@@ -39,5 +40,10 @@ public class DummyPatientRepositoryAdapter implements PatientRepositoryAdapter {
             entities.add(patientEntity);
         }
         return patientEntity;
+    }
+
+    @Override
+    public Optional<PatientEntity> get(long id) {
+        return entities.stream().filter(e -> e.getId().equals(id)).findFirst();
     }
 }

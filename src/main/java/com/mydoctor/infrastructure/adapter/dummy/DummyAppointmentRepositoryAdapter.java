@@ -67,4 +67,11 @@ public class DummyAppointmentRepositoryAdapter implements AppointmentRepositoryA
         return appointmentEntity;
     }
 
+    @Override
+    public List<AppointmentEntity> getPatientAppointments(long patientId) {
+        return appointmentEntities.stream()
+                .filter(a -> a.getPatient() != null && a.getPatient().getId() != null && a.getPatient().getId().equals(patientId))
+                .toList();
+    }
+
 }
