@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 //@Repository
 public class JpaAppointmentRepositoryAdapter implements AppointmentRepositoryAdapter {
@@ -26,5 +27,10 @@ public class JpaAppointmentRepositoryAdapter implements AppointmentRepositoryAda
     @Override
     public List<AppointmentEntity> getPatientAppointments(long patientId) {
         return repository.findByPatient_Id(patientId);
+    }
+
+    @Override
+    public Optional<AppointmentEntity> get(long id) {
+        return repository.findById(id);
     }
 }

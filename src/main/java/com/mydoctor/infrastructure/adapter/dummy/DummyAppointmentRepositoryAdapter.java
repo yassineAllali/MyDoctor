@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Repository
@@ -72,6 +73,11 @@ public class DummyAppointmentRepositoryAdapter implements AppointmentRepositoryA
         return appointmentEntities.stream()
                 .filter(a -> a.getPatient() != null && a.getPatient().getId() != null && a.getPatient().getId().equals(patientId))
                 .toList();
+    }
+
+    @Override
+    public Optional<AppointmentEntity> get(long id) {
+        return appointmentEntities.stream().filter(a -> a.getId() == id).findFirst();
     }
 
 }

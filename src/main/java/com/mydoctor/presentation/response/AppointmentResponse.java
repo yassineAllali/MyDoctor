@@ -3,5 +3,5 @@ package com.mydoctor.presentation.response;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public record AppointmentResponse(long id, LocalDate date, LocalTime start, LocalTime end, long medicalOfficeId, long patientId) {
+public record AppointmentResponse(long id, LocalDate date, LocalTime start, LocalTime end, long medicalOfficeId, long patientId, String status) {
 }

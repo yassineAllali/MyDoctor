@@ -26,6 +26,12 @@ public class DomainMapper {
         return new TimeSlot(appointmentEntity.getStart(), appointmentEntity.getEnd());
     }
 
+    public Appointment map(AppointmentEntity entity) {
+        if(entity == null)
+            return null;
+        return new Appointment(entity.getDate(), getTimeSlot(entity), Appointment.Status.valueOf(entity.getStatus()));
+    }
+
     public Appointment map(CreateAppointmentCommand createAppointmentCommand) {
         TimeSlot timeSlot = new TimeSlot(createAppointmentCommand.start(), createAppointmentCommand.end());
         return new Appointment(createAppointmentCommand.date(), timeSlot);

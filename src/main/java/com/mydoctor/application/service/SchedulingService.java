@@ -67,12 +67,13 @@ public class SchedulingService {
         WorkingTimeInterval workingInterval = domainMapper.map(workingIntervalEntity);
         try {
             workingInterval.book(appointment.getTimeSlot());
+            appointment.booked();
         } catch (BookingException e) {
             throw new BookingException("Can't book appointment : " + e.getMessage());
         }
         return resourceMapper.map(appointmentRepository.save(new AppointmentEntity(null, patientEntity,
                 workingIntervalEntity.getMedicalOffice(), workingIntervalEntity, appointment.getDate(),
-                appointment.getStart(), appointment.getEnd())));
+                appointment.getStart(), appointment.getEnd(), appointment.getStatus().name())));
     }
 
     private Optional<WorkingIntervalEntity> getWhereAppointmentInside(Long medicalOfficeId, CreateAppointmentCommand appointmentCommand) {

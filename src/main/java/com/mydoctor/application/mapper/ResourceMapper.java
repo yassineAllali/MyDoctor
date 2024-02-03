@@ -16,14 +16,20 @@ import java.util.List;
 public class ResourceMapper {
 
     public AppointmentResource map(AppointmentEntity entity) {
-        return new AppointmentResource(entity.getId(), map(entity.getPatient()), map(entity.getMedicalOffice()), entity.getDate(), entity.getStart(), entity.getEnd());
+        if(entity == null)
+            return null;
+        return new AppointmentResource(entity.getId(), map(entity.getPatient()), map(entity.getMedicalOffice()), entity.getDate(), entity.getStart(), entity.getEnd(), entity.getStatus());
     }
 
     public PatientResource map(PatientEntity entity) {
+        if(entity == null)
+            return null;
         return new PatientResource(entity.getId(), entity.getName());
     }
 
     public MedicalOfficeResource map(MedicalOfficeEntity entity) {
+        if(entity == null)
+            return null;
         return new MedicalOfficeResource(entity.getId(), entity.getName());
     }
 }

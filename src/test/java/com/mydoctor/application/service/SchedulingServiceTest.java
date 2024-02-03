@@ -7,9 +7,6 @@ import com.mydoctor.application.adapter.WorkingIntervalRepositoryAdapter;
 import com.mydoctor.application.command.CreateAppointmentCommand;
 import com.mydoctor.application.command.CreatePatientCommand;
 import com.mydoctor.application.resource.AppointmentResource;
-import com.mydoctor.application.resource.MedicalOfficeResource;
-import com.mydoctor.application.resource.PatientResource;
-import com.mydoctor.application.resource.WorkingIntervalResource;
 import com.mydoctor.domaine.appointment.booking.BookingException;
 import com.mydoctor.infrastructure.entity.AppointmentEntity;
 import com.mydoctor.infrastructure.entity.MedicalOfficeEntity;
@@ -24,11 +21,11 @@ import org.mockito.MockitoAnnotations;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 
 class SchedulingServiceTest {
 
@@ -73,7 +70,7 @@ class SchedulingServiceTest {
 
         when(appointmentRepository.save(any(AppointmentEntity.class))).then(args -> {
             AppointmentEntity entity = args.getArgument(0, AppointmentEntity.class);
-           return new AppointmentEntity(123l, entity.getPatient(), entity.getMedicalOffice(), entity.getWorkingInterval(), entity.getDate(), entity.getStart(), entity.getEnd());
+           return new AppointmentEntity(123l, entity.getPatient(), entity.getMedicalOffice(), entity.getWorkingInterval(), entity.getDate(), entity.getStart(), entity.getEnd(), entity.getStatus());
         });
 
         AppointmentResource actualAppointment = schedulingService.schedule(givenAppointment, givenPatient, 1l);
@@ -84,6 +81,7 @@ class SchedulingServiceTest {
         assertEquals(appointmentDate, actualAppointment.date());
         assertEquals(start, actualAppointment.start());
         assertEquals(end, actualAppointment.end());
+        assertEquals("BOOKED", actualAppointment.status());
         assertEquals("Yassine", actualAppointment.patient().name());
         assertEquals(1l, actualAppointment.medicalOffice().id());
         assertEquals("med_1", actualAppointment.medicalOffice().name());
@@ -107,7 +105,7 @@ class SchedulingServiceTest {
 
         when(appointmentRepository.save(any(AppointmentEntity.class))).then(args -> {
             AppointmentEntity entity = args.getArgument(0, AppointmentEntity.class);
-            return new AppointmentEntity(123l, entity.getPatient(), entity.getMedicalOffice(), entity.getWorkingInterval(), entity.getDate(), entity.getStart(), entity.getEnd());
+            return new AppointmentEntity(123l, entity.getPatient(), entity.getMedicalOffice(), entity.getWorkingInterval(), entity.getDate(), entity.getStart(), entity.getEnd(), entity.getStatus());
         });
 
         AppointmentResource actualAppointment = schedulingService.schedule(givenAppointment, 1l, 123l);
@@ -118,6 +116,7 @@ class SchedulingServiceTest {
         assertEquals(appointmentDate, actualAppointment.date());
         assertEquals(start, actualAppointment.start());
         assertEquals(end, actualAppointment.end());
+        assertEquals("BOOKED", actualAppointment.status());
         assertEquals("Yassine", actualAppointment.patient().name());
         assertEquals(1l, actualAppointment.medicalOffice().id());
         assertEquals("med_1", actualAppointment.medicalOffice().name());
@@ -146,7 +145,7 @@ class SchedulingServiceTest {
 
         when(appointmentRepository.save(any(AppointmentEntity.class))).then(args -> {
             AppointmentEntity entity = args.getArgument(0, AppointmentEntity.class);
-            return new AppointmentEntity(123l, entity.getPatient(), entity.getMedicalOffice(), entity.getWorkingInterval(), entity.getDate(), entity.getStart(), entity.getEnd());
+            return new AppointmentEntity(123l, entity.getPatient(), entity.getMedicalOffice(), entity.getWorkingInterval(), entity.getDate(), entity.getStart(), entity.getEnd(), entity.getStatus());
         });
 
         // When, Then
@@ -176,7 +175,7 @@ class SchedulingServiceTest {
 
         when(appointmentRepository.save(any(AppointmentEntity.class))).then(args -> {
             AppointmentEntity entity = args.getArgument(0, AppointmentEntity.class);
-            return new AppointmentEntity(123l, entity.getPatient(), entity.getMedicalOffice(), entity.getWorkingInterval(), entity.getDate(), entity.getStart(), entity.getEnd());
+            return new AppointmentEntity(123l, entity.getPatient(), entity.getMedicalOffice(), entity.getWorkingInterval(), entity.getDate(), entity.getStart(), entity.getEnd(), entity.getStatus());
         });
 
 
@@ -207,7 +206,7 @@ class SchedulingServiceTest {
 
         when(appointmentRepository.save(any(AppointmentEntity.class))).then(args -> {
             AppointmentEntity entity = args.getArgument(0, AppointmentEntity.class);
-            return new AppointmentEntity(123l, entity.getPatient(), entity.getMedicalOffice(), entity.getWorkingInterval(), entity.getDate(), entity.getStart(), entity.getEnd());
+            return new AppointmentEntity(123l, entity.getPatient(), entity.getMedicalOffice(), entity.getWorkingInterval(), entity.getDate(), entity.getStart(), entity.getEnd(), entity.getStatus());
         });
 
         // When, Then
