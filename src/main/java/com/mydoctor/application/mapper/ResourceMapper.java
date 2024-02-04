@@ -1,9 +1,6 @@
 package com.mydoctor.application.mapper;
 
-import com.mydoctor.application.resource.AppointmentResource;
-import com.mydoctor.application.resource.MedicalOfficeResource;
-import com.mydoctor.application.resource.PatientResource;
-import com.mydoctor.application.resource.WorkingIntervalResource;
+import com.mydoctor.application.resource.*;
 import com.mydoctor.domaine.appointment.booking.TimeSlot;
 import com.mydoctor.domaine.appointment.booking.WorkingTimeInterval;
 import com.mydoctor.domaine.medical.MedicalOffice;
@@ -31,5 +28,9 @@ public class ResourceMapper {
         if(entity == null)
             return null;
         return new MedicalOfficeResource(entity.getId(), entity.getName());
+    }
+
+    public TimeSlotResource map(TimeSlot timeSlot) {
+        return new TimeSlotResource(timeSlot.getStart(), timeSlot.getEnd());
     }
 }

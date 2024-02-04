@@ -2,17 +2,19 @@ package com.mydoctor.presentation.controller;
 
 import com.mydoctor.application.command.CreateAppointmentCommand;
 import com.mydoctor.application.command.CreatePatientCommand;
-import com.mydoctor.application.resource.AppointmentResource;
+import com.mydoctor.application.resource.TimeSlotResource;
 import com.mydoctor.application.service.AppointmentService;
 import com.mydoctor.application.service.SchedulingService;
 import com.mydoctor.presentation.mapper.CommandMapper;
 import com.mydoctor.presentation.mapper.ResponseMapper;
 import com.mydoctor.presentation.request.CreateAppointmentRequest;
-import com.mydoctor.presentation.request.CreatePatientRequest;
 import com.mydoctor.presentation.request.ScheduleRequest;
 import com.mydoctor.presentation.response.AppointmentResponse;
+import com.mydoctor.presentation.response.TimeSlotResponse;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -64,6 +66,12 @@ public class AppointmentController {
                 .stream()
                 .map(responseMapper::map)
                 .toList();
+    }
+
+    @GetMapping("/med-office/{medicalOfficeId}/available")
+    public List<TimeSlotResponse> getAvailableSlots(@PathVariable long medicalOfficeId, @RequestParam LocalDate date, @RequestParam("duration") long durationInMin) {
+        List<TimeSlotResource> availableTimeSlots = appointmentService.getAvailableSlots(medicalOfficeId, date, Duration.ofMinutes(durationInMin));
+        return availableTimeSlots.stream().map(responseMapper::map).toList();
     }
 
 
