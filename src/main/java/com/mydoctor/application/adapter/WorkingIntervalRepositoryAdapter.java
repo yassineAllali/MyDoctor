@@ -9,4 +9,5 @@ import java.util.List;
 public interface WorkingIntervalRepositoryAdapter {
     List<WorkingIntervalEntity> get(Long medicalOfficeId, LocalDate date, LocalTime startBefore, LocalTime endAfter);
     List<WorkingIntervalEntity> get(Long medicalOfficeId, LocalDate date);
+    List<WorkingIntervalEntity> get(Long medicalOfficeId, LocalDate from, LocalDate to);
 }

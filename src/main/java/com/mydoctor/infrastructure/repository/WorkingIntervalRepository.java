@@ -15,4 +15,6 @@ public interface WorkingIntervalRepository extends JpaRepository<WorkingInterval
     List<WorkingIntervalEntity> findByMedicalOffice_IdAndDate(Long id, LocalDate date);
 
     List<WorkingIntervalEntity> findByMedicalOffice_IdAndDateAndStartBeforeAndEndAfter(Long id, LocalDate date, LocalTime start, LocalTime end);
+
+    List<WorkingIntervalEntity> findByMedicalOffice_IdAndDateBetween(Long id, LocalDate dateStart, LocalDate dateEnd);
 }

@@ -1,30 +1,41 @@
 package com.mydoctor.application.service;
 
 import com.mydoctor.application.adapter.AppointmentRepositoryAdapter;
-import com.mydoctor.application.adapter.MedicalOfficeRepositoryAdapter;
-import com.mydoctor.application.command.CreateAppointmentCommand;
-import com.mydoctor.application.command.CreatePatientCommand;
+import com.mydoctor.application.adapter.WorkingIntervalRepositoryAdapter;
 import com.mydoctor.application.exception.NotFoundException;
 import com.mydoctor.application.mapper.DomainMapper;
 import com.mydoctor.application.mapper.EntityMapper;
 import com.mydoctor.application.mapper.ResourceMapper;
 import com.mydoctor.application.resource.AppointmentResource;
+import com.mydoctor.application.resource.TimeSlotResource;
 import com.mydoctor.domaine.appointment.Appointment;
+import com.mydoctor.domaine.appointment.booking.TimeSlot;
+import com.mydoctor.domaine.appointment.booking.WorkingDay;
+import com.mydoctor.domaine.appointment.booking.WorkingPeriod;
+import com.mydoctor.domaine.appointment.booking.WorkingTimeInterval;
 import com.mydoctor.infrastructure.entity.AppointmentEntity;
+import com.mydoctor.infrastructure.entity.WorkingIntervalEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AppointmentService {
 
     private final AppointmentRepositoryAdapter appointmentRepository;
+    private final WorkingIntervalRepositoryAdapter workingIntervalRepository;
     private final ResourceMapper resourceMapper;
     private final DomainMapper domainMapper;
     private final EntityMapper entityMapper;
 
-    public AppointmentService(AppointmentRepositoryAdapter appointmentRepository) {
+    public AppointmentService(AppointmentRepositoryAdapter appointmentRepository, WorkingIntervalRepositoryAdapter workingIntervalRepository) {
         this.appointmentRepository = appointmentRepository;
+        this.workingIntervalRepository = workingIntervalRepository;
         this.resourceMapper = new ResourceMapper();
         this.domainMapper = new DomainMapper();
         this.entityMapper = new EntityMapper();
@@ -54,9 +65,60 @@ public class AppointmentService {
         return entity;
     }
 
+    public List<TimeSlotResource> getAvailableSlots(long medOfficeId, LocalDate date, Duration duration) {
+        WorkingDay workingDay = getWorkingDay(medOfficeId, date);
+        List<TimeSlot> availableTimeSlots = workingDay.getAvailableSlots(duration);
+        return availableTimeSlots.stream().map(resourceMapper::map).toList();
+    }
+
+    public List<TimeSlotResource> getAvailableSlots(long medOfficeId, LocalDate from, LocalDate to, Duration duration) {
+        WorkingPeriod workingPeriod = getWorkingPeriod(medOfficeId, from, to);
+        return workingPeriod.getAvailableSlots(duration).stream()
+                .map(resourceMapper::map)
+                .toList();
+    }
+
+    private WorkingPeriod getWorkingPeriod(long medOfficeId, LocalDate from, LocalDate toInclusive) {
+        List<WorkingDay> workingDays = getWorkingDaysBetween(medOfficeId, from, toInclusive)
+                .stream()
+                .sorted(Comparator.comparing(WorkingDay::getDate))
+                .collect(Collectors.collectingAndThen(
+                        Collectors.toList(),
+                        Collections::unmodifiableList
+                ));
+        return new WorkingPeriod(from, toInclusive.plusDays(1), workingDays);
+    }
+
+    private WorkingDay getWorkingDay(long medOfficeId, LocalDate date) {
+        List<WorkingTimeInterval> workingIntervals = getWorkingIntervals(medOfficeId, date);
+        return new WorkingDay(date, workingIntervals);
+    }
+
     private AppointmentEntity getAppointmentEntity(long id) {
         return appointmentRepository
                 .get(id)
                 .orElseThrow(() -> new NotFoundException(String.format("Appointment with id : %s not found !", id)));
+    }
+
+    private List<WorkingTimeInterval> getWorkingIntervals(long medOfficeId, LocalDate date) {
+        List<WorkingIntervalEntity> entities = workingIntervalRepository.get(medOfficeId, date);
+        return entities.stream().map(domainMapper::map).toList();
+    }
+
+    private List<WorkingDay> getWorkingDaysBetween(long medOfficeId, LocalDate from, LocalDate toInclusive) {
+        List<WorkingIntervalEntity> entities = workingIntervalRepository.get(medOfficeId, from, toInclusive);
+        return entities.stream()
+                .collect(Collectors.groupingBy(WorkingIntervalEntity::getDate))
+                .entrySet().stream()
+                .map(e -> new WorkingDay(
+                        e.getKey(),
+                        e.getValue().stream().map(domainMapper::map)
+                                .sorted(Comparator.comparing(WorkingTimeInterval::getStart))
+                                .collect(Collectors.collectingAndThen(
+                                        Collectors.toList(),
+                                        Collections::unmodifiableList
+                                ))
+                ))
+                .toList();
     }
 }

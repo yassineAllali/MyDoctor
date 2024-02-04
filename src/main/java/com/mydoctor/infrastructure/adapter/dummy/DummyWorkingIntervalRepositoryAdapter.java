@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,5 +52,14 @@ public class DummyWorkingIntervalRepositoryAdapter implements WorkingIntervalRep
         return entities.stream().filter(w -> w.getDate().equals(date)
                 && w.getMedicalOffice().getId().equals(medicalOfficeId))
                 .toList();
+    }
+
+    @Override
+    public List<WorkingIntervalEntity> get(Long medicalOfficeId, LocalDate from, LocalDate to) {
+        return entities.stream().filter(e -> medicalOfficeId.equals(e.getMedicalOffice().getId()) && isBetween(e.getDate(), from, to)).toList();
+    }
+
+    private boolean isBetween(LocalDate dateToCheck, LocalDate startDate, LocalDate endDate) {
+        return !dateToCheck.isBefore(startDate) && !dateToCheck.isAfter(endDate);
     }
 }

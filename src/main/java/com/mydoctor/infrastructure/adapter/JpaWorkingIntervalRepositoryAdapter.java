@@ -28,4 +28,9 @@ public class JpaWorkingIntervalRepositoryAdapter implements WorkingIntervalRepos
     public List<WorkingIntervalEntity> get(Long medicalOfficeId, LocalDate date) {
         return repository.findByMedicalOffice_IdAndDate(medicalOfficeId,date);
     }
+
+    @Override
+    public List<WorkingIntervalEntity> get(Long medicalOfficeId, LocalDate from, LocalDate to) {
+        return repository.findByMedicalOffice_IdAndDateBetween(medicalOfficeId, from, to);
+    }
 }
