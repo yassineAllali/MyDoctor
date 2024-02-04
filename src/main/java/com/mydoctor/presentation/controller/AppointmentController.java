@@ -74,5 +74,11 @@ public class AppointmentController {
         return availableTimeSlots.stream().map(responseMapper::map).toList();
     }
 
+    @GetMapping("/med-office/{medicalOfficeId}/available/between")
+    public List<TimeSlotResponse> getAvailableSlots(@PathVariable long medicalOfficeId, @RequestParam LocalDate from, @RequestParam LocalDate to, @RequestParam("duration") long durationInMin) {
+        List<TimeSlotResource> availableTimeSlots = appointmentService.getAvailableSlots(medicalOfficeId, from, to, Duration.ofMinutes(durationInMin));
+        return availableTimeSlots.stream().map(responseMapper::map).toList();
+    }
+
 
 }
