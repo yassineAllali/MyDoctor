@@ -57,7 +57,7 @@ class SchedulingServiceTest {
         CreateAppointmentCommand givenAppointment = new CreateAppointmentCommand(appointmentDate, start, end);
         CreatePatientCommand givenPatient = new CreatePatientCommand("Yassine");
 
-        MedicalOfficeEntity givenMedicalOffice = new MedicalOfficeEntity(1l, "med_1");
+        MedicalOfficeEntity givenMedicalOffice = new MedicalOfficeEntity(1l, "med_1", null, null);
 
         // When
         when(workingIntervalRepository.get(1l, LocalDate.of(2024, 1, 23), LocalTime.of(9, 0), LocalTime.of(10, 0)))
@@ -95,7 +95,7 @@ class SchedulingServiceTest {
         LocalTime end = LocalTime.of(10, 0);
         CreateAppointmentCommand givenAppointment = new CreateAppointmentCommand(appointmentDate, start, end);
         PatientEntity givenPatient = new PatientEntity(123l, "Yassine");
-        MedicalOfficeEntity givenMedicalOffice = new MedicalOfficeEntity(1l, "med_1");
+        MedicalOfficeEntity givenMedicalOffice = new MedicalOfficeEntity(1l, "med_1", null, null);
 
         // When
         when(workingIntervalRepository.get(1l, LocalDate.of(2024, 1, 23), LocalTime.of(9, 0), LocalTime.of(10, 0)))
@@ -132,7 +132,7 @@ class SchedulingServiceTest {
 
         CreatePatientCommand givenPatient = new CreatePatientCommand("Yassine");
 
-        MedicalOfficeEntity givenMedicalOffice = new MedicalOfficeEntity(1l, "med_1");
+        MedicalOfficeEntity givenMedicalOffice = new MedicalOfficeEntity(1l, "med_1", null, null);
 
         // When
         when(workingIntervalRepository.get(1l, LocalDate.of(2024, 1, 23), LocalTime.of(9, 0), LocalTime.of(10, 0)))
@@ -162,7 +162,7 @@ class SchedulingServiceTest {
 
         CreatePatientCommand givenPatient = new CreatePatientCommand("Yassine");
 
-        MedicalOfficeEntity givenMedicalOffice = new MedicalOfficeEntity(1l, "med_1");
+        MedicalOfficeEntity givenMedicalOffice = new MedicalOfficeEntity(1l, "med_1", null, null);
 
         // When
         when(workingIntervalRepository.get(1l, LocalDate.of(2024, 1, 23), LocalTime.of(9, 0), LocalTime.of(10, 0)))
@@ -193,7 +193,7 @@ class SchedulingServiceTest {
 
         CreatePatientCommand givenPatient = new CreatePatientCommand("Yassine");
 
-        MedicalOfficeEntity givenMedicalOffice = new MedicalOfficeEntity(1l, "med_1");
+        MedicalOfficeEntity givenMedicalOffice = new MedicalOfficeEntity(1l, "med_1", null, null);
 
         // When
         when(workingIntervalRepository.get(1l, LocalDate.of(2024, 1, 23), LocalTime.of(9, 0), LocalTime.of(10, 0)))
