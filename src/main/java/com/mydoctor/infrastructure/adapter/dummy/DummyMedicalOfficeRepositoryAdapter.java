@@ -2,7 +2,7 @@ package com.mydoctor.infrastructure.adapter.dummy;
 
 import com.mydoctor.application.adapter.MedicalOfficeRepositoryAdapter;
 import com.mydoctor.infrastructure.entity.MedicalOfficeEntity;
-import com.mydoctor.infrastructure.repository.MedicalOfficeRepository;
+import com.mydoctor.application.command.MedicalOfficeSearchCriteriaCommand;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class DummyMedicalOfficeRepositoryAdapter implements MedicalOfficeReposit
         );
         List<MedicalOfficeEntity> entities = new ArrayList<>(10);
         for(int i = 0; i < names.size(); i++) {
-            entities.add(new MedicalOfficeEntity((long) i + 1, names.get(i)));
+            entities.add(new MedicalOfficeEntity((long) i + 1, names.get(i), null, null));
         }
         return entities;
     }
@@ -53,5 +53,10 @@ public class DummyMedicalOfficeRepositoryAdapter implements MedicalOfficeReposit
     @Override
     public Optional<MedicalOfficeEntity> get(Long medicalOfficeId) {
         return medicalOfficeEntities.stream().filter(m -> m.getId().equals(medicalOfficeId)).findFirst();
+    }
+
+    @Override
+    public List<MedicalOfficeEntity> get(MedicalOfficeSearchCriteriaCommand criteria) {
+        return List.of();
     }
 }
