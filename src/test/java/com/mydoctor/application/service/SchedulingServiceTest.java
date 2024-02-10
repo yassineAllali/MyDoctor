@@ -6,6 +6,7 @@ import com.mydoctor.application.adapter.PatientRepositoryAdapter;
 import com.mydoctor.application.adapter.WorkingIntervalRepositoryAdapter;
 import com.mydoctor.application.command.CreateAppointmentCommand;
 import com.mydoctor.application.command.CreatePatientCommand;
+import com.mydoctor.application.exception.BusinessException;
 import com.mydoctor.application.resource.AppointmentResource;
 import com.mydoctor.domaine.appointment.booking.BookingException;
 import com.mydoctor.infrastructure.entity.AppointmentEntity;
@@ -149,7 +150,7 @@ class SchedulingServiceTest {
         });
 
         // When, Then
-        assertThrows(BookingException.class, () -> schedulingService.schedule(givenAppointment, givenPatient, 1l));
+        assertThrows(BusinessException.class, () -> schedulingService.schedule(givenAppointment, givenPatient, 1l));
     }
 
     @Test
@@ -180,7 +181,7 @@ class SchedulingServiceTest {
 
 
         // When, Then
-        assertThrows(BookingException.class, () -> schedulingService.schedule(givenAppointment, givenPatient, 1l));
+        assertThrows(BusinessException.class, () -> schedulingService.schedule(givenAppointment, givenPatient, 1l));
     }
 
     @Test
@@ -210,7 +211,7 @@ class SchedulingServiceTest {
         });
 
         // When, Then
-        assertThrows(BookingException.class, () -> schedulingService.schedule(givenAppointment, givenPatient, 1l));
+        assertThrows(BusinessException.class, () -> schedulingService.schedule(givenAppointment, givenPatient, 1l));
     }
 
     @AfterEach
