@@ -15,6 +15,7 @@ import com.mydoctor.domaine.appointment.booking.WorkingPeriod;
 import com.mydoctor.domaine.appointment.booking.WorkingTimeInterval;
 import com.mydoctor.infrastructure.entity.AppointmentEntity;
 import com.mydoctor.infrastructure.entity.WorkingIntervalEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -24,6 +25,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class AppointmentService {
 
@@ -42,11 +44,13 @@ public class AppointmentService {
     }
 
     public AppointmentResource getAppointment(long id) {
+        log.info("Getting appointment for id {}", id);
         AppointmentEntity entity = getAppointmentEntity(id);
         return resourceMapper.map(entity);
     }
 
     public List<AppointmentResource> getPatientAppointments(long patientId) {
+        log.info("Getting appointments for patient {}", patientId);
         return appointmentRepository.getPatientAppointments(patientId)
                 .stream()
                 .map(resourceMapper::map)
@@ -54,6 +58,7 @@ public class AppointmentService {
     }
 
     public AppointmentResource cancelAppointment(long id) {
+        log.info("Canceling appointment {}", id);
         AppointmentEntity entity = getAppointmentEntity(id);
         return resourceMapper.map(cancelAppointment(entity));
     }
@@ -66,12 +71,14 @@ public class AppointmentService {
     }
 
     public List<TimeSlotResource> getAvailableSlots(long medOfficeId, LocalDate date, Duration duration) {
+        log.info("Getting available slots with duration of {} minutes for the medical office {}, for the day {}", duration.toMinutes(), medOfficeId, date);
         WorkingDay workingDay = getWorkingDay(medOfficeId, date);
         List<TimeSlot> availableTimeSlots = workingDay.getAvailableSlots(duration);
         return availableTimeSlots.stream().map(resourceMapper::map).toList();
     }
 
     public List<TimeSlotResource> getAvailableSlots(long medOfficeId, LocalDate from, LocalDate to, Duration duration) {
+        log.info("Getting available slots with duration of {} minutes for the medical office {}, for the days between {} and {}", duration.toMinutes(), medOfficeId, from, to);
         WorkingPeriod workingPeriod = getWorkingPeriod(medOfficeId, from, to);
         return workingPeriod.getAvailableSlots(duration).stream()
                 .map(resourceMapper::map)
@@ -79,6 +86,7 @@ public class AppointmentService {
     }
 
     private WorkingPeriod getWorkingPeriod(long medOfficeId, LocalDate from, LocalDate toInclusive) {
+        log.info("Getting WorkingPeriod for medical office {} between {} and {} inclusive", medOfficeId, from, toInclusive);
         List<WorkingDay> workingDays = getWorkingDaysBetween(medOfficeId, from, toInclusive)
                 .stream()
                 .sorted(Comparator.comparing(WorkingDay::getDate))
@@ -90,6 +98,7 @@ public class AppointmentService {
     }
 
     private WorkingDay getWorkingDay(long medOfficeId, LocalDate date) {
+        log.info("Getting WorkingDay for medical office {} for date {}", medOfficeId, date);
         List<WorkingTimeInterval> workingIntervals = getWorkingIntervals(medOfficeId, date);
         return new WorkingDay(date, workingIntervals);
     }
@@ -101,11 +110,13 @@ public class AppointmentService {
     }
 
     private List<WorkingTimeInterval> getWorkingIntervals(long medOfficeId, LocalDate date) {
+        log.info("Getting Working Intervals for medical office {} for date {}", medOfficeId, date);
         List<WorkingIntervalEntity> entities = workingIntervalRepository.get(medOfficeId, date);
         return entities.stream().map(domainMapper::map).toList();
     }
 
     private List<WorkingDay> getWorkingDaysBetween(long medOfficeId, LocalDate from, LocalDate toInclusive) {
+        log.info("Getting Working Days for medical office {} between {} and {} inclusive", medOfficeId, from, toInclusive);
         List<WorkingIntervalEntity> entities = workingIntervalRepository.get(medOfficeId, from, toInclusive);
         return entities.stream()
                 .collect(Collectors.groupingBy(WorkingIntervalEntity::getDate))
