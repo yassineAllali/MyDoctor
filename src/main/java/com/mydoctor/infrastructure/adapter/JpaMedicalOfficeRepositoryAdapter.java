@@ -3,11 +3,9 @@ package com.mydoctor.infrastructure.adapter;
 import com.mydoctor.application.adapter.MedicalOfficeRepositoryAdapter;
 import com.mydoctor.infrastructure.repository.MedicalOfficeRepository;
 import com.mydoctor.infrastructure.entity.MedicalOfficeEntity;
-import com.mydoctor.infrastructure.repository.criteria.MedicalOfficeSearchCriteria;
-import com.mydoctor.infrastructure.repository.criteria.MedicalOfficeSpecificationBuilder;
+import com.mydoctor.application.command.MedicalOfficeSearchCriteriaCommand;
+import com.mydoctor.infrastructure.repository.specification.MedicalOfficeSpecificationBuilder;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +30,7 @@ public class JpaMedicalOfficeRepositoryAdapter implements MedicalOfficeRepositor
     }
 
     @Override
-    public List<MedicalOfficeEntity> get(MedicalOfficeSearchCriteria criteria) {
+    public List<MedicalOfficeEntity> get(MedicalOfficeSearchCriteriaCommand criteria) {
         Specification<MedicalOfficeEntity> spec = new MedicalOfficeSpecificationBuilder().with(criteria).build();
         return repository.findAll(spec);
     }

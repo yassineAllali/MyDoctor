@@ -1,14 +1,15 @@
-package com.mydoctor.infrastructure.repository.criteria;
+package com.mydoctor.infrastructure.repository.specification;
 
+import com.mydoctor.application.command.MedicalOfficeSearchCriteriaCommand;
 import com.mydoctor.infrastructure.entity.MedicalOfficeEntity;
 import com.mydoctor.infrastructure.entity.SpecializationEntity;
 import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 
 public class MedicalOfficeSpecification implements Specification<MedicalOfficeEntity> {
-    private final MedicalOfficeSearchCriteria criteria;
+    private final MedicalOfficeSearchCriteriaCommand criteria;
 
-    public MedicalOfficeSpecification(MedicalOfficeSearchCriteria criteria) {
+    public MedicalOfficeSpecification(MedicalOfficeSearchCriteriaCommand criteria) {
         this.criteria = criteria;
     }
 

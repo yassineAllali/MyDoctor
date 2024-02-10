@@ -1,4 +1,4 @@
-package com.mydoctor.infrastructure.repository.criteria;
+package com.mydoctor.infrastructure.repository.specification;
 
 public enum SearchOperation {
 

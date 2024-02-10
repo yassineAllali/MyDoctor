@@ -1,9 +1,9 @@
-package com.mydoctor.infrastructure.repository.criteria;
+package com.mydoctor.application.command;
 
 import lombok.Data;
 
 @Data
-public class MedicalOfficeSearchCriteria {
+public class MedicalOfficeSearchCriteriaCommand {
     private String name;
     private Long cityId;
     private Long specializationId;

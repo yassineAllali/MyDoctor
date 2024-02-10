@@ -2,8 +2,7 @@ package com.mydoctor.infrastructure.adapter.dummy;
 
 import com.mydoctor.application.adapter.MedicalOfficeRepositoryAdapter;
 import com.mydoctor.infrastructure.entity.MedicalOfficeEntity;
-import com.mydoctor.infrastructure.repository.MedicalOfficeRepository;
-import com.mydoctor.infrastructure.repository.criteria.MedicalOfficeSearchCriteria;
+import com.mydoctor.application.command.MedicalOfficeSearchCriteriaCommand;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -57,7 +56,7 @@ public class DummyMedicalOfficeRepositoryAdapter implements MedicalOfficeReposit
     }
 
     @Override
-    public List<MedicalOfficeEntity> get(MedicalOfficeSearchCriteria criteria) {
+    public List<MedicalOfficeEntity> get(MedicalOfficeSearchCriteriaCommand criteria) {
         return List.of();
     }
 }
