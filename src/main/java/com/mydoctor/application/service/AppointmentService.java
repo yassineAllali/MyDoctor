@@ -106,7 +106,10 @@ public class AppointmentService {
     private AppointmentEntity getAppointmentEntity(long id) {
         return appointmentRepository
                 .get(id)
-                .orElseThrow(() -> new NotFoundException(String.format("Appointment with id : %s not found !", id)));
+                .orElseThrow(() -> {
+                    log.info("Appointment with id : {} not found !", id);
+                    throw new NotFoundException(String.format("Appointment with id : %s not found !", id));
+                });
     }
 
     private List<WorkingTimeInterval> getWorkingIntervals(long medOfficeId, LocalDate date) {

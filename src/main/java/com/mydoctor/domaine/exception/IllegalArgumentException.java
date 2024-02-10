@@ -1,7 +1,5 @@
 package com.mydoctor.domaine.exception;
 
-import com.mydoctor.domaine.exception.DomainException;
-
 public class IllegalArgumentException extends DomainException {
 
     private static final String ILLEGAL_MESSAGE = "Illegal Argument : ";

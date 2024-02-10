@@ -22,7 +22,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -58,34 +57,46 @@ public class SchedulingService {
 
     public AppointmentResource schedule(CreateAppointmentCommand appointmentCommand, long medicalOfficeId, long patientId) {
         log.info("Scheduling an appointment for patient {} at the medical Office {}", patientId, medicalOfficeId);
-        PatientEntity patientEntity = patientRepository.get(patientId)
-                .orElseThrow(() -> new NotFoundException(String.format("Patient not found for id : %s !", patientId)));
+        PatientEntity patientEntity = getPatientEntity(patientId);
         return schedule(appointmentCommand, medicalOfficeId, patientEntity);
     }
 
+    private PatientEntity getPatientEntity(long id) {
+        return patientRepository.get(id)
+                .orElseThrow(() -> {
+                    log.info("Patient with id {} not found !", id);
+                    throw new NotFoundException(String.format("Patient with id %s not found !", id));
+                });
+    }
+
     private AppointmentResource schedule(CreateAppointmentCommand appointmentCommand, long medicalOfficeId, PatientEntity patientEntity) {
-        WorkingIntervalEntity workingIntervalEntity = getWhereAppointmentInside(medicalOfficeId, appointmentCommand)
-                .orElseThrow(() -> new BookingException("Appointment is not inside any working interval !"));
+        WorkingIntervalEntity workingIntervalEntity = getWhereAppointmentInside(medicalOfficeId, appointmentCommand);
         Appointment appointment = domainMapper.map(appointmentCommand);
         WorkingTimeInterval workingInterval = domainMapper.map(workingIntervalEntity);
         try {
             workingInterval.book(appointment.getTimeSlot());
             appointment.booked();
         } catch (BookingException e) {
-            throw new BookingException("Can't book appointment : " + e.getMessage());
+            log.error("Booking exception : " + e.getMessage());
+            throw new BusinessException("Can't book appointment !", e.getCause());
         }
         return resourceMapper.map(appointmentRepository.save(new AppointmentEntity(null, patientEntity,
                 workingIntervalEntity.getMedicalOffice(), workingIntervalEntity, appointment.getDate(),
                 appointment.getStart(), appointment.getEnd(), appointment.getStatus().name())));
     }
 
-    private Optional<WorkingIntervalEntity> getWhereAppointmentInside(Long medicalOfficeId, CreateAppointmentCommand appointmentCommand) {
+    private WorkingIntervalEntity getWhereAppointmentInside(Long medicalOfficeId, CreateAppointmentCommand appointmentCommand) {
         log.info("Getting inside which WorkingInterval of the medical office {} the appointment for the day {} between {} {}", medicalOfficeId, appointmentCommand.date(), appointmentCommand.start(), appointmentCommand.end());
         List<WorkingIntervalEntity> entities = workingIntervalRepository.get(medicalOfficeId, appointmentCommand.date(), appointmentCommand.start(), appointmentCommand.end());
         if(entities.size() == 1)
-            return Optional.of(entities.get(0));
-        if(entities.size() > 1)
-            throw new BusinessException(String.format("Inconsistent data : founded %s WorkingIntervals where an appointment can be inside", entities.size()));
-        return Optional.empty();
+            return entities.get(0);
+        else if(entities.size() > 1) {
+            log.error("Inconsistent data : founded {} WorkingIntervals where an appointment can be inside", entities.size());
+            throw new BusinessException("Can't book appointment !");
+        }
+        else {
+            log.error("Appointment is not inside any working interval !");
+            throw new BusinessException("Can't book appointment !");
+        }
     }
 }
