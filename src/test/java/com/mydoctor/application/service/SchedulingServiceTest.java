@@ -9,10 +9,7 @@ import com.mydoctor.application.command.CreatePatientCommand;
 import com.mydoctor.application.exception.BusinessException;
 import com.mydoctor.application.resource.AppointmentResource;
 import com.mydoctor.domaine.appointment.booking.BookingException;
-import com.mydoctor.infrastructure.entity.AppointmentEntity;
-import com.mydoctor.infrastructure.entity.MedicalOfficeEntity;
-import com.mydoctor.infrastructure.entity.PatientEntity;
-import com.mydoctor.infrastructure.entity.WorkingIntervalEntity;
+import com.mydoctor.infrastructure.entity.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,10 +56,11 @@ class SchedulingServiceTest {
         CreatePatientCommand givenPatient = new CreatePatientCommand("Yassine");
 
         MedicalOfficeEntity givenMedicalOffice = new MedicalOfficeEntity(1l, "med_1", null, null);
+        DoctorEntity givenDoctor = new DoctorEntity(1l, "Doctor", null);
 
         // When
-        when(workingIntervalRepository.get(1l, LocalDate.of(2024, 1, 23), LocalTime.of(9, 0), LocalTime.of(10, 0)))
-                .thenReturn(Arrays.asList(new WorkingIntervalEntity(123l, givenMedicalOffice, LocalDate.of(2024, 1, 23), LocalTime.of(8, 0), LocalTime.of(12, 0), null)));
+        when(workingIntervalRepository.get(1l, 1l, LocalDate.of(2024, 1, 23), LocalTime.of(9, 0), LocalTime.of(10, 0)))
+                .thenReturn(Arrays.asList(new WorkingIntervalEntity(123l, LocalDate.of(2024, 1, 23), LocalTime.of(8, 0), LocalTime.of(12, 0), givenDoctor, givenMedicalOffice, null)));
 
         when(patientRepository.save(any(PatientEntity.class))).then(args -> {
             PatientEntity entity = args.getArgument(0, PatientEntity.class);
@@ -71,10 +69,10 @@ class SchedulingServiceTest {
 
         when(appointmentRepository.save(any(AppointmentEntity.class))).then(args -> {
             AppointmentEntity entity = args.getArgument(0, AppointmentEntity.class);
-           return new AppointmentEntity(123l, entity.getPatient(), entity.getMedicalOffice(), entity.getWorkingInterval(), entity.getDate(), entity.getStart(), entity.getEnd(), entity.getStatus());
+           return new AppointmentEntity(123l, entity.getPatient(), entity.getMedicalOffice(), entity.getDoctor(), entity.getWorkingInterval(), entity.getDate(), entity.getStart(), entity.getEnd(), entity.getStatus());
         });
 
-        AppointmentResource actualAppointment = schedulingService.schedule(givenAppointment, givenPatient, 1l);
+        AppointmentResource actualAppointment = schedulingService.schedule(givenAppointment, givenPatient, 1l, 1l);
 
         // Then
         assertNotNull(actualAppointment);
@@ -86,6 +84,7 @@ class SchedulingServiceTest {
         assertEquals("Yassine", actualAppointment.patient().name());
         assertEquals(1l, actualAppointment.medicalOffice().id());
         assertEquals("med_1", actualAppointment.medicalOffice().name());
+        assertEquals("Doctor", actualAppointment.doctor().name());
     }
 
     @Test
@@ -97,19 +96,20 @@ class SchedulingServiceTest {
         CreateAppointmentCommand givenAppointment = new CreateAppointmentCommand(appointmentDate, start, end);
         PatientEntity givenPatient = new PatientEntity(123l, "Yassine");
         MedicalOfficeEntity givenMedicalOffice = new MedicalOfficeEntity(1l, "med_1", null, null);
+        DoctorEntity givenDoctor = new DoctorEntity(1l, "Doctor", null);
 
         // When
-        when(workingIntervalRepository.get(1l, LocalDate.of(2024, 1, 23), LocalTime.of(9, 0), LocalTime.of(10, 0)))
-                .thenReturn(Arrays.asList(new WorkingIntervalEntity(123l, givenMedicalOffice, LocalDate.of(2024, 1, 23), LocalTime.of(8, 0), LocalTime.of(12, 0), null)));
+        when(workingIntervalRepository.get(1l, 1l, LocalDate.of(2024, 1, 23), LocalTime.of(9, 0), LocalTime.of(10, 0)))
+                .thenReturn(Arrays.asList(new WorkingIntervalEntity(123l, LocalDate.of(2024, 1, 23), LocalTime.of(8, 0), LocalTime.of(12, 0), givenDoctor, givenMedicalOffice, null)));
 
         when(patientRepository.get(123l)).thenReturn(Optional.of(givenPatient));
 
         when(appointmentRepository.save(any(AppointmentEntity.class))).then(args -> {
             AppointmentEntity entity = args.getArgument(0, AppointmentEntity.class);
-            return new AppointmentEntity(123l, entity.getPatient(), entity.getMedicalOffice(), entity.getWorkingInterval(), entity.getDate(), entity.getStart(), entity.getEnd(), entity.getStatus());
+            return new AppointmentEntity(123l, entity.getPatient(), entity.getMedicalOffice(), entity.getDoctor(), entity.getWorkingInterval(), entity.getDate(), entity.getStart(), entity.getEnd(), entity.getStatus());
         });
 
-        AppointmentResource actualAppointment = schedulingService.schedule(givenAppointment, 1l, 123l);
+        AppointmentResource actualAppointment = schedulingService.schedule(givenAppointment, 1l, 1l, 123l);
 
         // Then
         assertNotNull(actualAppointment);
@@ -121,6 +121,7 @@ class SchedulingServiceTest {
         assertEquals("Yassine", actualAppointment.patient().name());
         assertEquals(1l, actualAppointment.medicalOffice().id());
         assertEquals("med_1", actualAppointment.medicalOffice().name());
+        assertEquals("Doctor", actualAppointment.doctor().name());
     }
 
     @Test
@@ -134,10 +135,11 @@ class SchedulingServiceTest {
         CreatePatientCommand givenPatient = new CreatePatientCommand("Yassine");
 
         MedicalOfficeEntity givenMedicalOffice = new MedicalOfficeEntity(1l, "med_1", null, null);
+        DoctorEntity givenDoctor = new DoctorEntity(1l, "Doctor", null);
 
         // When
-        when(workingIntervalRepository.get(1l, LocalDate.of(2024, 1, 23), LocalTime.of(9, 0), LocalTime.of(10, 0)))
-                .thenReturn(Arrays.asList(new WorkingIntervalEntity(123l, givenMedicalOffice, LocalDate.of(2024, 1, 23), LocalTime.of(8, 0), LocalTime.of(12, 0), null)));
+        when(workingIntervalRepository.get(1l, 1l, LocalDate.of(2024, 1, 23), LocalTime.of(9, 0), LocalTime.of(10, 0)))
+                .thenReturn(Arrays.asList(new WorkingIntervalEntity(123l, LocalDate.of(2024, 1, 23), LocalTime.of(8, 0), LocalTime.of(12, 0), givenDoctor, givenMedicalOffice, null)));
 
         when(patientRepository.save(any(PatientEntity.class))).then(args -> {
             PatientEntity entity = args.getArgument(0, PatientEntity.class);
@@ -146,11 +148,11 @@ class SchedulingServiceTest {
 
         when(appointmentRepository.save(any(AppointmentEntity.class))).then(args -> {
             AppointmentEntity entity = args.getArgument(0, AppointmentEntity.class);
-            return new AppointmentEntity(123l, entity.getPatient(), entity.getMedicalOffice(), entity.getWorkingInterval(), entity.getDate(), entity.getStart(), entity.getEnd(), entity.getStatus());
+            return new AppointmentEntity(123l, entity.getPatient(), entity.getMedicalOffice(), entity.getDoctor(), entity.getWorkingInterval(), entity.getDate(), entity.getStart(), entity.getEnd(), entity.getStatus());
         });
 
         // When, Then
-        assertThrows(BusinessException.class, () -> schedulingService.schedule(givenAppointment, givenPatient, 1l));
+        assertThrows(BusinessException.class, () -> schedulingService.schedule(givenAppointment, givenPatient, 1l, 1l));
     }
 
     @Test
@@ -164,10 +166,11 @@ class SchedulingServiceTest {
         CreatePatientCommand givenPatient = new CreatePatientCommand("Yassine");
 
         MedicalOfficeEntity givenMedicalOffice = new MedicalOfficeEntity(1l, "med_1", null, null);
+        DoctorEntity givenDoctor = new DoctorEntity(1l, "Doctor", null);
 
         // When
-        when(workingIntervalRepository.get(1l, LocalDate.of(2024, 1, 23), LocalTime.of(9, 0), LocalTime.of(10, 0)))
-                .thenReturn(Arrays.asList(new WorkingIntervalEntity(123l, givenMedicalOffice, LocalDate.of(2024, 1, 23), LocalTime.of(8, 0), LocalTime.of(12, 0), null)));
+        when(workingIntervalRepository.get(1l, 1l, LocalDate.of(2024, 1, 23), LocalTime.of(9, 0), LocalTime.of(10, 0)))
+                .thenReturn(Arrays.asList(new WorkingIntervalEntity(123l, LocalDate.of(2024, 1, 23), LocalTime.of(8, 0), LocalTime.of(12, 0), givenDoctor, givenMedicalOffice, null)));
 
         when(patientRepository.save(any(PatientEntity.class))).then(args -> {
             PatientEntity entity = args.getArgument(0, PatientEntity.class);
@@ -176,12 +179,12 @@ class SchedulingServiceTest {
 
         when(appointmentRepository.save(any(AppointmentEntity.class))).then(args -> {
             AppointmentEntity entity = args.getArgument(0, AppointmentEntity.class);
-            return new AppointmentEntity(123l, entity.getPatient(), entity.getMedicalOffice(), entity.getWorkingInterval(), entity.getDate(), entity.getStart(), entity.getEnd(), entity.getStatus());
+            return new AppointmentEntity(123l, entity.getPatient(), entity.getMedicalOffice(), entity.getDoctor(), entity.getWorkingInterval(), entity.getDate(), entity.getStart(), entity.getEnd(), entity.getStatus());
         });
 
 
         // When, Then
-        assertThrows(BusinessException.class, () -> schedulingService.schedule(givenAppointment, givenPatient, 1l));
+        assertThrows(BusinessException.class, () -> schedulingService.schedule(givenAppointment, givenPatient, 1l, 1l));
     }
 
     @Test
@@ -195,10 +198,11 @@ class SchedulingServiceTest {
         CreatePatientCommand givenPatient = new CreatePatientCommand("Yassine");
 
         MedicalOfficeEntity givenMedicalOffice = new MedicalOfficeEntity(1l, "med_1", null, null);
+        DoctorEntity givenDoctor = new DoctorEntity(1l, "Doctor", null);
 
         // When
-        when(workingIntervalRepository.get(1l, LocalDate.of(2024, 1, 23), LocalTime.of(9, 0), LocalTime.of(10, 0)))
-                .thenReturn(Arrays.asList(new WorkingIntervalEntity(123l, givenMedicalOffice, LocalDate.of(2024, 1, 23), LocalTime.of(8, 0), LocalTime.of(12, 0), null)));
+        when(workingIntervalRepository.get(1l, 1l, LocalDate.of(2024, 1, 23), LocalTime.of(9, 0), LocalTime.of(10, 0)))
+                .thenReturn(Arrays.asList(new WorkingIntervalEntity(123l, LocalDate.of(2024, 1, 23), LocalTime.of(8, 0), LocalTime.of(12, 0), givenDoctor, givenMedicalOffice, null)));
 
         when(patientRepository.save(any(PatientEntity.class))).then(args -> {
             PatientEntity entity = args.getArgument(0, PatientEntity.class);
@@ -207,11 +211,11 @@ class SchedulingServiceTest {
 
         when(appointmentRepository.save(any(AppointmentEntity.class))).then(args -> {
             AppointmentEntity entity = args.getArgument(0, AppointmentEntity.class);
-            return new AppointmentEntity(123l, entity.getPatient(), entity.getMedicalOffice(), entity.getWorkingInterval(), entity.getDate(), entity.getStart(), entity.getEnd(), entity.getStatus());
+            return new AppointmentEntity(123l, entity.getPatient(), entity.getMedicalOffice(), entity.getDoctor(), entity.getWorkingInterval(), entity.getDate(), entity.getStart(), entity.getEnd(), entity.getStatus());
         });
 
         // When, Then
-        assertThrows(BusinessException.class, () -> schedulingService.schedule(givenAppointment, givenPatient, 1l));
+        assertThrows(BusinessException.class, () -> schedulingService.schedule(givenAppointment, givenPatient, 1l, 1l));
     }
 
     @AfterEach

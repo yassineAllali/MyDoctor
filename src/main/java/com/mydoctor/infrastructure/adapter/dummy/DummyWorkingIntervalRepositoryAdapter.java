@@ -27,8 +27,8 @@ public class DummyWorkingIntervalRepositoryAdapter implements WorkingIntervalRep
             // Duplicate the working intervals for the day
             for (int j = 0; j < 10; j++) {
                 MedicalOfficeEntity medicalOffice = medicalOfficeRepositoryAdapter.get((long)j + 1).get();
-                workingIntervals.add(new WorkingIntervalEntity(IdGenerator.generate(), medicalOffice, currentDate, LocalTime.of(8, 0), LocalTime.of(12, 0), new ArrayList<>()));
-                workingIntervals.add(new WorkingIntervalEntity(IdGenerator.generate(), medicalOffice, currentDate, LocalTime.of(14, 0), LocalTime.of(18, 0), new ArrayList<>()));
+                workingIntervals.add(new WorkingIntervalEntity(IdGenerator.generate(), currentDate, LocalTime.of(8, 0), LocalTime.of(12, 0), null, medicalOffice, new ArrayList<>()));
+                workingIntervals.add(new WorkingIntervalEntity(IdGenerator.generate(), currentDate, LocalTime.of(14, 0), LocalTime.of(18, 0), null, medicalOffice, new ArrayList<>()));
             }
         }
         return workingIntervals;
@@ -40,22 +40,22 @@ public class DummyWorkingIntervalRepositoryAdapter implements WorkingIntervalRep
     }
 
     @Override
-    public List<WorkingIntervalEntity> get(Long medicalOfficeId, LocalDate date, LocalTime startBefore, LocalTime endAfter) {
-        List<WorkingIntervalEntity> workingIntervalEntities = get(medicalOfficeId, date);
+    public List<WorkingIntervalEntity> get(Long medicalOfficeId, Long doctorId, LocalDate date, LocalTime startBefore, LocalTime endAfter) {
+        List<WorkingIntervalEntity> workingIntervalEntities = get(medicalOfficeId, doctorId, date);
         return workingIntervalEntities.stream()
                 .filter(w -> w.getStart().isBefore(startBefore) && w.getEnd().isAfter(endAfter))
                 .toList();
     }
 
     @Override
-    public List<WorkingIntervalEntity> get(Long medicalOfficeId, LocalDate date) {
+    public List<WorkingIntervalEntity> get(Long medicalOfficeId, Long doctorId, LocalDate date) {
         return entities.stream().filter(w -> w.getDate().equals(date)
                 && w.getMedicalOffice().getId().equals(medicalOfficeId))
                 .toList();
     }
 
     @Override
-    public List<WorkingIntervalEntity> get(Long medicalOfficeId, LocalDate from, LocalDate to) {
+    public List<WorkingIntervalEntity> get(Long medicalOfficeId, Long doctorId, LocalDate from, LocalDate to) {
         return entities.stream().filter(e -> medicalOfficeId.equals(e.getMedicalOffice().getId()) && isBetween(e.getDate(), from, to)).toList();
     }
 

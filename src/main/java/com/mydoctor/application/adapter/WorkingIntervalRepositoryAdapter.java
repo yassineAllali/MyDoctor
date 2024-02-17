@@ -7,7 +7,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 public interface WorkingIntervalRepositoryAdapter {
-    List<WorkingIntervalEntity> get(Long medicalOfficeId, LocalDate date, LocalTime startBefore, LocalTime endAfter);
-    List<WorkingIntervalEntity> get(Long medicalOfficeId, LocalDate date);
-    List<WorkingIntervalEntity> get(Long medicalOfficeId, LocalDate from, LocalDate to);
+    List<WorkingIntervalEntity> get(Long medicalOfficeId, Long doctorId, LocalDate date, LocalTime startBefore, LocalTime endAfter);
+    List<WorkingIntervalEntity> get(Long medicalOfficeId, Long doctorId, LocalDate date);
+    List<WorkingIntervalEntity> get(Long medicalOfficeId, Long doctorId, LocalDate from, LocalDate to);
 }

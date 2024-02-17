@@ -15,7 +15,7 @@ public class ResourceMapper {
     public AppointmentResource map(AppointmentEntity entity) {
         if(entity == null)
             return null;
-        return new AppointmentResource(entity.getId(), map(entity.getPatient()), map(entity.getMedicalOffice()), entity.getDate(), entity.getStart(), entity.getEnd(), entity.getStatus());
+        return new AppointmentResource(entity.getId(), map(entity.getPatient()), map(entity.getMedicalOffice()), map(entity.getDoctor()), entity.getDate(), entity.getStart(), entity.getEnd(), entity.getStatus());
     }
 
     public PatientResource map(PatientEntity entity) {
@@ -36,6 +36,15 @@ public class ResourceMapper {
                             .stream()
                             .map(this::map)
                             .collect(Collectors.toSet()));
+    }
+
+    public DoctorResource map(DoctorEntity entity) {
+        if(entity == null)
+            return null;
+        return new DoctorResource(
+                entity.getId(),
+                entity.getName(),
+                map(entity.getSpecializationEntity()));
     }
 
     public CityResource map(CityEntity entity) {

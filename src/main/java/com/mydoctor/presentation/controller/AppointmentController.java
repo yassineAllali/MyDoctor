@@ -38,24 +38,24 @@ public class AppointmentController {
         return responseMapper.map(appointmentService.getAppointment(id));
     }
 
-    @PostMapping("/med-office/{medicalOfficeId}")
-    public AppointmentResponse schedule(@PathVariable long medicalOfficeId,
+    @PostMapping("/med-office/{medicalOfficeId}/doctor/{doctorId}")
+    public AppointmentResponse schedule(@PathVariable long medicalOfficeId, @PathVariable long doctorId,
                                         @RequestBody ScheduleRequest scheduleRequest) {
 
         CreateAppointmentCommand appointmentCommand = commandMapper.map(scheduleRequest.appointment());
         CreatePatientCommand patientCommand = commandMapper.map(scheduleRequest.patient());
 
-        return responseMapper.map(schedulingService.schedule(appointmentCommand, patientCommand, medicalOfficeId));
+        return responseMapper.map(schedulingService.schedule(appointmentCommand, patientCommand, medicalOfficeId, doctorId));
     }
 
-    @PostMapping("/med-office/{medicalOfficeId}/patient/{patientId}")
-    public AppointmentResponse schedule(@PathVariable long medicalOfficeId, @PathVariable long patientId,
+    @PostMapping("/med-office/{medicalOfficeId}/doctor/{doctorId}/patient/{patientId}")
+    public AppointmentResponse schedule(@PathVariable long medicalOfficeId, @PathVariable long doctorId, @PathVariable long patientId,
                                         @RequestBody CreateAppointmentRequest appointmentRequest) {
         CreateAppointmentCommand appointmentCommand = commandMapper.map(appointmentRequest);
-        return responseMapper.map(schedulingService.schedule(appointmentCommand, medicalOfficeId, patientId));
+        return responseMapper.map(schedulingService.schedule(appointmentCommand, medicalOfficeId, doctorId, patientId));
     }
 
-    @PostMapping("/{id}/cancel")
+    @PutMapping("/{id}/cancel")
     public AppointmentResponse cancelAppointment(@PathVariable long id) {
         return responseMapper.map(appointmentService.cancelAppointment(id));
     }
@@ -68,15 +68,15 @@ public class AppointmentController {
                 .toList();
     }
 
-    @GetMapping("/med-office/{medicalOfficeId}/available")
-    public List<TimeSlotResponse> getAvailableSlots(@PathVariable long medicalOfficeId, @RequestParam LocalDate date, @RequestParam("duration") long durationInMin) {
-        List<TimeSlotResource> availableTimeSlots = appointmentService.getAvailableSlots(medicalOfficeId, date, Duration.ofMinutes(durationInMin));
+    @GetMapping("/med-office/{medicalOfficeId}/doctor/{doctorId}/available")
+    public List<TimeSlotResponse> getAvailableSlots(@PathVariable long medicalOfficeId, @PathVariable long doctorId, @RequestParam LocalDate date, @RequestParam("duration") long durationInMin) {
+        List<TimeSlotResource> availableTimeSlots = appointmentService.getAvailableSlots(medicalOfficeId, doctorId, date, Duration.ofMinutes(durationInMin));
         return availableTimeSlots.stream().map(responseMapper::map).toList();
     }
 
-    @GetMapping("/med-office/{medicalOfficeId}/available/between")
-    public List<TimeSlotResponse> getAvailableSlots(@PathVariable long medicalOfficeId, @RequestParam LocalDate from, @RequestParam LocalDate to, @RequestParam("duration") long durationInMin) {
-        List<TimeSlotResource> availableTimeSlots = appointmentService.getAvailableSlots(medicalOfficeId, from, to, Duration.ofMinutes(durationInMin));
+    @GetMapping("/med-office/{medicalOfficeId}/doctor/{doctorId}/available/between")
+    public List<TimeSlotResponse> getAvailableSlots(@PathVariable long medicalOfficeId, @PathVariable long doctorId, @RequestParam LocalDate from, @RequestParam LocalDate to, @RequestParam("duration") long durationInMin) {
+        List<TimeSlotResource> availableTimeSlots = appointmentService.getAvailableSlots(medicalOfficeId, doctorId, from, to, Duration.ofMinutes(durationInMin));
         return availableTimeSlots.stream().map(responseMapper::map).toList();
     }
 

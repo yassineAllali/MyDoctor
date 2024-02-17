@@ -70,24 +70,24 @@ public class AppointmentService {
         return entity;
     }
 
-    public List<TimeSlotResource> getAvailableSlots(long medOfficeId, LocalDate date, Duration duration) {
-        log.info("Getting available slots with duration of {} minutes for the medical office {}, for the day {}", duration.toMinutes(), medOfficeId, date);
-        WorkingDay workingDay = getWorkingDay(medOfficeId, date);
+    public List<TimeSlotResource> getAvailableSlots(long medOfficeId, long doctorId, LocalDate date, Duration duration) {
+        log.info("Getting available slots with duration of {} minutes with the doctor {} in the medical office {}, for the day {}", duration.toMinutes(), doctorId, medOfficeId, date);
+        WorkingDay workingDay = getWorkingDay(medOfficeId, doctorId, date);
         List<TimeSlot> availableTimeSlots = workingDay.getAvailableSlots(duration);
         return availableTimeSlots.stream().map(resourceMapper::map).toList();
     }
 
-    public List<TimeSlotResource> getAvailableSlots(long medOfficeId, LocalDate from, LocalDate to, Duration duration) {
+    public List<TimeSlotResource> getAvailableSlots(long medOfficeId, long doctorId, LocalDate from, LocalDate to, Duration duration) {
         log.info("Getting available slots with duration of {} minutes for the medical office {}, for the days between {} and {}", duration.toMinutes(), medOfficeId, from, to);
-        WorkingPeriod workingPeriod = getWorkingPeriod(medOfficeId, from, to);
+        WorkingPeriod workingPeriod = getWorkingPeriod(medOfficeId, doctorId, from, to);
         return workingPeriod.getAvailableSlots(duration).stream()
                 .map(resourceMapper::map)
                 .toList();
     }
 
-    private WorkingPeriod getWorkingPeriod(long medOfficeId, LocalDate from, LocalDate toInclusive) {
-        log.info("Getting WorkingPeriod for medical office {} between {} and {} inclusive", medOfficeId, from, toInclusive);
-        List<WorkingDay> workingDays = getWorkingDaysBetween(medOfficeId, from, toInclusive)
+    private WorkingPeriod getWorkingPeriod(long medOfficeId, long doctorId, LocalDate from, LocalDate toInclusive) {
+        log.info("Getting WorkingPeriod of doctor {} in medical office {} between {} and {} inclusive", doctorId, medOfficeId, from, toInclusive);
+        List<WorkingDay> workingDays = getWorkingDaysBetween(medOfficeId, doctorId, from, toInclusive)
                 .stream()
                 .sorted(Comparator.comparing(WorkingDay::getDate))
                 .collect(Collectors.collectingAndThen(
@@ -97,9 +97,9 @@ public class AppointmentService {
         return new WorkingPeriod(from, toInclusive.plusDays(1), workingDays);
     }
 
-    private WorkingDay getWorkingDay(long medOfficeId, LocalDate date) {
-        log.info("Getting WorkingDay for medical office {} for date {}", medOfficeId, date);
-        List<WorkingTimeInterval> workingIntervals = getWorkingIntervals(medOfficeId, date);
+    private WorkingDay getWorkingDay(long medOfficeId, long doctorId, LocalDate date) {
+        log.info("Getting WorkingDay of doctor {} in medical office {} for date {}", doctorId, medOfficeId, date);
+        List<WorkingTimeInterval> workingIntervals = getWorkingIntervals(medOfficeId, doctorId, date);
         return new WorkingDay(date, workingIntervals);
     }
 
@@ -112,15 +112,15 @@ public class AppointmentService {
                 });
     }
 
-    private List<WorkingTimeInterval> getWorkingIntervals(long medOfficeId, LocalDate date) {
-        log.info("Getting Working Intervals for medical office {} for date {}", medOfficeId, date);
-        List<WorkingIntervalEntity> entities = workingIntervalRepository.get(medOfficeId, date);
+    private List<WorkingTimeInterval> getWorkingIntervals(long medOfficeId, long doctorId, LocalDate date) {
+        log.info("Getting Working Intervals of doctor {} in medical office {} for date {}", doctorId, medOfficeId, date);
+        List<WorkingIntervalEntity> entities = workingIntervalRepository.get(medOfficeId, doctorId, date);
         return entities.stream().map(domainMapper::map).toList();
     }
 
-    private List<WorkingDay> getWorkingDaysBetween(long medOfficeId, LocalDate from, LocalDate toInclusive) {
-        log.info("Getting Working Days for medical office {} between {} and {} inclusive", medOfficeId, from, toInclusive);
-        List<WorkingIntervalEntity> entities = workingIntervalRepository.get(medOfficeId, from, toInclusive);
+    private List<WorkingDay> getWorkingDaysBetween(long medOfficeId, long doctorId, LocalDate from, LocalDate toInclusive) {
+        log.info("Getting Working Days of doctor {} in medical office {} between {} and {} inclusive", doctorId, medOfficeId, from, toInclusive);
+        List<WorkingIntervalEntity> entities = workingIntervalRepository.get(medOfficeId, doctorId, from, toInclusive);
         return entities.stream()
                 .collect(Collectors.groupingBy(WorkingIntervalEntity::getDate))
                 .entrySet().stream()

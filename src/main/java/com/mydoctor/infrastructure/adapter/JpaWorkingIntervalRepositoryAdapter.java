@@ -20,17 +20,17 @@ public class JpaWorkingIntervalRepositoryAdapter implements WorkingIntervalRepos
     }
 
     @Override
-    public List<WorkingIntervalEntity> get(Long medicalOfficeId, LocalDate date, LocalTime startBefore, LocalTime endAfter) {
-        return repository.findByMedicalOffice_IdAndDateAndStartBeforeAndEndAfter(medicalOfficeId, date, startBefore, endAfter);
+    public List<WorkingIntervalEntity> get(Long medicalOfficeId, Long doctorId, LocalDate date, LocalTime startBefore, LocalTime endAfter) {
+        return repository.findByMedicalOffice_IdAndDoctor_IdAndDateAndStartBeforeAndEndAfter(medicalOfficeId, doctorId, date, startBefore, endAfter);
     }
 
     @Override
-    public List<WorkingIntervalEntity> get(Long medicalOfficeId, LocalDate date) {
-        return repository.findByMedicalOffice_IdAndDate(medicalOfficeId,date);
+    public List<WorkingIntervalEntity> get(Long medicalOfficeId, Long doctorId, LocalDate date) {
+        return repository.findByMedicalOffice_IdAndDoctor_IdAndDate(medicalOfficeId, doctorId, date);
     }
 
     @Override
-    public List<WorkingIntervalEntity> get(Long medicalOfficeId, LocalDate from, LocalDate to) {
-        return repository.findByMedicalOffice_IdAndDateBetween(medicalOfficeId, from, to);
+    public List<WorkingIntervalEntity> get(Long medicalOfficeId, Long doctorId, LocalDate from, LocalDate to) {
+        return repository.findByMedicalOffice_IdAndDoctor_IdAndDateBetween(medicalOfficeId, doctorId, from, to);
     }
 }
