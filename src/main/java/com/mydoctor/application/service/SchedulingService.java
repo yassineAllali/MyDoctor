@@ -49,16 +49,16 @@ public class SchedulingService {
     }
 
     public AppointmentResource schedule(CreateAppointmentCommand appointmentCommand,
-                                        CreatePatientCommand patientCommand, long medicalOfficeId) {
-        log.info("Scheduling an appointment for new patient at the medical Office {}", medicalOfficeId);
+                                        CreatePatientCommand patientCommand, long medicalOfficeId, long doctorId) {
+        log.info("Scheduling an appointment for new patient with the doctor {} in the medical Office {}", doctorId, medicalOfficeId);
         PatientEntity patientEntity = patientRepository.save(entityMapper.map(patientCommand));
-        return schedule(appointmentCommand, medicalOfficeId, patientEntity);
+        return schedule(appointmentCommand, medicalOfficeId, doctorId, patientEntity);
     }
 
-    public AppointmentResource schedule(CreateAppointmentCommand appointmentCommand, long medicalOfficeId, long patientId) {
-        log.info("Scheduling an appointment for patient {} at the medical Office {}", patientId, medicalOfficeId);
+    public AppointmentResource schedule(CreateAppointmentCommand appointmentCommand, long medicalOfficeId, long doctorId, long patientId) {
+        log.info("Scheduling an appointment for patient {} with the doctor {} in the medical Office {}", doctorId, medicalOfficeId);
         PatientEntity patientEntity = getPatientEntity(patientId);
-        return schedule(appointmentCommand, medicalOfficeId, patientEntity);
+        return schedule(appointmentCommand, medicalOfficeId, doctorId, patientEntity);
     }
 
     private PatientEntity getPatientEntity(long id) {
@@ -69,8 +69,8 @@ public class SchedulingService {
                 });
     }
 
-    private AppointmentResource schedule(CreateAppointmentCommand appointmentCommand, long medicalOfficeId, PatientEntity patientEntity) {
-        WorkingIntervalEntity workingIntervalEntity = getWhereAppointmentInside(medicalOfficeId, appointmentCommand);
+    private AppointmentResource schedule(CreateAppointmentCommand appointmentCommand, long medicalOfficeId, long doctorId, PatientEntity patientEntity) {
+        WorkingIntervalEntity workingIntervalEntity = getWhereAppointmentInside(medicalOfficeId, doctorId, appointmentCommand);
         Appointment appointment = domainMapper.map(appointmentCommand);
         WorkingTimeInterval workingInterval = domainMapper.map(workingIntervalEntity);
         try {
@@ -81,13 +81,13 @@ public class SchedulingService {
             throw new BusinessException("Can't book appointment !", e.getCause());
         }
         return resourceMapper.map(appointmentRepository.save(new AppointmentEntity(null, patientEntity,
-                workingIntervalEntity.getMedicalOffice(), workingIntervalEntity, appointment.getDate(),
+                workingIntervalEntity.getMedicalOffice(), workingIntervalEntity.getDoctor(), workingIntervalEntity, appointment.getDate(),
                 appointment.getStart(), appointment.getEnd(), appointment.getStatus().name())));
     }
 
-    private WorkingIntervalEntity getWhereAppointmentInside(Long medicalOfficeId, CreateAppointmentCommand appointmentCommand) {
-        log.info("Getting inside which WorkingInterval of the medical office {} the appointment for the day {} between {} {}", medicalOfficeId, appointmentCommand.date(), appointmentCommand.start(), appointmentCommand.end());
-        List<WorkingIntervalEntity> entities = workingIntervalRepository.get(medicalOfficeId, appointmentCommand.date(), appointmentCommand.start(), appointmentCommand.end());
+    private WorkingIntervalEntity getWhereAppointmentInside(long medicalOfficeId, long doctorId, CreateAppointmentCommand appointmentCommand) {
+        log.info("Getting inside which WorkingInterval of the doctor {} in medical office {} the appointment for the day {} between {} {}", doctorId, medicalOfficeId, appointmentCommand.date(), appointmentCommand.start(), appointmentCommand.end());
+        List<WorkingIntervalEntity> entities = workingIntervalRepository.get(medicalOfficeId, doctorId, appointmentCommand.date(), appointmentCommand.start(), appointmentCommand.end());
         if(entities.size() == 1)
             return entities.get(0);
         else if(entities.size() > 1) {

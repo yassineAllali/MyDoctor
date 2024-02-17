@@ -12,9 +12,9 @@ import java.util.Optional;
 @Repository
 public interface WorkingIntervalRepository extends JpaRepository<WorkingIntervalEntity, Long> {
 
-    List<WorkingIntervalEntity> findByMedicalOffice_IdAndDate(Long id, LocalDate date);
+    List<WorkingIntervalEntity> findByMedicalOffice_IdAndDoctor_IdAndDate(Long medicalOfficeId, Long doctorId, LocalDate date);
 
-    List<WorkingIntervalEntity> findByMedicalOffice_IdAndDateAndStartBeforeAndEndAfter(Long id, LocalDate date, LocalTime start, LocalTime end);
+    List<WorkingIntervalEntity> findByMedicalOffice_IdAndDoctor_IdAndDateBetween(Long medicalOfficeId, Long doctorId, LocalDate dateStart, LocalDate dateEnd);
 
-    List<WorkingIntervalEntity> findByMedicalOffice_IdAndDateBetween(Long id, LocalDate dateStart, LocalDate dateEnd);
+    List<WorkingIntervalEntity> findByMedicalOffice_IdAndDoctor_IdAndDateAndStartBeforeAndEndAfter(Long id, Long id1, LocalDate date, LocalTime start, LocalTime end);
 }

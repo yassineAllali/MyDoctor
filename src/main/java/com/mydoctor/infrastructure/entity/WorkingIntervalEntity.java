@@ -18,14 +18,19 @@ public class WorkingIntervalEntity {
     @Id
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "medical_office_id")
-    private MedicalOfficeEntity medicalOffice;
-
     private LocalDate date;
     private LocalTime start;
     private LocalTime end;
 
+    @ManyToOne(cascade = CascadeType.DETACH, optional = false)
+    @JoinColumn(name = "doctor_id", nullable = false)
+    private DoctorEntity doctor;
+
+    @ManyToOne(cascade = CascadeType.DETACH, optional = false)
+    @JoinColumn(name = "medical_office_id", nullable = false)
+    private MedicalOfficeEntity medicalOffice;
+
     @OneToMany(mappedBy = "workingInterval", fetch = FetchType.LAZY)
     private List<AppointmentEntity> appointments;
+
 }

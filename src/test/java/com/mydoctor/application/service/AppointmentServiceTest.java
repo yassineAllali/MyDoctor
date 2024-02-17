@@ -79,7 +79,7 @@ class AppointmentServiceTest {
     @Test
     public void testCancelAppointment() {
         // Given
-        AppointmentEntity appointmentEntity = new AppointmentEntity(123l, null, null, null, LocalDate.of(2024, 2, 3), LocalTime.of(9, 10), LocalTime.of(9, 30), "BOOKED");
+        AppointmentEntity appointmentEntity = new AppointmentEntity(123l, null, null, null, null, LocalDate.of(2024, 2, 3), LocalTime.of(9, 10), LocalTime.of(9, 30), "BOOKED");
 
         // When
         when(appointmentRepository.get(123l)).thenReturn(Optional.of(appointmentEntity));
@@ -95,23 +95,24 @@ class AppointmentServiceTest {
         // Given
         LocalDate date = LocalDate.of(2024, 2, 4);
         long medOfficeId = 123l;
+        long doctorId = 123l;
         List<AppointmentEntity> morningAppointments = List.of(
-                new AppointmentEntity(1L, null, null, null, date, LocalTime.of(8, 0), LocalTime.of(8, 20), "BOOKED"),
-                new AppointmentEntity(2L, null, null, null, date, LocalTime.of(9, 0), LocalTime.of(9, 20), "BOOKED"),
-                new AppointmentEntity(3L, null, null, null, date, LocalTime.of(10, 0), LocalTime.of(10, 20), "BOOKED")
+                new AppointmentEntity(1L, null, null, null, null, date, LocalTime.of(8, 0), LocalTime.of(8, 20), "BOOKED"),
+                new AppointmentEntity(2L, null, null, null, null, date, LocalTime.of(9, 0), LocalTime.of(9, 20), "BOOKED"),
+                new AppointmentEntity(3L, null, null, null, null, date, LocalTime.of(10, 0), LocalTime.of(10, 20), "BOOKED")
         );
-        WorkingIntervalEntity morningWorkingInterval = new WorkingIntervalEntity(1L, null, date, LocalTime.of(8, 0), LocalTime.of(12, 0), morningAppointments);
+        WorkingIntervalEntity morningWorkingInterval = new WorkingIntervalEntity(1L, date, LocalTime.of(8, 0), LocalTime.of(12, 0), null, null, morningAppointments);
 
         List<AppointmentEntity> afternoonAppointments = List.of(
-                new AppointmentEntity(4L, null, null, null, date, LocalTime.of(14, 0), LocalTime.of(14, 20), "BOOKED"),
-                new AppointmentEntity(5L, null, null, null, date, LocalTime.of(15, 0), LocalTime.of(15, 20), "BOOKED"),
-                new AppointmentEntity(6L, null, null, null, date, LocalTime.of(16, 0), LocalTime.of(16, 20), "BOOKED")
+                new AppointmentEntity(4L, null, null, null, null, date, LocalTime.of(14, 0), LocalTime.of(14, 20), "BOOKED"),
+                new AppointmentEntity(5L, null, null, null, null, date, LocalTime.of(15, 0), LocalTime.of(15, 20), "BOOKED"),
+                new AppointmentEntity(6L, null, null, null, null, date, LocalTime.of(16, 0), LocalTime.of(16, 20), "BOOKED")
         );
-        WorkingIntervalEntity afternoonWorkingInterval = new WorkingIntervalEntity(2L, null, date, LocalTime.of(14, 0), LocalTime.of(18, 0), afternoonAppointments);
+        WorkingIntervalEntity afternoonWorkingInterval = new WorkingIntervalEntity(2L, date, LocalTime.of(14, 0), LocalTime.of(18, 0), null, null, afternoonAppointments);
 
         // When
-        when(workingIntervalRepository.get(medOfficeId, date)).thenReturn(List.of(morningWorkingInterval, afternoonWorkingInterval));
-        List<TimeSlotResource> timeSlots = appointmentService.getAvailableSlots(medOfficeId, date, Duration.ofMinutes(20));
+        when(workingIntervalRepository.get(medOfficeId, doctorId, date)).thenReturn(List.of(morningWorkingInterval, afternoonWorkingInterval));
+        List<TimeSlotResource> timeSlots = appointmentService.getAvailableSlots(medOfficeId, doctorId, date, Duration.ofMinutes(20));
 
         // Then
         assertEquals(18, timeSlots.size());
@@ -123,54 +124,55 @@ class AppointmentServiceTest {
     public void testGetAvailableSlotsForPeriod() {
         // Given
         long medOfficeId = 123l;
+        long doctorId = 123l;
 
         // First working day
         LocalDate date1 = LocalDate.of(2024, 2, 4);
         List<AppointmentEntity> morningAppointments = List.of(
-                new AppointmentEntity(1L, null, null, null, date1, LocalTime.of(8, 0), LocalTime.of(8, 20), "BOOKED"),
-                new AppointmentEntity(2L, null, null, null, date1, LocalTime.of(9, 0), LocalTime.of(9, 20), "BOOKED"),
-                new AppointmentEntity(3L, null, null, null, date1, LocalTime.of(10, 0), LocalTime.of(10, 20), "BOOKED")
+                new AppointmentEntity(1L, null, null, null, null, date1, LocalTime.of(8, 0), LocalTime.of(8, 20), "BOOKED"),
+                new AppointmentEntity(2L, null, null, null, null, date1, LocalTime.of(9, 0), LocalTime.of(9, 20), "BOOKED"),
+                new AppointmentEntity(3L, null, null, null, null, date1, LocalTime.of(10, 0), LocalTime.of(10, 20), "BOOKED")
         );
-        WorkingIntervalEntity morningWorkingInterval = new WorkingIntervalEntity(1L, null, date1, LocalTime.of(8, 0), LocalTime.of(12, 0), morningAppointments);
+        WorkingIntervalEntity morningWorkingInterval = new WorkingIntervalEntity(1L, date1, LocalTime.of(8, 0), LocalTime.of(12, 0), null, null, morningAppointments);
 
         List<AppointmentEntity> afternoonAppointments = List.of(
-                new AppointmentEntity(4L, null, null, null, date1, LocalTime.of(14, 0), LocalTime.of(14, 20), "BOOKED"),
-                new AppointmentEntity(5L, null, null, null, date1, LocalTime.of(15, 0), LocalTime.of(15, 20), "BOOKED"),
-                new AppointmentEntity(6L, null, null, null, date1, LocalTime.of(16, 0), LocalTime.of(16, 20), "BOOKED")
+                new AppointmentEntity(4L, null, null, null, null, date1, LocalTime.of(14, 0), LocalTime.of(14, 20), "BOOKED"),
+                new AppointmentEntity(5L, null, null, null, null, date1, LocalTime.of(15, 0), LocalTime.of(15, 20), "BOOKED"),
+                new AppointmentEntity(6L, null, null, null, null, date1, LocalTime.of(16, 0), LocalTime.of(16, 20), "BOOKED")
         );
-        WorkingIntervalEntity afternoonWorkingInterval = new WorkingIntervalEntity(2L, null, date1, LocalTime.of(14, 0), LocalTime.of(18, 0), afternoonAppointments);
+        WorkingIntervalEntity afternoonWorkingInterval = new WorkingIntervalEntity(2L, date1, LocalTime.of(14, 0), LocalTime.of(18, 0), null, null, afternoonAppointments);
 
         // Second working day
         LocalDate date2 = LocalDate.of(2024, 2, 5);
         List<AppointmentEntity> morningAppointments2 = List.of(
-                new AppointmentEntity(7L, null, null, null, date2, LocalTime.of(8, 0), LocalTime.of(8, 20), "BOOKED"),
-                new AppointmentEntity(8L, null, null, null, date2, LocalTime.of(9, 0), LocalTime.of(9, 20), "BOOKED"),
-                new AppointmentEntity(9L, null, null, null, date2, LocalTime.of(10, 0), LocalTime.of(10, 20), "BOOKED")
+                new AppointmentEntity(7L, null, null, null, null, date2, LocalTime.of(8, 0), LocalTime.of(8, 20), "BOOKED"),
+                new AppointmentEntity(8L, null, null, null, null, date2, LocalTime.of(9, 0), LocalTime.of(9, 20), "BOOKED"),
+                new AppointmentEntity(9L, null, null, null, null, date2, LocalTime.of(10, 0), LocalTime.of(10, 20), "BOOKED")
         );
-        WorkingIntervalEntity morningWorkingInterval2 = new WorkingIntervalEntity(3L, null, date2, LocalTime.of(8, 0), LocalTime.of(12, 0), morningAppointments2);
+        WorkingIntervalEntity morningWorkingInterval2 = new WorkingIntervalEntity(3L, date2, LocalTime.of(8, 0), LocalTime.of(12, 0), null, null, morningAppointments2);
 
         List<AppointmentEntity> afternoonAppointments2 = List.of(
-                new AppointmentEntity(10L, null, null, null, date2, LocalTime.of(14, 0), LocalTime.of(14, 20), "BOOKED"),
-                new AppointmentEntity(11L, null, null, null, date2, LocalTime.of(15, 0), LocalTime.of(15, 20), "BOOKED"),
-                new AppointmentEntity(12L, null, null, null, date2, LocalTime.of(16, 0), LocalTime.of(16, 20), "BOOKED")
+                new AppointmentEntity(10L, null, null, null, null, date2, LocalTime.of(14, 0), LocalTime.of(14, 20), "BOOKED"),
+                new AppointmentEntity(11L, null, null, null, null, date2, LocalTime.of(15, 0), LocalTime.of(15, 20), "BOOKED"),
+                new AppointmentEntity(12L, null, null, null, null, date2, LocalTime.of(16, 0), LocalTime.of(16, 20), "BOOKED")
         );
-        WorkingIntervalEntity afternoonWorkingInterval2 = new WorkingIntervalEntity(4L, null, date2, LocalTime.of(14, 0), LocalTime.of(18, 0), afternoonAppointments2);
+        WorkingIntervalEntity afternoonWorkingInterval2 = new WorkingIntervalEntity(4L, date2, LocalTime.of(14, 0), LocalTime.of(18, 0), null, null, afternoonAppointments2);
 
         // Third working day
         LocalDate date3 = LocalDate.of(2024, 2, 6);
         List<AppointmentEntity> morningAppointments3 = List.of(
-                new AppointmentEntity(13L, null, null, null, date3, LocalTime.of(8, 0), LocalTime.of(8, 20), "BOOKED"),
-                new AppointmentEntity(14L, null, null, null, date3, LocalTime.of(9, 0), LocalTime.of(9, 20), "BOOKED"),
-                new AppointmentEntity(15L, null, null, null, date3, LocalTime.of(10, 0), LocalTime.of(10, 20), "BOOKED")
+                new AppointmentEntity(13L, null, null, null, null, date3, LocalTime.of(8, 0), LocalTime.of(8, 20), "BOOKED"),
+                new AppointmentEntity(14L, null, null, null, null, date3, LocalTime.of(9, 0), LocalTime.of(9, 20), "BOOKED"),
+                new AppointmentEntity(15L, null, null, null, null, date3, LocalTime.of(10, 0), LocalTime.of(10, 20), "BOOKED")
         );
-        WorkingIntervalEntity morningWorkingInterval3 = new WorkingIntervalEntity(5L, null, date3, LocalTime.of(8, 0), LocalTime.of(12, 0), morningAppointments3);
+        WorkingIntervalEntity morningWorkingInterval3 = new WorkingIntervalEntity(5L, date3, LocalTime.of(8, 0), LocalTime.of(12, 0), null, null, morningAppointments3);
 
         List<AppointmentEntity> afternoonAppointments3 = List.of(
-                new AppointmentEntity(16L, null, null, null, date3, LocalTime.of(14, 0), LocalTime.of(14, 20), "BOOKED"),
-                new AppointmentEntity(17L, null, null, null, date3, LocalTime.of(15, 0), LocalTime.of(15, 20), "BOOKED"),
-                new AppointmentEntity(18L, null, null, null, date3, LocalTime.of(16, 0), LocalTime.of(16, 20), "BOOKED")
+                new AppointmentEntity(16L, null, null, null, null, date3, LocalTime.of(14, 0), LocalTime.of(14, 20), "BOOKED"),
+                new AppointmentEntity(17L, null, null, null, null, date3, LocalTime.of(15, 0), LocalTime.of(15, 20), "BOOKED"),
+                new AppointmentEntity(18L, null, null, null, null, date3, LocalTime.of(16, 0), LocalTime.of(16, 20), "BOOKED")
         );
-        WorkingIntervalEntity afternoonWorkingInterval3 = new WorkingIntervalEntity(6L, null, date3, LocalTime.of(14, 0), LocalTime.of(18, 0), afternoonAppointments3);
+        WorkingIntervalEntity afternoonWorkingInterval3 = new WorkingIntervalEntity(6L, date3, LocalTime.of(14, 0), LocalTime.of(18, 0), null, null, afternoonAppointments3);
 
         // Create a list of all working time intervals
         List<WorkingIntervalEntity> allWorkingIntervals = List.of(
@@ -180,8 +182,8 @@ class AppointmentServiceTest {
         );
 
         // When
-        when(workingIntervalRepository.get(medOfficeId, date1, date3)).thenReturn(allWorkingIntervals);
-        List<TimeSlotResource> timeSlots = appointmentService.getAvailableSlots(medOfficeId, date1, date3, Duration.ofMinutes(20));
+        when(workingIntervalRepository.get(medOfficeId, doctorId, date1, date3)).thenReturn(allWorkingIntervals);
+        List<TimeSlotResource> timeSlots = appointmentService.getAvailableSlots(medOfficeId, doctorId, date1, date3, Duration.ofMinutes(20));
 
         // Then
         assertEquals(54, timeSlots.size());

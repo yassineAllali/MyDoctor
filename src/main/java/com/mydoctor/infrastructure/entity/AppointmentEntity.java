@@ -17,15 +17,21 @@ public class AppointmentEntity {
     @Id
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id")
     private PatientEntity patient;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+
+
+    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @JoinColumn(name = "medical_office_id")
     private MedicalOfficeEntity medicalOffice;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctor_id")
+    private DoctorEntity doctor;
+
+    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @JoinColumn(name = "working_interval_id")
     private WorkingIntervalEntity workingInterval;
 

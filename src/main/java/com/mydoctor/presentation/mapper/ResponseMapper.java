@@ -9,7 +9,7 @@ public class ResponseMapper {
 
     public AppointmentResponse map(AppointmentResource resource) {
         return new AppointmentResponse(resource.id(), resource.date(), resource.start(), resource.end(),
-                resource.medicalOffice().id(), resource.patient().id(), resource.status());
+                resource.medicalOffice().id(), resource.doctor().id(), resource.patient().id(), resource.status());
     }
 
     public TimeSlotResponse map(TimeSlotResource resource) {
