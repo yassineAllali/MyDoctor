@@ -1,7 +1,9 @@
 package com.mydoctor.infrastructure.adapter.dummy;
 
+import com.mydoctor.application.adapter.DoctorRepositoryAdapter;
 import com.mydoctor.application.adapter.MedicalOfficeRepositoryAdapter;
 import com.mydoctor.application.adapter.WorkingIntervalRepositoryAdapter;
+import com.mydoctor.infrastructure.entity.DoctorEntity;
 import com.mydoctor.infrastructure.entity.MedicalOfficeEntity;
 import com.mydoctor.infrastructure.entity.WorkingIntervalEntity;
 import com.mydoctor.infrastructure.repository.WorkingIntervalRepository;
@@ -18,6 +20,7 @@ public class DummyWorkingIntervalRepositoryAdapter implements WorkingIntervalRep
 
     private final List<WorkingIntervalEntity> entities;
     private final MedicalOfficeRepositoryAdapter medicalOfficeRepositoryAdapter;
+    private final DoctorRepositoryAdapter doctorRepositoryAdapter;
     private List<WorkingIntervalEntity> generateWorkingIntervalsForWeek() {
         List<WorkingIntervalEntity> workingIntervals = new ArrayList<>();
         LocalDate startDate = LocalDate.of(2024, 1, 27);
@@ -27,15 +30,17 @@ public class DummyWorkingIntervalRepositoryAdapter implements WorkingIntervalRep
             // Duplicate the working intervals for the day
             for (int j = 0; j < 10; j++) {
                 MedicalOfficeEntity medicalOffice = medicalOfficeRepositoryAdapter.get((long)j + 1).get();
-                workingIntervals.add(new WorkingIntervalEntity(IdGenerator.generate(), currentDate, LocalTime.of(8, 0), LocalTime.of(12, 0), null, medicalOffice, new ArrayList<>()));
-                workingIntervals.add(new WorkingIntervalEntity(IdGenerator.generate(), currentDate, LocalTime.of(14, 0), LocalTime.of(18, 0), null, medicalOffice, new ArrayList<>()));
+                DoctorEntity doctor = doctorRepositoryAdapter.get((long) j + 1).get();
+                workingIntervals.add(new WorkingIntervalEntity(IdGenerator.generate(), currentDate, LocalTime.of(8, 0), LocalTime.of(12, 0), doctor, medicalOffice, new ArrayList<>()));
+                workingIntervals.add(new WorkingIntervalEntity(IdGenerator.generate(), currentDate, LocalTime.of(14, 0), LocalTime.of(18, 0), doctor, medicalOffice, new ArrayList<>()));
             }
         }
         return workingIntervals;
     }
 
-    public DummyWorkingIntervalRepositoryAdapter(MedicalOfficeRepositoryAdapter medicalOfficeRepositoryAdapter) {
+    public DummyWorkingIntervalRepositoryAdapter(MedicalOfficeRepositoryAdapter medicalOfficeRepositoryAdapter, DoctorRepositoryAdapter doctorRepositoryAdapter) {
         this.medicalOfficeRepositoryAdapter = medicalOfficeRepositoryAdapter;
+        this.doctorRepositoryAdapter = doctorRepositoryAdapter;
         entities = generateWorkingIntervalsForWeek();
     }
 
