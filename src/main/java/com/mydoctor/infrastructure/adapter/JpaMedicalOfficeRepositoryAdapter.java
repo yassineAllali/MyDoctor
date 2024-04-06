@@ -6,11 +6,12 @@ import com.mydoctor.infrastructure.entity.MedicalOfficeEntity;
 import com.mydoctor.application.command.MedicalOfficeSearchCriteriaCommand;
 import com.mydoctor.infrastructure.repository.specification.MedicalOfficeSpecificationBuilder;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
-//@Repository
+@Repository
 public class JpaMedicalOfficeRepositoryAdapter implements MedicalOfficeRepositoryAdapter {
 
     private final MedicalOfficeRepository repository;

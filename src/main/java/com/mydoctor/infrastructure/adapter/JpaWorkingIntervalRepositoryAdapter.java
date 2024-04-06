@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-//@Repository
+@Repository
 public class JpaWorkingIntervalRepositoryAdapter implements WorkingIntervalRepositoryAdapter {
 
     private final WorkingIntervalRepository repository;

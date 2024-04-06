@@ -15,7 +15,7 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
+//@Repository
 public class DummyWorkingIntervalRepositoryAdapter implements WorkingIntervalRepositoryAdapter {
 
     private final List<WorkingIntervalEntity> entities;

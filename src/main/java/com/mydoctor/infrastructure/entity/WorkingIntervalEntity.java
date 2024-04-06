@@ -16,6 +16,7 @@ import java.util.List;
 public class WorkingIntervalEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private LocalDate date;

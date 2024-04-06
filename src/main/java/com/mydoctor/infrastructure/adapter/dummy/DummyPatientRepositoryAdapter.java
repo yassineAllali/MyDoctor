@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+//@Repository
 public class DummyPatientRepositoryAdapter implements PatientRepositoryAdapter {
 
     private final List<PatientEntity> entities;
