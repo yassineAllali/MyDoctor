@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-@Repository
+//@Repository
 public class DummyAppointmentRepositoryAdapter implements AppointmentRepositoryAdapter {
 
     private final List<AppointmentEntity> appointmentEntities;

@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+//@Repository
 public class DummyMedicalOfficeRepositoryAdapter implements MedicalOfficeRepositoryAdapter {
 
     private final List<MedicalOfficeEntity> medicalOfficeEntities;
