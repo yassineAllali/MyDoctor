@@ -1,9 +1,6 @@
 package com.mydoctor.application.service;
 
-import com.mydoctor.application.adapter.AppointmentRepositoryAdapter;
-import com.mydoctor.application.adapter.MedicalOfficeRepositoryAdapter;
-import com.mydoctor.application.adapter.PatientRepositoryAdapter;
-import com.mydoctor.application.adapter.WorkingIntervalRepositoryAdapter;
+import com.mydoctor.application.adapter.*;
 import com.mydoctor.application.command.CreateAppointmentCommand;
 import com.mydoctor.application.command.CreatePatientCommand;
 import com.mydoctor.application.exception.BusinessException;
@@ -37,13 +34,15 @@ class SchedulingServiceTest {
     private PatientRepositoryAdapter patientRepository;
     @Mock
     private MedicalOfficeRepositoryAdapter medicalOfficeRepository;
+    @Mock
+    private DoctorRepositoryAdapter doctorRepository;
 
     private AutoCloseable openMocks;
 
     @BeforeEach
     void init() {
         openMocks = MockitoAnnotations.openMocks(this);
-        schedulingService = new SchedulingService(appointmentRepository, workingIntervalRepository, patientRepository, medicalOfficeRepository);
+        schedulingService = new SchedulingService(appointmentRepository, workingIntervalRepository, patientRepository, medicalOfficeRepository, doctorRepository);
     }
 
     @Test
@@ -59,6 +58,8 @@ class SchedulingServiceTest {
         DoctorEntity givenDoctor = new DoctorEntity(1l, "Doctor", null);
 
         // When
+        when(medicalOfficeRepository.existById(1l)).thenReturn(true);
+        when(doctorRepository.existById(1l)).thenReturn(true);
         when(workingIntervalRepository.get(1l, 1l, LocalDate.of(2024, 1, 23), LocalTime.of(9, 0), LocalTime.of(10, 0)))
                 .thenReturn(Arrays.asList(new WorkingIntervalEntity(123l, LocalDate.of(2024, 1, 23), LocalTime.of(8, 0), LocalTime.of(12, 0), givenDoctor, givenMedicalOffice, null)));
 
@@ -99,6 +100,9 @@ class SchedulingServiceTest {
         DoctorEntity givenDoctor = new DoctorEntity(1l, "Doctor", null);
 
         // When
+        when(medicalOfficeRepository.existById(1l)).thenReturn(true);
+        when(doctorRepository.existById(1l)).thenReturn(true);
+        when(patientRepository.existById(123l)).thenReturn(true);
         when(workingIntervalRepository.get(1l, 1l, LocalDate.of(2024, 1, 23), LocalTime.of(9, 0), LocalTime.of(10, 0)))
                 .thenReturn(Arrays.asList(new WorkingIntervalEntity(123l, LocalDate.of(2024, 1, 23), LocalTime.of(8, 0), LocalTime.of(12, 0), givenDoctor, givenMedicalOffice, null)));
 

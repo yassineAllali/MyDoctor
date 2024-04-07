@@ -31,8 +31,23 @@ public class JpaMedicalOfficeRepositoryAdapter implements MedicalOfficeRepositor
     }
 
     @Override
+    public List<MedicalOfficeEntity> getAll() {
+        return repository.findAll();
+    }
+
+    @Override
+    public void delete(long id) {
+        repository.deleteById(id);
+    }
+
+    @Override
     public List<MedicalOfficeEntity> get(MedicalOfficeSearchCriteriaCommand criteria) {
         Specification<MedicalOfficeEntity> spec = new MedicalOfficeSpecificationBuilder().with(criteria).build();
         return repository.findAll(spec);
+    }
+
+    @Override
+    public boolean existById(Long medicalOfficeId) {
+        return repository.existsById(medicalOfficeId);
     }
 }

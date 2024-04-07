@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class AppointmentService {
+public class AppointmentService implements ApplicationService<AppointmentResource, Long> {
 
     private final AppointmentRepositoryAdapter appointmentRepository;
     private final WorkingIntervalRepositoryAdapter workingIntervalRepository;
@@ -43,10 +43,66 @@ public class AppointmentService {
         this.entityMapper = new EntityMapper();
     }
 
-    public AppointmentResource getAppointment(long id) {
-        log.info("Getting appointment for id {}", id);
-        AppointmentEntity entity = getAppointmentEntity(id);
+    @Override
+    public AppointmentResource get(Long id) throws NotFoundException {
+        log.info("Getting appointment with id {} !", id);
+        AppointmentEntity entity = appointmentRepository
+                .get(id)
+                .orElseThrow(() -> new NotFoundException(String.format("Appointment with id : %s not found !", id)));
         return resourceMapper.map(entity);
+    }
+
+    @Override
+    public List<AppointmentResource> getAll() {
+        log.info("Getting all appointments !");
+        List<AppointmentEntity> entities = appointmentRepository.getAll();
+        return entities.stream()
+                .map(resourceMapper::map)
+                .toList();
+    }
+
+    @Override
+    public AppointmentResource create(AppointmentResource resource) throws IllegalArgumentException {
+        log.info("Creating new appointment !");
+        if(resource.id() != null) {
+            throw new IllegalArgumentException("Id should not be set !");
+        }
+        return save(resource);
+    }
+
+    @Override
+    public AppointmentResource update(AppointmentResource resource) throws NotFoundException {
+        log.info("Updating appointment with id {} !", resource.id());
+        checkExists(resource.id());
+        return save(resource);
+    }
+
+    @Override
+    public AppointmentResource save(AppointmentResource resource) {
+        log.info("Saving appointment !");
+        AppointmentEntity entity = appointmentRepository.save(entityMapper.map(resource));
+        return resourceMapper.map(entity);
+    }
+
+    @Override
+    public void delete(Long id) throws NotFoundException {
+        log.info("Deleting appointment with id {} !", id);
+        checkExists(id);
+        appointmentRepository.delete(id);
+    }
+
+    @Override
+    public boolean exists(Long id) {
+        log.info("Checking if appointment with id {} exist !", id);
+        return appointmentRepository.existById(id);
+    }
+
+    @Override
+    public void checkExists(Long id) throws NotFoundException {
+        if(!appointmentRepository.existById(id)) {
+            log.info("Appointment with id : {} not found !", id);
+            throw new NotFoundException(String.format("Appointment with id : %s not found !", id));
+        }
     }
 
     public List<AppointmentResource> getPatientAppointments(long patientId) {

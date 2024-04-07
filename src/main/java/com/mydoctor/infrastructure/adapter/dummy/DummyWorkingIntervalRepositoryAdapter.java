@@ -14,6 +14,7 @@ import java.time.LocalTime;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 //@Repository
 public class DummyWorkingIntervalRepositoryAdapter implements WorkingIntervalRepositoryAdapter {
@@ -42,6 +43,31 @@ public class DummyWorkingIntervalRepositoryAdapter implements WorkingIntervalRep
         this.medicalOfficeRepositoryAdapter = medicalOfficeRepositoryAdapter;
         this.doctorRepositoryAdapter = doctorRepositoryAdapter;
         entities = generateWorkingIntervalsForWeek();
+    }
+
+    @Override
+    public Optional<WorkingIntervalEntity> get(long id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public List<WorkingIntervalEntity> getAll() {
+        return List.of();
+    }
+
+    @Override
+    public WorkingIntervalEntity save(WorkingIntervalEntity entity) {
+        return null;
+    }
+
+    @Override
+    public void delete(long id) {
+
+    }
+
+    @Override
+    public boolean existById(long id) {
+        return false;
     }
 
     @Override

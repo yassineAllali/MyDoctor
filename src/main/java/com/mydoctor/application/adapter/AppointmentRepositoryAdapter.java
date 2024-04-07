@@ -11,4 +11,7 @@ public interface AppointmentRepositoryAdapter {
     List<AppointmentEntity> getPatientAppointments(long patient);
 
     Optional<AppointmentEntity> get(long id);
+    List<AppointmentEntity> getAll();
+    void delete(long id);
+    boolean existById(long id);
 }

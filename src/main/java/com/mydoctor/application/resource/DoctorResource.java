@@ -1,4 +1,7 @@
 package com.mydoctor.application.resource;
 
-public record DoctorResource(long id, String name, SpecializationResource specialization) {
+import lombok.Builder;
+
+@Builder
+public record DoctorResource(Long id, String name, SpecializationResource specialization) {
 }

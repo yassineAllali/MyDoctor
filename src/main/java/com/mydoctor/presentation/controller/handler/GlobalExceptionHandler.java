@@ -1,6 +1,7 @@
 package com.mydoctor.presentation.controller.handler;
 
 import com.mydoctor.application.exception.BusinessException;
+import com.mydoctor.application.exception.IllegalArgumentException;
 import com.mydoctor.application.exception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -12,9 +13,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(BusinessException.class)
+    @ExceptionHandler({BusinessException.class})
     public ResponseEntity<String> handleBusinessException(BusinessException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler({IllegalArgumentException.class})
+    public ResponseEntity<String> handleIllegalArgumentException(BusinessException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Illegal Argument : " + ex.getMessage());
     }
 
     @ExceptionHandler(NotFoundException.class)
