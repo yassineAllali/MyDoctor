@@ -35,4 +35,12 @@ public class ResponseMapper {
     public SpecializationResponse map(SpecializationResource resource) {
         return new SpecializationResponse(resource.id(), resource.name());
     }
+
+    public DoctorResponse map(DoctorResource resource) {
+        return DoctorResponse.builder()
+                .id(resource.id())
+                .name(resource.name())
+                .specialization(map(resource.specialization()))
+                .build();
+    }
 }

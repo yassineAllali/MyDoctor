@@ -1,4 +1,4 @@
-package com.mydoctor.presentation.request;
+package com.mydoctor.presentation.request.create;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
