@@ -8,7 +8,7 @@ import com.mydoctor.application.service.AppointmentService;
 import com.mydoctor.application.service.SchedulingService;
 import com.mydoctor.presentation.mapper.CommandMapper;
 import com.mydoctor.presentation.mapper.ResponseMapper;
-import com.mydoctor.presentation.request.CreateAppointmentRequest;
+import com.mydoctor.presentation.request.create.CreateAppointmentRequest;
 import com.mydoctor.presentation.request.ScheduleRequest;
 import com.mydoctor.presentation.response.AppointmentResponse;
 import com.mydoctor.presentation.response.TimeSlotResponse;

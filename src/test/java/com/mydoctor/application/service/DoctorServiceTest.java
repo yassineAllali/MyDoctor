@@ -4,7 +4,9 @@ import com.mydoctor.application.adapter.DoctorRepositoryAdapter;
 import com.mydoctor.application.exception.IllegalArgumentException;
 import com.mydoctor.application.exception.NotFoundException;
 import com.mydoctor.application.resource.DoctorResource;
+import com.mydoctor.application.resource.SpecializationResource;
 import com.mydoctor.infrastructure.entity.DoctorEntity;
+import com.mydoctor.presentation.request.create.CreateDoctorRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,13 +24,16 @@ class DoctorServiceTest {
     @Mock
     private DoctorRepositoryAdapter doctorRepository;
 
+    @Mock
+    private SpecializationService specializationService;
+
     private DoctorService doctorService;
     private AutoCloseable openMocks;
 
     @BeforeEach
     void setUp() {
         openMocks = MockitoAnnotations.openMocks(this);
-        this.doctorService = new DoctorService(doctorRepository);
+        this.doctorService = new DoctorService(doctorRepository, specializationService);
     }
 
     @AfterEach
@@ -104,6 +109,33 @@ class DoctorServiceTest {
 
         // When, Then
         assertThrows(IllegalArgumentException.class, () -> doctorService.create(resource));
+    }
+
+    @Test
+    void testCreateDoctorFromRequest() {
+        // Given
+        SpecializationResource givenSpecialization = SpecializationResource.builder()
+                .id(123l)
+                .name("general")
+                .build();
+        CreateDoctorRequest request = CreateDoctorRequest.builder()
+                .name("new doctor")
+                .specializationId(123l)
+                .build();
+
+
+        // When
+        when(specializationService.get(123l)).thenReturn(givenSpecialization);
+        when(doctorRepository.save(any())).then(args -> {
+            DoctorEntity entity = args.getArgument(0, DoctorEntity.class);
+            entity.setId(123l);
+            return entity;
+        });
+        DoctorResource doctor = doctorService.create(request);
+        // Then
+        assertEquals("new doctor", doctor.name());
+        assertEquals("general", doctor.specialization().name());
+        assertNotNull(doctor.id());
     }
 
     @Test

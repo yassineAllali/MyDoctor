@@ -6,7 +6,9 @@ import com.mydoctor.application.exception.NotFoundException;
 import com.mydoctor.application.mapper.EntityMapper;
 import com.mydoctor.application.mapper.ResourceMapper;
 import com.mydoctor.application.resource.DoctorResource;
+import com.mydoctor.application.resource.SpecializationResource;
 import com.mydoctor.infrastructure.entity.DoctorEntity;
+import com.mydoctor.presentation.request.create.CreateDoctorRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +19,13 @@ import java.util.List;
 public class DoctorService implements ApplicationService<DoctorResource, Long> {
 
     private final DoctorRepositoryAdapter doctorRepository;
+    private final SpecializationService specializationService;
     private final ResourceMapper resourceMapper;
     private final EntityMapper entityMapper;
 
-    public DoctorService(DoctorRepositoryAdapter doctorRepository) {
+    public DoctorService(DoctorRepositoryAdapter doctorRepository, SpecializationService specializationService) {
         this.doctorRepository = doctorRepository;
+        this.specializationService = specializationService;
         resourceMapper = new ResourceMapper();
         entityMapper = new EntityMapper();
     }
@@ -54,11 +58,32 @@ public class DoctorService implements ApplicationService<DoctorResource, Long> {
         return save(resource);
     }
 
+    public DoctorResource create(CreateDoctorRequest createDoctorRequest) {
+        log.info("Creating new doctor from request !");
+        DoctorResource doctorResource = map(null, createDoctorRequest);
+        return create(doctorResource);
+    }
+
     @Override
     public DoctorResource update(DoctorResource resource) throws NotFoundException {
         log.info("Updating doctor with id {} !", resource.id());
         checkExists(resource.id());
         return save(resource);
+    }
+
+    public DoctorResource update(Long id, CreateDoctorRequest createDoctorRequest) {
+        log.info("Updating doctor from request !");
+        DoctorResource doctorResource = map(id, createDoctorRequest);
+        return update(doctorResource);
+    }
+
+    private DoctorResource map(Long id, CreateDoctorRequest createDoctorRequest) {
+        SpecializationResource specializationResource = specializationService.get(createDoctorRequest.specializationId());
+        return DoctorResource.builder()
+                .id(id)
+                .name(createDoctorRequest.name())
+                .specialization(specializationResource)
+                .build();
     }
 
     @Override

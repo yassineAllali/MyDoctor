@@ -3,8 +3,8 @@ package com.mydoctor.presentation.mapper;
 import com.mydoctor.application.command.CreateAppointmentCommand;
 import com.mydoctor.application.command.CreatePatientCommand;
 import com.mydoctor.application.command.MedicalOfficeSearchCriteriaCommand;
-import com.mydoctor.presentation.request.CreateAppointmentRequest;
-import com.mydoctor.presentation.request.CreatePatientRequest;
+import com.mydoctor.presentation.request.create.CreateAppointmentRequest;
+import com.mydoctor.presentation.request.create.CreatePatientRequest;
 import com.mydoctor.presentation.request.MedicalOfficeSearchCriteriaRequest;
 
 public class CommandMapper {
