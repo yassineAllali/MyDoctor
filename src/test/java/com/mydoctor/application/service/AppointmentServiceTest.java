@@ -37,31 +37,131 @@ class AppointmentServiceTest {
         this.appointmentService = new AppointmentService(appointmentRepository, workingIntervalRepository);
     }
 
-    @Test
-    public void testGetAppointment() {
-        // Given
-        AppointmentEntity appointmentEntity = new AppointmentEntity();
-        appointmentEntity.setId(123l);
-
-        // When
-        when(appointmentRepository.get(123l)).thenReturn(Optional.of(appointmentEntity));
-        AppointmentResource actualAppointment = appointmentService.getAppointment(123l);
-
-        // Then
-        assertNotNull(actualAppointment);
-        assertEquals(123l, actualAppointment.id());
+    @AfterEach
+    void tearDown() throws Exception {
+        openMocks.close();
     }
 
     @Test
-    public void testGetAppointmentRaisesNotFoundException() {
+    void testGet() {
         // Given
-        long id = 123l;
+        AppointmentEntity appointmentEntity = AppointmentEntity.builder().id(123456l).build();
+        Long id = 123l;
 
-        // when
-        when(appointmentRepository.get(123l)).thenReturn(Optional.empty());
+        // When
+        when(appointmentRepository.get(id)).thenReturn(Optional.of(appointmentEntity));
+        AppointmentResource appointmentResource = appointmentService.get(id);
 
         // Then
-        assertThrows(NotFoundException.class, () -> appointmentService.getAppointment(id));
+        assertEquals(123456l, appointmentResource.id());
+    }
+
+    @Test
+    void testGetThrowsNotFoundException() {
+        // Given
+        Long id = 123l;
+
+        // When
+        when(appointmentRepository.get(id)).thenReturn(Optional.empty());
+
+        // Then
+        assertThrows(NotFoundException.class, () -> appointmentService.get(id));
+    }
+
+    @Test
+    void testGetAll() {
+        // Given
+        List<AppointmentEntity> entities = List.of(
+                AppointmentEntity.builder().id(1l).build(),
+                AppointmentEntity.builder().id(2l).build(),
+                AppointmentEntity.builder().id(3l).build()
+        );
+
+        // When
+        when(appointmentRepository.getAll()).thenReturn(entities);
+        List<AppointmentResource> appointments = appointmentService.getAll();
+
+        // Then
+        assertEquals(3, appointments.size());
+        assertEquals(3l, appointments.get(2).id());
+    }
+
+    @Test
+    void testCreate() {
+        // Given
+        AppointmentResource resource = AppointmentResource.builder().date(LocalDate.of(2024, 4, 7)).build();
+
+        // When
+        when(appointmentRepository.save(any())).then(args -> {
+            AppointmentEntity entity = args.getArgument(0, AppointmentEntity.class);
+            entity.setId(123l);
+            return entity;
+        });
+        AppointmentResource appointment = appointmentService.create(resource);
+        // Then
+        assertEquals(LocalDate.of(2024, 4, 7), appointment.date());
+        assertNotNull(appointment.id());
+    }
+
+    @Test
+    void testCreateThrowsIllegalArgumentException() {
+        // Given
+        AppointmentResource resource = AppointmentResource.builder().id(123l).date(LocalDate.of(2024, 4, 7)).build();
+
+        // When, Then
+        assertThrows(IllegalArgumentException.class, () -> appointmentService.create(resource));
+    }
+
+    @Test
+    void testUpdate() {
+        // Given
+        AppointmentResource resource = AppointmentResource.builder().id(123456l).date(LocalDate.of(2024, 4, 7)).build();
+
+        // When
+        when(appointmentRepository.existById(123456l)).thenReturn(true);
+        when(appointmentRepository.save(any())).then(args -> args.getArgument(0, AppointmentEntity.class));
+        AppointmentResource appointment = appointmentService.update(resource);
+        // Then
+        assertEquals(LocalDate.of(2024, 4, 7), appointment.date());
+        assertEquals(123456l, appointment.id());
+    }
+
+    @Test
+    void testUpdateThrowsNotFoundException() {
+        // Given
+        AppointmentResource resource = AppointmentResource.builder().id(123456l).date(LocalDate.of(2024, 4, 7)).build();
+
+        // When
+        when(appointmentRepository.existById(123456l)).thenReturn(false);
+        when(appointmentRepository.save(any())).then(args -> args.getArgument(0, AppointmentEntity.class));
+
+        // Then
+        assertThrows(NotFoundException.class, () -> appointmentService.update(resource));
+    }
+
+    @Test
+    void testDelete() {
+        // Given
+        Long id = 123789l;
+
+        // When
+        when(appointmentRepository.existById(id)).thenReturn(true);
+        appointmentService.delete(id);
+
+        // Then
+        verify(appointmentRepository, times(1)).delete(id);
+    }
+
+    @Test
+    void testDeleteThrowsNotFoundException() {
+        // Given
+        Long id = 123789l;
+
+        // When
+        when(appointmentRepository.existById(id)).thenReturn(false);
+
+        // Then
+        assertThrows(NotFoundException.class, () -> appointmentService.delete(id));
     }
 
     @Test
@@ -191,8 +291,4 @@ class AppointmentServiceTest {
         assertEquals(LocalTime.of(18, 0), timeSlots.get(53).end());
     }
 
-    @AfterEach
-    void tearDown() throws Exception {
-        openMocks.close();
-    }
 }

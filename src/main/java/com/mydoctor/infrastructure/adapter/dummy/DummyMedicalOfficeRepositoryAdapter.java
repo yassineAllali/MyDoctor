@@ -56,7 +56,22 @@ public class DummyMedicalOfficeRepositoryAdapter implements MedicalOfficeReposit
     }
 
     @Override
+    public List<MedicalOfficeEntity> getAll() {
+        return List.of();
+    }
+
+    @Override
+    public void delete(long id) {
+
+    }
+
+    @Override
     public List<MedicalOfficeEntity> get(MedicalOfficeSearchCriteriaCommand criteria) {
         return List.of();
+    }
+
+    @Override
+    public boolean existById(Long medicalOfficeId) {
+        return false;
     }
 }

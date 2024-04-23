@@ -11,6 +11,10 @@ public interface MedicalOfficeRepositoryAdapter {
     MedicalOfficeEntity save(MedicalOfficeEntity medicalOfficeEntity);
 
     Optional<MedicalOfficeEntity> get(Long medicalOfficeId);
+    List<MedicalOfficeEntity> getAll();
+    void delete(long id);
 
     List<MedicalOfficeEntity> get(MedicalOfficeSearchCriteriaCommand criteria);
+
+    boolean existById(Long medicalOfficeId);
 }

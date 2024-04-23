@@ -42,4 +42,24 @@ public class DummyDoctorRepositoryAdapter implements DoctorRepositoryAdapter {
     public Optional<DoctorEntity> get(Long id) {
         return entities.stream().filter(d -> d.getId().equals(id)).findFirst();
     }
+
+    @Override
+    public List<DoctorEntity> getAll() {
+        return List.of();
+    }
+
+    @Override
+    public DoctorEntity save(DoctorEntity entity) {
+        return null;
+    }
+
+    @Override
+    public void delete(Long id) {
+
+    }
+
+    @Override
+    public boolean existById(long id) {
+        return false;
+    }
 }

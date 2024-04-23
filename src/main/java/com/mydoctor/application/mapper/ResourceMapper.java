@@ -15,7 +15,17 @@ public class ResourceMapper {
     public AppointmentResource map(AppointmentEntity entity) {
         if(entity == null)
             return null;
-        return new AppointmentResource(entity.getId(), map(entity.getPatient()), map(entity.getMedicalOffice()), map(entity.getDoctor()), entity.getDate(), entity.getStart(), entity.getEnd(), entity.getStatus());
+        return AppointmentResource.builder()
+                .id(entity.getId())
+                .doctor(map(entity.getDoctor()))
+                .patient(map(entity.getPatient()))
+                .medicalOffice(map(entity.getMedicalOffice()))
+                .date(entity.getDate())
+                .start(entity.getStart())
+                .end(entity.getEnd())
+                .status(entity.getStatus())
+                .workingInterval(map(entity.getWorkingInterval()))
+                .build();
     }
 
     public PatientResource map(PatientEntity entity) {
@@ -63,5 +73,18 @@ public class ResourceMapper {
         if (timeSlot == null)
             return null;
         return new TimeSlotResource(timeSlot.getStart(), timeSlot.getEnd());
+    }
+
+    public WorkingIntervalResource map(WorkingIntervalEntity entity) {
+        if(entity == null)
+            return null;
+        return WorkingIntervalResource.builder()
+                .id(entity.getId())
+                .start(entity.getStart())
+                .end(entity.getEnd())
+                .date(entity.getDate())
+                .doctor(map(entity.getDoctor()))
+                .appointments(entity.getAppointments() == null ? null : entity.getAppointments().stream().map(this::map).toList())
+                .build();
     }
 }

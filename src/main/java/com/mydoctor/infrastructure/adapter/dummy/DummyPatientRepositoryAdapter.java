@@ -46,4 +46,19 @@ public class DummyPatientRepositoryAdapter implements PatientRepositoryAdapter {
     public Optional<PatientEntity> get(long id) {
         return entities.stream().filter(e -> e.getId().equals(id)).findFirst();
     }
+
+    @Override
+    public List<PatientEntity> getAll() {
+        return List.of();
+    }
+
+    @Override
+    public void delete(long id) {
+
+    }
+
+    @Override
+    public boolean existById(long id) {
+        return false;
+    }
 }

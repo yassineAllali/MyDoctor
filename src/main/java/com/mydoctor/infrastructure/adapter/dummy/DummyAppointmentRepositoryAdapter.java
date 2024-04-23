@@ -80,4 +80,19 @@ public class DummyAppointmentRepositoryAdapter implements AppointmentRepositoryA
         return appointmentEntities.stream().filter(a -> a.getId() == id).findFirst();
     }
 
+    @Override
+    public List<AppointmentEntity> getAll() {
+        return List.of();
+    }
+
+    @Override
+    public void delete(long id) {
+
+    }
+
+    @Override
+    public boolean existById(long id) {
+        return false;
+    }
+
 }

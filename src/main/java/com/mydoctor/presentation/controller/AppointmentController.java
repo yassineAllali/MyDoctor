@@ -2,6 +2,7 @@ package com.mydoctor.presentation.controller;
 
 import com.mydoctor.application.command.CreateAppointmentCommand;
 import com.mydoctor.application.command.CreatePatientCommand;
+import com.mydoctor.application.resource.AppointmentResource;
 import com.mydoctor.application.resource.TimeSlotResource;
 import com.mydoctor.application.service.AppointmentService;
 import com.mydoctor.application.service.SchedulingService;
@@ -35,7 +36,8 @@ public class AppointmentController {
 
     @GetMapping("/{id}")
     public AppointmentResponse getAppointment(@PathVariable long id) {
-        return responseMapper.map(appointmentService.getAppointment(id));
+        AppointmentResource appointment = appointmentService.get(id);
+        return responseMapper.map(appointment);
     }
 
     @PostMapping("/med-office/{medicalOfficeId}/doctor/{doctorId}")
@@ -45,7 +47,8 @@ public class AppointmentController {
         CreateAppointmentCommand appointmentCommand = commandMapper.map(scheduleRequest.appointment());
         CreatePatientCommand patientCommand = commandMapper.map(scheduleRequest.patient());
 
-        return responseMapper.map(schedulingService.schedule(appointmentCommand, patientCommand, medicalOfficeId, doctorId));
+        AppointmentResource appointment = schedulingService.schedule(appointmentCommand, patientCommand, medicalOfficeId, doctorId);
+        return responseMapper.map(appointment);
     }
 
     @PostMapping("/med-office/{medicalOfficeId}/doctor/{doctorId}/patient/{patientId}")

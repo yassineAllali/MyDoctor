@@ -33,4 +33,19 @@ public class JpaAppointmentRepositoryAdapter implements AppointmentRepositoryAda
     public Optional<AppointmentEntity> get(long id) {
         return repository.findById(id);
     }
+
+    @Override
+    public List<AppointmentEntity> getAll() {
+        return repository.findAll();
+    }
+
+    @Override
+    public void delete(long id) {
+        repository.deleteById(id);
+    }
+
+    @Override
+    public boolean existById(long id) {
+        return repository.existsById(id);
+    }
 }

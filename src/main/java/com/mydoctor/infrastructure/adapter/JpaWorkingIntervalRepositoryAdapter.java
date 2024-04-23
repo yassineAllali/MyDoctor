@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class JpaWorkingIntervalRepositoryAdapter implements WorkingIntervalRepositoryAdapter {
@@ -17,6 +18,31 @@ public class JpaWorkingIntervalRepositoryAdapter implements WorkingIntervalRepos
 
     public JpaWorkingIntervalRepositoryAdapter(WorkingIntervalRepository repository) {
         this.repository = repository;
+    }
+
+    @Override
+    public Optional<WorkingIntervalEntity> get(long id) {
+        return repository.findById(id);
+    }
+
+    @Override
+    public List<WorkingIntervalEntity> getAll() {
+        return repository.findAll();
+    }
+
+    @Override
+    public WorkingIntervalEntity save(WorkingIntervalEntity entity) {
+        return repository.save(entity);
+    }
+
+    @Override
+    public void delete(long id) {
+        repository.deleteById(id);
+    }
+
+    @Override
+    public boolean existById(long id) {
+        return repository.existsById(id);
     }
 
     @Override
