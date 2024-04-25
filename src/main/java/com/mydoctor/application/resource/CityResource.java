@@ -1,4 +1,7 @@
 package com.mydoctor.application.resource;
 
-public record CityResource(long id, String name) {
+import lombok.Builder;
+
+@Builder
+public record CityResource(Long id, String name) {
 }

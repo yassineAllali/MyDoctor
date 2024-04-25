@@ -164,7 +164,7 @@ public class AppointmentService implements ApplicationService<AppointmentResourc
                 .get(id)
                 .orElseThrow(() -> {
                     log.info("Appointment with id : {} not found !", id);
-                    throw new NotFoundException(String.format("Appointment with id : %s not found !", id));
+                    return new NotFoundException(String.format("Appointment with id : %s not found !", id));
                 });
     }
 

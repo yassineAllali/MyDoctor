@@ -82,7 +82,7 @@ public class SchedulingService {
 
 
     public AppointmentResource schedule(CreateAppointmentCommand appointmentCommand, long medicalOfficeId, long doctorId, long patientId) {
-        log.info("Scheduling an appointment for patient {} with the doctor {} in the medical Office {}", doctorId, medicalOfficeId);
+        log.info("Scheduling an appointment for patient {} with the doctor {} in the medical Office {}", patientId, doctorId, medicalOfficeId);
 
         checkMedicalOfficeExists(medicalOfficeId);
         checkDoctorExists(doctorId);
@@ -96,7 +96,7 @@ public class SchedulingService {
         return patientRepository.get(id)
                 .orElseThrow(() -> {
                     log.info("Patient with id {} not found !", id);
-                    throw new NotFoundException(String.format("Patient with id %s not found !", id));
+                    return new NotFoundException(String.format("Patient with id %s not found !", id));
                 });
     }
 
@@ -108,7 +108,7 @@ public class SchedulingService {
             workingInterval.book(appointment.getTimeSlot());
             appointment.booked();
         } catch (BookingException e) {
-            log.error("Booking exception : " + e.getMessage());
+            log.error("Booking exception : {}", e.getMessage());
             throw new BusinessException("Can't book appointment !", e.getCause());
         }
         return resourceMapper.map(appointmentRepository.save(new AppointmentEntity(null, patientEntity,

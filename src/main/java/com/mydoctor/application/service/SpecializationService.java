@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -107,5 +109,11 @@ public class SpecializationService implements ApplicationService<SpecializationR
             log.info("Specialization with id : {} not found !", id);
             throw new NotFoundException(String.format("Specialization with id : %s not found !", id));
         }
+    }
+
+    public Set<SpecializationResource> get(Set<Long> ids) {
+        return specializationRepository.get(ids).stream()
+                .map(resourceMapper::map)
+                .collect(Collectors.toSet());
     }
 }
