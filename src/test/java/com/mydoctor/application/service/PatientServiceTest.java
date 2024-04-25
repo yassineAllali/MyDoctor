@@ -2,8 +2,13 @@ package com.mydoctor.application.service;
 
 import com.mydoctor.application.adapter.PatientRepositoryAdapter;
 import com.mydoctor.application.exception.NotFoundException;
+import com.mydoctor.application.resource.DoctorResource;
 import com.mydoctor.application.resource.PatientResource;
+import com.mydoctor.application.resource.SpecializationResource;
+import com.mydoctor.infrastructure.entity.DoctorEntity;
 import com.mydoctor.infrastructure.entity.PatientEntity;
+import com.mydoctor.presentation.request.create.CreateDoctorRequest;
+import com.mydoctor.presentation.request.create.CreatePatientRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -102,6 +107,26 @@ class PatientServiceTest {
 
         // When, Then
         assertThrows(IllegalArgumentException.class, () -> patientService.create(resource));
+    }
+
+    @Test
+    void testCreateFromRequest() {
+        // Given
+        CreatePatientRequest request = CreatePatientRequest.builder()
+                .name("new patient")
+                .build();
+
+
+        // When
+        when(patientRepository.save(any())).then(args -> {
+            PatientEntity entity = args.getArgument(0, PatientEntity.class);
+            entity.setId(123l);
+            return entity;
+        });
+        PatientResource patient = patientService.create(request);
+        // Then
+        assertEquals("new patient", patient.name());
+        assertNotNull(patient.id());
     }
 
     @Test
