@@ -43,4 +43,11 @@ public class ResponseMapper {
                 .specialization(map(resource.specialization()))
                 .build();
     }
+
+    public PatientResponse map(PatientResource resource) {
+        return PatientResponse.builder()
+                .id(resource.id())
+                .name(resource.name())
+                .build();
+    }
 }
