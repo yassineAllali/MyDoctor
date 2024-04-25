@@ -5,23 +5,33 @@ import com.mydoctor.application.command.MedicalOfficeSearchCriteriaCommand;
 import com.mydoctor.application.exception.NotFoundException;
 import com.mydoctor.application.mapper.EntityMapper;
 import com.mydoctor.application.mapper.ResourceMapper;
+import com.mydoctor.application.resource.CityResource;
 import com.mydoctor.application.resource.MedicalOfficeResource;
+import com.mydoctor.application.resource.PatientResource;
+import com.mydoctor.application.resource.SpecializationResource;
 import com.mydoctor.infrastructure.entity.MedicalOfficeEntity;
+import com.mydoctor.presentation.request.create.CreateMedicalOfficeRequest;
+import com.mydoctor.presentation.request.create.CreatePatientRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
 public class MedicalOfficeService implements ApplicationService<MedicalOfficeResource, Long> {
 
     private final MedicalOfficeRepositoryAdapter medicalOfficeRepository;
+    private final SpecializationService specializationService;
+    private final CityService cityService;
     private final ResourceMapper resourceMapper;
     private final EntityMapper entityMapper;
 
-    public MedicalOfficeService(MedicalOfficeRepositoryAdapter medicalOfficeRepository) {
+    public MedicalOfficeService(MedicalOfficeRepositoryAdapter medicalOfficeRepository, SpecializationService specializationService, CityService cityService) {
         this.medicalOfficeRepository = medicalOfficeRepository;
+        this.specializationService = specializationService;
+        this.cityService = cityService;
         resourceMapper = new ResourceMapper();
         entityMapper = new EntityMapper();
     }
@@ -61,11 +71,34 @@ public class MedicalOfficeService implements ApplicationService<MedicalOfficeRes
         return save(resource);
     }
 
+    public MedicalOfficeResource create(CreateMedicalOfficeRequest createMedicalOfficeRequest) {
+        log.info("Creating new medical office from request !");
+        MedicalOfficeResource medicalOfficeResource = map(null, createMedicalOfficeRequest);
+        return create(medicalOfficeResource);
+    }
+
     @Override
     public MedicalOfficeResource update(MedicalOfficeResource resource) throws NotFoundException {
         log.info("Updating medical office with id {} !", resource.id());
         checkExists(resource.id());
         return save(resource);
+    }
+
+    public MedicalOfficeResource update(Long id, CreateMedicalOfficeRequest createMedicalOfficeRequest) {
+        log.info("Updating medical office from request !");
+        MedicalOfficeResource medicalOfficeResource = map(id, createMedicalOfficeRequest);
+        return update(medicalOfficeResource);
+    }
+
+    private MedicalOfficeResource map(Long id, CreateMedicalOfficeRequest createMedicalOfficeRequest) {
+        Set<SpecializationResource> specializationResources = specializationService.get(createMedicalOfficeRequest.specializationIds());
+        CityResource cityResource = cityService.get(createMedicalOfficeRequest.cityId());
+        return MedicalOfficeResource.builder()
+                .id(id)
+                .name(createMedicalOfficeRequest.name())
+                .city(cityResource)
+                .specializations(specializationResources)
+                .build();
     }
 
     @Override

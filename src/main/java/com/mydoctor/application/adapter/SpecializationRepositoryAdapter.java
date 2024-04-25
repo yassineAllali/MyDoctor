@@ -4,6 +4,7 @@ import com.mydoctor.infrastructure.entity.SpecializationEntity;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface SpecializationRepositoryAdapter {
 
@@ -12,4 +13,5 @@ public interface SpecializationRepositoryAdapter {
     List<SpecializationEntity> getAll();
     void delete(long id);
     boolean existById(long id);
+    Set<SpecializationEntity> get(Set<Long> ids);
 }

@@ -3,8 +3,14 @@ package com.mydoctor.application.service;
 import com.mydoctor.application.adapter.MedicalOfficeRepositoryAdapter;
 import com.mydoctor.application.command.MedicalOfficeSearchCriteriaCommand;
 import com.mydoctor.application.exception.NotFoundException;
+import com.mydoctor.application.resource.CityResource;
 import com.mydoctor.application.resource.MedicalOfficeResource;
+import com.mydoctor.application.resource.PatientResource;
+import com.mydoctor.application.resource.SpecializationResource;
 import com.mydoctor.infrastructure.entity.MedicalOfficeEntity;
+import com.mydoctor.infrastructure.entity.PatientEntity;
+import com.mydoctor.presentation.request.create.CreateMedicalOfficeRequest;
+import com.mydoctor.presentation.request.create.CreatePatientRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +19,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -25,12 +32,16 @@ class MedicalOfficeServiceTest {
 
     @Mock
     private MedicalOfficeRepositoryAdapter medicalOfficeRepository;
+    @Mock
+    private SpecializationService specializationService;
+    @Mock
+    private CityService cityService;
 
     private AutoCloseable openMocks;
     @BeforeEach
     void setUp() {
         openMocks = MockitoAnnotations.openMocks(this);
-        medicalOfficeService = new MedicalOfficeService(medicalOfficeRepository);
+        medicalOfficeService = new MedicalOfficeService(medicalOfficeRepository, specializationService, cityService);
     }
 
     @AfterEach
@@ -126,6 +137,47 @@ class MedicalOfficeServiceTest {
 
         // When, Then
         assertThrows(IllegalArgumentException.class, () -> medicalOfficeService.create(resource));
+    }
+
+    @Test
+    void testCreateFromRequest() {
+        // Given
+        CreateMedicalOfficeRequest request = CreateMedicalOfficeRequest.builder()
+                .name("new med office")
+                .cityId(1l)
+                .specializationIds(Set.of(1l, 2l))
+                .build();
+        CityResource cityResource = CityResource.builder()
+                .id(1l)
+                .name("Fes")
+                .build();
+
+        Set<SpecializationResource> specializationResources = Set.of(
+                SpecializationResource.builder()
+                        .id(1l)
+                        .name("sp1")
+                        .build(),
+                SpecializationResource.builder()
+                        .id(2l)
+                        .name("sp2")
+                        .build()
+        );
+
+        // When
+        when(cityService.get(1l)).thenReturn(cityResource);
+        when(specializationService.get(Set.of(1l, 2l))).thenReturn(specializationResources);
+
+        when(medicalOfficeRepository.save(any())).then(args -> {
+            MedicalOfficeEntity entity = args.getArgument(0, MedicalOfficeEntity.class);
+            entity.setId(123l);
+            return entity;
+        });
+        MedicalOfficeResource medicalOffice = medicalOfficeService.create(request);
+        // Then
+        assertEquals("new med office", medicalOffice.name());
+        assertEquals(2, medicalOffice.specializations().size());
+        assertEquals("Fes", medicalOffice.city().name());
+        assertNotNull(medicalOffice.id());
     }
 
     @Test
