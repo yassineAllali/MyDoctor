@@ -3,6 +3,7 @@ package com.mydoctor.presentation.mapper;
 import com.mydoctor.application.resource.*;
 import com.mydoctor.presentation.response.*;
 
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ResponseMapper {
@@ -17,15 +18,22 @@ public class ResponseMapper {
     }
 
     public MedicalOfficeResponse map(MedicalOfficeResource resource) {
-        return new MedicalOfficeResponse(
-                resource.id(),
-                resource.name(),
-                map(resource.city()),
-                resource.specializations()
-                        .stream()
-                        .map(this::map)
-                        .collect(Collectors.toSet())
-        );
+
+        return MedicalOfficeResponse.builder()
+                .id(resource.id())
+                .name(resource.name())
+                .city(map(resource.city()))
+                .specializations(resource.specializations() == null ? Set.of() :
+                        resource.specializations()
+                                .stream()
+                                .map(this::map)
+                                .collect(Collectors.toSet()))
+                .doctors(resource.doctors() == null ? Set.of() :
+                        resource.doctors()
+                                .stream()
+                                .map(this::map)
+                                .collect(Collectors.toSet()))
+                .build();
     }
 
     public CityResponse map(CityResource resource) {

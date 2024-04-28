@@ -33,7 +33,7 @@ public class DummyDoctorRepositoryAdapter implements DoctorRepositoryAdapter {
         );
         List<DoctorEntity> doctors = new ArrayList<>(10);
         for(int i = 0; i < doctorNames.size(); i++) {
-            doctors.add(new DoctorEntity((long) i + 1, doctorNames.get(i), null));
+            doctors.add(new DoctorEntity((long) i + 1, doctorNames.get(i), null, null));
         }
         return doctors;
     }

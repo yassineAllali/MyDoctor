@@ -30,6 +30,12 @@ public class MedicalOfficeEntity {
     @JoinTable(name = "medOffice_specialization",
             joinColumns = @JoinColumn(name = "medicalOffice_id"),
             inverseJoinColumns = @JoinColumn(name = "specialization_id"))
-    private Set<SpecializationEntity> specializations = new LinkedHashSet<>();
+    private Set<SpecializationEntity> specializations;
+
+    @ManyToMany(cascade = CascadeType.DETACH)
+    @JoinTable(name = "med_offices_doctors",
+            joinColumns = @JoinColumn(name = "medical_office_id"),
+            inverseJoinColumns = @JoinColumn(name = "doctors_id"))
+    private Set<DoctorEntity> doctors;
 
 }

@@ -6,12 +6,11 @@ import com.mydoctor.application.exception.NotFoundException;
 import com.mydoctor.application.mapper.EntityMapper;
 import com.mydoctor.application.mapper.ResourceMapper;
 import com.mydoctor.application.resource.CityResource;
+import com.mydoctor.application.resource.DoctorResource;
 import com.mydoctor.application.resource.MedicalOfficeResource;
-import com.mydoctor.application.resource.PatientResource;
 import com.mydoctor.application.resource.SpecializationResource;
 import com.mydoctor.infrastructure.entity.MedicalOfficeEntity;
 import com.mydoctor.presentation.request.create.CreateMedicalOfficeRequest;
-import com.mydoctor.presentation.request.create.CreatePatientRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -25,13 +24,15 @@ public class MedicalOfficeService implements ApplicationService<MedicalOfficeRes
     private final MedicalOfficeRepositoryAdapter medicalOfficeRepository;
     private final SpecializationService specializationService;
     private final CityService cityService;
+    private final DoctorService doctorService;
     private final ResourceMapper resourceMapper;
     private final EntityMapper entityMapper;
 
-    public MedicalOfficeService(MedicalOfficeRepositoryAdapter medicalOfficeRepository, SpecializationService specializationService, CityService cityService) {
+    public MedicalOfficeService(MedicalOfficeRepositoryAdapter medicalOfficeRepository, SpecializationService specializationService, CityService cityService, DoctorService doctorService) {
         this.medicalOfficeRepository = medicalOfficeRepository;
         this.specializationService = specializationService;
         this.cityService = cityService;
+        this.doctorService = doctorService;
         resourceMapper = new ResourceMapper();
         entityMapper = new EntityMapper();
     }
@@ -47,10 +48,14 @@ public class MedicalOfficeService implements ApplicationService<MedicalOfficeRes
     @Override
     public MedicalOfficeResource get(Long id) throws NotFoundException {
         log.info("Getting medical office with id {} !", id);
-        MedicalOfficeEntity entity = medicalOfficeRepository
+        MedicalOfficeEntity entity = getEntity(id);
+        return resourceMapper.map(entity);
+    }
+
+    private MedicalOfficeEntity getEntity(Long id) {
+        return medicalOfficeRepository
                 .get(id)
                 .orElseThrow(() -> new NotFoundException(String.format("Medical office with id : %s not found !", id)));
-        return resourceMapper.map(entity);
     }
 
     @Override
@@ -129,4 +134,17 @@ public class MedicalOfficeService implements ApplicationService<MedicalOfficeRes
         }
     }
 
+    public MedicalOfficeResource addDoctor(Long id, Long doctorId) {
+        log.info("Adding doctor {} to medical office {} !", doctorId, id);
+
+        checkExists(id);
+        doctorService.checkExists(doctorId);
+
+        MedicalOfficeResource medicalOffice = get(id);
+        DoctorResource doctor = doctorService.get(doctorId);
+
+        medicalOffice.doctors().add(doctor);
+
+        return save(medicalOffice);
+    }
 }

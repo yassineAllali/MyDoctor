@@ -1,4 +1,4 @@
 package com.mydoctor.presentation.request;
 
-public record MedicalOfficeSearchCriteriaRequest(String name, long cityId, long specializationId) {
+public record MedicalOfficeSearchCriteriaRequest(String name, Long cityId, Long specializationId) {
 }

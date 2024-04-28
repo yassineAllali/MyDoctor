@@ -24,6 +24,17 @@ public class DoctorEntity {
     @JoinColumn(name = "specialization_id", nullable = false)
     private SpecializationEntity specializationEntity;
 
+    @ManyToMany(mappedBy = "doctors", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+    private Set<MedicalOfficeEntity> medicalOffices;
+
+    public Set<MedicalOfficeEntity> getMedicalOffices() {
+        return medicalOffices;
+    }
+
+    public void setMedicalOffices(Set<MedicalOfficeEntity> medicalOffices) {
+        this.medicalOffices = medicalOffices;
+    }
+
     public Long getId() {
         return id;
     }

@@ -107,6 +107,10 @@ public class EntityMapper {
                 .city(map(resource.city()))
                 .specializations(resource.specializations() == null ? null : resource.specializations().stream().map(this::map).collect(Collectors.toSet()))
                 .name(resource.name())
+                .doctors(resource.doctors() == null ? null :
+                        resource.doctors()
+                                .stream()
+                                .map(this::map).collect(Collectors.toSet()))
                 .build();
     }
 

@@ -30,7 +30,7 @@ public class DummyMedicalOfficeRepositoryAdapter implements MedicalOfficeReposit
         );
         List<MedicalOfficeEntity> entities = new ArrayList<>(10);
         for(int i = 0; i < names.size(); i++) {
-            entities.add(new MedicalOfficeEntity((long) i + 1, names.get(i), null, null));
+            entities.add(new MedicalOfficeEntity((long) i + 1, names.get(i), null, null, null));
         }
         return entities;
     }

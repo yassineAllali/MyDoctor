@@ -37,24 +37,33 @@ public class ResourceMapper {
     public MedicalOfficeResource map(MedicalOfficeEntity entity) {
         if(entity == null)
             return null;
-        return new MedicalOfficeResource(
-                entity.getId(),
-                entity.getName(),
-                map(entity.getCity()),
-                entity.getSpecializations() == null ? Set.of() :
+
+        return MedicalOfficeResource.builder()
+                .id(entity.getId())
+                .city(map(entity.getCity()))
+                .name(entity.getName())
+                .specializations(entity.getSpecializations() == null ? Set.of() :
                         entity.getSpecializations()
-                            .stream()
-                            .map(this::map)
-                            .collect(Collectors.toSet()));
+                                .stream()
+                                .map(this::map)
+                                .collect(Collectors.toSet()))
+                .doctors(entity.getDoctors() == null ? Set.of() :
+                        entity.getDoctors()
+                                .stream()
+                                .map(this::map)
+                                .collect(Collectors.toSet()))
+                .build();
+
     }
 
+    // TODO : add non cyclic mapper
     public DoctorResource map(DoctorEntity entity) {
         if(entity == null)
             return null;
         return new DoctorResource(
                 entity.getId(),
                 entity.getName(),
-                map(entity.getSpecializationEntity()));
+                map(entity.getSpecializationEntity()), null);
     }
 
     public CityResource map(CityEntity entity) {

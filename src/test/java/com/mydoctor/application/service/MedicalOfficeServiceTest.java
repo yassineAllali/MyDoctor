@@ -3,10 +3,8 @@ package com.mydoctor.application.service;
 import com.mydoctor.application.adapter.MedicalOfficeRepositoryAdapter;
 import com.mydoctor.application.command.MedicalOfficeSearchCriteriaCommand;
 import com.mydoctor.application.exception.NotFoundException;
-import com.mydoctor.application.resource.CityResource;
-import com.mydoctor.application.resource.MedicalOfficeResource;
-import com.mydoctor.application.resource.PatientResource;
-import com.mydoctor.application.resource.SpecializationResource;
+import com.mydoctor.application.resource.*;
+import com.mydoctor.infrastructure.entity.DoctorEntity;
 import com.mydoctor.infrastructure.entity.MedicalOfficeEntity;
 import com.mydoctor.infrastructure.entity.PatientEntity;
 import com.mydoctor.presentation.request.create.CreateMedicalOfficeRequest;
@@ -36,12 +34,14 @@ class MedicalOfficeServiceTest {
     private SpecializationService specializationService;
     @Mock
     private CityService cityService;
+    @Mock
+    private DoctorService doctorService;
 
     private AutoCloseable openMocks;
     @BeforeEach
     void setUp() {
         openMocks = MockitoAnnotations.openMocks(this);
-        medicalOfficeService = new MedicalOfficeService(medicalOfficeRepository, specializationService, cityService);
+        medicalOfficeService = new MedicalOfficeService(medicalOfficeRepository, specializationService, cityService, doctorService);
     }
 
     @AfterEach
@@ -57,8 +57,8 @@ class MedicalOfficeServiceTest {
         searchCriteria.setCityId(1L);
 
         List<MedicalOfficeEntity> entities = List.of(
-                new MedicalOfficeEntity(1L, "Med office 1", null, null),
-                new MedicalOfficeEntity(2L, "Med office 2", null, null)
+                new MedicalOfficeEntity(1L, "Med office 1", null, null, null),
+                new MedicalOfficeEntity(2L, "Med office 2", null, null, null)
         );
 
         // When
@@ -230,6 +230,31 @@ class MedicalOfficeServiceTest {
 
         // Then
         assertThrows(NotFoundException.class, () -> medicalOfficeService.delete(id));
+    }
+
+    @Test
+    void testAddDoctor() {
+        // Given
+        MedicalOfficeEntity medicalOfficeEntity = MedicalOfficeEntity.builder()
+                .id(123l)
+                .name("test med office")
+                .doctors(Set.of(DoctorEntity.builder().id(1l).build(), DoctorEntity.builder().id(2l).build()))
+                .build();
+        DoctorResource givenDoctor = DoctorResource.builder()
+                .id(3l)
+                .build();
+        // When
+        when(medicalOfficeRepository.existById(123l)).thenReturn(true);
+        when(medicalOfficeRepository.get(123l)).thenReturn(Optional.of(medicalOfficeEntity));
+        when(doctorService.get(3l)).thenReturn(givenDoctor);
+        when(medicalOfficeRepository.save(any())).then(args -> args.getArgument(0, MedicalOfficeEntity.class));
+
+        MedicalOfficeResource medicalOfficeResource = medicalOfficeService.addDoctor(123l, 3l);
+        DoctorResource actualDoctor = medicalOfficeResource.doctors().stream().filter(d -> d.id().equals(3l)).findFirst().get();
+        // Then
+        assertEquals(3, medicalOfficeResource.doctors().size());
+        // TODO : add assertion for number of med office of doctor
+//        assertEquals(1, actualDoctor.medicalOffices());
     }
 
 }

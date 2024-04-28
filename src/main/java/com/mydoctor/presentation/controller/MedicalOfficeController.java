@@ -53,17 +53,21 @@ public class MedicalOfficeController {
         return new ResponseEntity<>(medicalOffice, HttpStatus.OK);
     }
 
-    // Update a medicalOffice
     @PutMapping("/{id}")
     public ResponseEntity<MedicalOfficeResponse> updateMedicalOffice(@PathVariable("id") Long id, @RequestBody CreateMedicalOfficeRequest medicalOffice) {
         MedicalOfficeResponse updatedMedicalOffice = responseMapper.map(medicalOfficeService.update(id, medicalOffice));
         return new ResponseEntity<>(updatedMedicalOffice, HttpStatus.OK);
     }
 
-    // Delete a medicalOffice
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMedicalOffice(@PathVariable("id") Long id) {
         medicalOfficeService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/{id}/{doctorId}")
+    public ResponseEntity<MedicalOfficeResponse> addDoctor(@PathVariable("id") Long id, @PathVariable("doctorId") Long doctorId) {
+        MedicalOfficeResponse medicalOfficeResponse = responseMapper.map(medicalOfficeService.addDoctor(id, doctorId));
+        return new ResponseEntity<>(medicalOfficeResponse, HttpStatus.OK);
     }
 }
