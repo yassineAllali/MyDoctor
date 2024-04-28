@@ -16,6 +16,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -75,7 +76,7 @@ public class JpaMedicalOfficeRepositoryTest {
         medicalOffice1.setId(1L);
         medicalOffice1.setName("Medical Office 1");
         medicalOffice1.setCity(city1);
-        medicalOffice1.getSpecializations().add(specialization1);
+        medicalOffice1.setSpecializations(Set.of(specialization1));
         medicalOfficeRepository.save(medicalOffice1);
 
         // Define search criteria by specialization
@@ -106,7 +107,7 @@ public class JpaMedicalOfficeRepositoryTest {
         medicalOffice1.setId(1L);
         medicalOffice1.setName("Medical Office 1");
         medicalOffice1.setCity(city1);
-        medicalOffice1.getSpecializations().add(specialization1);
+        medicalOffice1.setSpecializations(Set.of(specialization1));
         medicalOfficeRepository.save(medicalOffice1);
 
         // Define search criteria by city and specialization
