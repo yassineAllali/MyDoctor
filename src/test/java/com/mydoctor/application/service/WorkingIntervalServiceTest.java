@@ -96,7 +96,13 @@ class WorkingIntervalServiceTest {
     @Test
     void testCreate() {
         // Given
-        WorkingIntervalResource resource = WorkingIntervalResource.builder().date(LocalDate.of(2024, 4, 7)).build();
+        WorkingIntervalResource resource = WorkingIntervalResource.builder()
+                .medicalOffice(MedicalOfficeResource.builder().id(1l).build())
+                .doctor(DoctorResource.builder().id(1l).build())
+                .date(LocalDate.of(2024, 4, 7))
+                .start(LocalTime.of(8, 0))
+                .end(LocalTime.of(12, 0))
+                .build();
 
         // When
         when(workingIntervalRepository.save(any())).then(args -> {
