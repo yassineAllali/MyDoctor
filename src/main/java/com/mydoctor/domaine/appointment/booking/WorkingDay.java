@@ -30,7 +30,7 @@ public final class WorkingDay implements BookableTimeInterval {
         if(workingTimeSlots == null)
             throw new IllegalArgumentException("Working Time Slots is null !");
         if(!isWorkingTimeSlotsOrdered(workingTimeSlots))
-            throw new IllegalArgumentException("Working Time Slots should be ordered !");
+            throw new IllegalArgumentException("Working Time Slots should be ordered and without conflicts !");
     }
 
     private boolean isWorkingTimeSlotsOrdered(List<WorkingTimeInterval> workingTimeSlots) {

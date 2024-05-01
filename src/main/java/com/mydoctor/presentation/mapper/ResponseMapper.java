@@ -58,4 +58,20 @@ public class ResponseMapper {
                 .name(resource.name())
                 .build();
     }
+
+    public WorkingIntervalResponse map(WorkingIntervalResource resource) {
+        return WorkingIntervalResponse.builder()
+                .id(resource.id())
+                .date(resource.date())
+                .start(resource.start())
+                .end(resource.end())
+                .medicalOffice(map(resource.medicalOffice()))
+                .doctor(map(resource.doctor()))
+                .appointments(resource.appointments() == null ? null :
+                        resource.appointments()
+                        .stream()
+                        .map(this::map)
+                        .toList())
+                .build();
+    }
 }
