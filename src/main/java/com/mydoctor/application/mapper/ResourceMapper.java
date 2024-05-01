@@ -93,6 +93,7 @@ public class ResourceMapper {
                 .end(entity.getEnd())
                 .date(entity.getDate())
                 .doctor(map(entity.getDoctor()))
+                .medicalOffice(map(entity.getMedicalOffice()))
                 .appointments(entity.getAppointments() == null ? null : entity.getAppointments().stream().map(this::map).toList())
                 .build();
     }

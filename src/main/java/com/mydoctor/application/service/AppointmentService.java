@@ -134,7 +134,7 @@ public class AppointmentService implements ApplicationService<AppointmentResourc
     }
 
     public List<TimeSlotResource> getAvailableSlots(long medOfficeId, long doctorId, LocalDate from, LocalDate to, Duration duration) {
-        log.info("Getting available slots with duration of {} minutes for the medical office {}, for the days between {} and {}", duration.toMinutes(), medOfficeId, from, to);
+        log.info("Getting available slots with duration of {} minutes with the doctor {} in the medical office {}, for the days between {} and {}", duration.toMinutes(), doctorId, medOfficeId, from, to);
         WorkingPeriod workingPeriod = getWorkingPeriod(medOfficeId, doctorId, from, to);
         return workingPeriod.getAvailableSlots(duration).stream()
                 .map(resourceMapper::map)
