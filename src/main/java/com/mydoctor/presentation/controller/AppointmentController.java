@@ -12,6 +12,7 @@ import com.mydoctor.presentation.request.create.CreateAppointmentRequest;
 import com.mydoctor.presentation.request.ScheduleRequest;
 import com.mydoctor.presentation.response.AppointmentResponse;
 import com.mydoctor.presentation.response.TimeSlotResponse;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
@@ -72,13 +73,18 @@ public class AppointmentController {
     }
 
     @GetMapping("/med-office/{medicalOfficeId}/doctor/{doctorId}/available")
-    public List<TimeSlotResponse> getAvailableSlots(@PathVariable long medicalOfficeId, @PathVariable long doctorId, @RequestParam LocalDate date, @RequestParam("duration") long durationInMin) {
+    public List<TimeSlotResponse> getAvailableSlots(@PathVariable long medicalOfficeId, @PathVariable long doctorId,
+                                                    @RequestParam @Schema(example = "2024-01-01", format = "date") LocalDate date,
+                                                    @RequestParam("duration") long durationInMin) {
         List<TimeSlotResource> availableTimeSlots = appointmentService.getAvailableSlots(medicalOfficeId, doctorId, date, Duration.ofMinutes(durationInMin));
         return availableTimeSlots.stream().map(responseMapper::map).toList();
     }
 
     @GetMapping("/med-office/{medicalOfficeId}/doctor/{doctorId}/available/between")
-    public List<TimeSlotResponse> getAvailableSlots(@PathVariable long medicalOfficeId, @PathVariable long doctorId, @RequestParam LocalDate from, @RequestParam LocalDate to, @RequestParam("duration") long durationInMin) {
+    public List<TimeSlotResponse> getAvailableSlots(@PathVariable long medicalOfficeId, @PathVariable long doctorId,
+                                                    @RequestParam @Schema(example = "2024-01-01", format = "date") LocalDate from,
+                                                    @RequestParam @Schema(example = "2024-01-01", format = "date") LocalDate to,
+                                                    @RequestParam("duration") long durationInMin) {
         List<TimeSlotResource> availableTimeSlots = appointmentService.getAvailableSlots(medicalOfficeId, doctorId, from, to, Duration.ofMinutes(durationInMin));
         return availableTimeSlots.stream().map(responseMapper::map).toList();
     }

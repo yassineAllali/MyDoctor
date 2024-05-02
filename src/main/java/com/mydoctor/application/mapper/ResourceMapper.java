@@ -24,7 +24,20 @@ public class ResourceMapper {
                 .start(entity.getStart())
                 .end(entity.getEnd())
                 .status(entity.getStatus())
-                .workingInterval(map(entity.getWorkingInterval()))
+                .workingInterval(mapWithoutAppointment(entity.getWorkingInterval()))
+                .build();
+    }
+
+    private WorkingIntervalResource mapWithoutAppointment(WorkingIntervalEntity entity) {
+        if(entity == null)
+            return null;
+        return WorkingIntervalResource.builder()
+                .id(entity.getId())
+                .start(entity.getStart())
+                .end(entity.getEnd())
+                .date(entity.getDate())
+                .doctor(map(entity.getDoctor()))
+                .medicalOffice(map(entity.getMedicalOffice()))
                 .build();
     }
 
@@ -94,7 +107,22 @@ public class ResourceMapper {
                 .date(entity.getDate())
                 .doctor(map(entity.getDoctor()))
                 .medicalOffice(map(entity.getMedicalOffice()))
-                .appointments(entity.getAppointments() == null ? null : entity.getAppointments().stream().map(this::map).toList())
+                .appointments(entity.getAppointments() == null ? null : entity.getAppointments().stream().map(this::mapWithoutWorkingInterval).toList())
+                .build();
+    }
+
+    private AppointmentResource mapWithoutWorkingInterval(AppointmentEntity entity) {
+        if(entity == null)
+            return null;
+        return AppointmentResource.builder()
+                .id(entity.getId())
+                .doctor(map(entity.getDoctor()))
+                .patient(map(entity.getPatient()))
+                .medicalOffice(map(entity.getMedicalOffice()))
+                .date(entity.getDate())
+                .start(entity.getStart())
+                .end(entity.getEnd())
+                .status(entity.getStatus())
                 .build();
     }
 }

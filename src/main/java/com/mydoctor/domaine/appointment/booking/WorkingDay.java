@@ -1,11 +1,13 @@
 package com.mydoctor.domaine.appointment.booking;
 
+import com.mydoctor.domaine.exception.DomainException;
 import com.mydoctor.domaine.exception.IllegalArgumentException;
 
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -100,6 +102,14 @@ public final class WorkingDay implements BookableTimeInterval {
     @Override
     public boolean isInside(TimeSlot timeSlot) {
         return workingTimeSlots.stream().anyMatch(w -> w.isInside(timeSlot));
+    }
+
+    public void addWorkingInterval(WorkingTimeInterval workingTimeInterval) {
+        if(workingTimeSlots.stream().anyMatch(w -> w.isConflict(workingTimeInterval))) {
+            throw new DomainException("Can't add working time interval ! Conflict with existing working time intervals !");
+        }
+        workingTimeSlots.add(workingTimeInterval);
+        workingTimeSlots.sort(Comparator.comparing(TimeSlot::getStart));
     }
 
 }
