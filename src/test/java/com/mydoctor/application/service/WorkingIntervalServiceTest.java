@@ -190,7 +190,14 @@ class WorkingIntervalServiceTest {
     @Test
     void testUpdate() {
         // Given
-        WorkingIntervalResource resource = WorkingIntervalResource.builder().id(123456l).date(LocalDate.of(2024, 4, 7)).build();
+        WorkingIntervalResource resource = WorkingIntervalResource.builder()
+                .id(123456l)
+                .date(LocalDate.of(2024, 4, 7))
+                .medicalOffice(MedicalOfficeResource.builder().id(1l).build())
+                .doctor(DoctorResource.builder().id(1l).build())
+                .start(LocalTime.of(8, 0))
+                .end(LocalTime.of(12, 0))
+                .build();
 
         // When
         when(workingIntervalRepository.existById(123456l)).thenReturn(true);

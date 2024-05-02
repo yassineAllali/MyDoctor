@@ -1,5 +1,6 @@
 package com.mydoctor.domaine.appointment.booking;
 
+import com.mydoctor.domaine.exception.DomainException;
 import com.mydoctor.domaine.exception.IllegalArgumentException;
 import org.junit.jupiter.api.Test;
 
@@ -420,6 +421,58 @@ class WorkingDayTest {
         assertEquals(LocalTime.of(8, 50), actualAvailableSlots.get(0).getEnd());
         assertEquals(LocalTime.of(17, 10), actualAvailableSlots.get(12).getStart());
         assertEquals(16, actualAvailableSlots.size());
+    }
+
+    @Test
+    void testAddWorkingTimeInterval() {
+        // Given
+
+        // Working TimeSlot 1
+        LocalTime workingStart1 = LocalTime.of(8, 0);
+        LocalTime workingEnd1 = LocalTime.of(12, 30);
+
+        WorkingTimeInterval workingTimeSlot1 = new WorkingTimeInterval(workingStart1, workingEnd1);
+
+        // Working TimeSlot 2
+        LocalTime workingStart2 = LocalTime.of(14, 0);
+        LocalTime workingEnd2 = LocalTime.of(18, 30);
+
+        WorkingTimeInterval workingTimeSlot2 = new WorkingTimeInterval(workingStart2, workingEnd2);
+
+        // Working Day
+        LocalDate date = LocalDate.of(2024, 5,2);
+        WorkingDay workingDay = new WorkingDay(date, Arrays.asList(workingTimeSlot2));
+
+        // When
+        workingDay.addWorkingInterval(workingTimeSlot1);
+
+        // Then
+        assertEquals(2, workingDay.getWorkingTimeSlots().size());
+        assertEquals(LocalTime.of(14, 0), workingDay.getWorkingTimeSlots().get(1).getStart());
+    }
+
+    @Test
+    void testAddWorkingTimeIntervalShouldThrowExceptionIfConflict() {
+        // Given
+
+        // Working TimeSlot 1
+        LocalTime workingStart1 = LocalTime.of(8, 0);
+        LocalTime workingEnd1 = LocalTime.of(12, 30);
+
+        WorkingTimeInterval workingTimeSlot1 = new WorkingTimeInterval(workingStart1, workingEnd1);
+
+        // Working TimeSlot 2
+        LocalTime workingStart2 = LocalTime.of(12, 29);
+        LocalTime workingEnd2 = LocalTime.of(18, 30);
+
+        WorkingTimeInterval workingTimeSlot2 = new WorkingTimeInterval(workingStart2, workingEnd2);
+
+        // Working Day
+        LocalDate date = LocalDate.of(2024, 5,2);
+        WorkingDay workingDay = new WorkingDay(date, Arrays.asList(workingTimeSlot2));
+
+        // When, Then
+        assertThrows(DomainException.class, () -> workingDay.addWorkingInterval(workingTimeSlot1));
     }
 
 }

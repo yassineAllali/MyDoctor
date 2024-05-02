@@ -4,10 +4,12 @@ import com.mydoctor.application.service.WorkingIntervalService;
 import com.mydoctor.presentation.mapper.ResponseMapper;
 import com.mydoctor.presentation.request.create.CreateWorkingIntervalRequest;
 import com.mydoctor.presentation.response.WorkingIntervalResponse;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -52,6 +54,16 @@ public class WorkingIntervalController {
     public ResponseEntity<Void> deleteWorkingInterval(@PathVariable("id") Long id) {
         workingIntervalService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/{medOfficeId}/{doctorId}")
+    public ResponseEntity<List<WorkingIntervalResponse>> getWorkingIntervals
+            (@PathVariable("medOfficeId") Long medicalOfficeId, @PathVariable("doctorId") Long doctorId,
+             @RequestParam("date") @Schema(example = "2024-01-01", format = "date") LocalDate date) {
+        List<WorkingIntervalResponse> workingIntervals = workingIntervalService.get(medicalOfficeId, doctorId, date).stream()
+                .map(responseMapper::map)
+                .toList();
+        return new ResponseEntity<>(workingIntervals, HttpStatus.OK);
     }
 }
 
