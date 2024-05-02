@@ -9,23 +9,18 @@ import com.mydoctor.application.mapper.ResourceMapper;
 import com.mydoctor.application.resource.DoctorResource;
 import com.mydoctor.application.resource.MedicalOfficeResource;
 import com.mydoctor.application.resource.WorkingIntervalResource;
-import com.mydoctor.application.resource.PatientResource;
-import com.mydoctor.application.resource.WorkingIntervalResource;
-import com.mydoctor.domaine.appointment.booking.TimeSlot;
 import com.mydoctor.domaine.appointment.booking.WorkingDay;
 import com.mydoctor.domaine.appointment.booking.WorkingTimeInterval;
 import com.mydoctor.domaine.exception.DomainException;
 import com.mydoctor.infrastructure.entity.WorkingIntervalEntity;
-import com.mydoctor.presentation.request.create.CreatePatientRequest;
 import com.mydoctor.presentation.request.create.CreateWorkingIntervalRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -105,37 +100,6 @@ public class WorkingIntervalService implements ApplicationService<WorkingInterva
         return create(workingIntervalResource);
     }
 
-    private WorkingDay getWorkingDayWithNew(WorkingIntervalResource workingIntervalResource) {
-        List<WorkingIntervalEntity> existingIntervalEntities = workingIntervalRepository.get(
-                workingIntervalResource.medicalOffice().id(),
-                workingIntervalResource.doctor().id(),
-                workingIntervalResource.date());
-        List<WorkingTimeInterval> existingTimeIntervals = existingIntervalEntities.stream()
-                .map(domainMapper::map)
-                .toList();
-        WorkingTimeInterval newWorkingTimeInterval = domainMapper.map(workingIntervalResource);
-        List<WorkingTimeInterval> workingDayTimeIntervals = Stream.concat(existingTimeIntervals.stream(), Stream.of(newWorkingTimeInterval))
-                .sorted(Comparator.comparing(WorkingTimeInterval::getStart))
-                .toList();
-        return new WorkingDay(workingIntervalResource.date(), workingDayTimeIntervals);
-    }
-
-    private void checkWorkingDayForNew(WorkingIntervalResource workingIntervalResource) {
-        try {
-            getWorkingDayWithNew(workingIntervalResource);
-        } catch (DomainException ex) {
-            String message = "Can't create working interval : " + ex.getMessage();
-            log.error(message);
-            throw new BusinessException(message);
-        }
-    }
-
-    public WorkingIntervalResource create(CreateWorkingIntervalRequest createWorkingIntervalRequest) {
-        log.info("Creating new working interval from request !");
-        WorkingIntervalResource workingIntervalResource = map(null, createWorkingIntervalRequest);
-        return create(workingIntervalResource);
-    }
-
     @Override
     public WorkingIntervalResource update(WorkingIntervalResource resource) throws NotFoundException {
         log.info("Updating working interval with id {} !", resource.id());
@@ -150,30 +114,11 @@ public class WorkingIntervalService implements ApplicationService<WorkingInterva
                 workingIntervalResource.doctor().id(),
                 workingIntervalResource.date());
         List<WorkingTimeInterval> existingTimeIntervals = existingIntervalEntities.stream()
-                .filter(e -> e.getId() != workingIntervalResource.id())
+                .filter(e -> !Objects.equals(e.getId(), workingIntervalResource.id()))
                 .map(domainMapper::map)
                 .sorted(Comparator.comparing(WorkingTimeInterval::getStart))
                 .toList();
         return new WorkingDay(workingIntervalResource.date(), existingTimeIntervals);
-    }
-
-    public WorkingIntervalResource update(Long id, CreateWorkingIntervalRequest createWorkingIntervalRequest) {
-        log.info("Updating working interval from request !");
-        WorkingIntervalResource workingIntervalResource = map(id, createWorkingIntervalRequest);
-        return update(workingIntervalResource);
-    }
-
-    private WorkingIntervalResource map(Long id, CreateWorkingIntervalRequest createWorkingIntervalRequest) {
-        DoctorResource doctorResource = doctorService.get(createWorkingIntervalRequest.doctorId());
-        MedicalOfficeResource medicalOfficeResource = medicalOfficeService.get(createWorkingIntervalRequest.medicalOfficeId());
-        return WorkingIntervalResource.builder()
-                .id(id)
-                .doctor(doctorResource)
-                .medicalOffice(medicalOfficeResource)
-                .date(createWorkingIntervalRequest.date())
-                .start(createWorkingIntervalRequest.start())
-                .end(createWorkingIntervalRequest.end())
-                .build();
     }
 
     public WorkingIntervalResource update(Long id, CreateWorkingIntervalRequest createWorkingIntervalRequest) {
